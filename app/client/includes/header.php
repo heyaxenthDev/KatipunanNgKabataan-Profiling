@@ -1,3 +1,26 @@
+<?php 
+// Get Barangay Code value
+$BrgyCode = $_GET['Code'];
+
+// Fetch the specific barangay details from the database
+$getBrgy = "SELECT * FROM barangay WHERE barangay_code = '$BrgyCode'";
+$run_query = mysqli_query($conn, $getBrgy);
+
+// Check if the query returned any results
+if (mysqli_num_rows($run_query) > 0) {
+    // Fetch the barangay data
+    $barangay = mysqli_fetch_assoc($run_query);
+
+    // Assuming you have columns like 'barangay_name', 'barangay_captain', etc.
+    $barangayName = $barangay['barangay_name'];
+
+} else {
+    // If no results were found, display a message or handle the error
+    echo "<p>No details found for the selected barangay.</p>";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +28,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Administrative - Katipunan ng Kabataan Profiling System</title>
+    <title><?= $barangayName?> SK Official - Katipunan ng Kabataan Profiling System</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -119,7 +142,7 @@
 
                         <li>
                             <a class="dropdown-item d-flex align-items-center"
-                                href="\KatipunanNgKabataan-Profiling/admin-logout.php">
+                                href="\KatipunanNgKabataan-Profiling/client-logout.php">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>

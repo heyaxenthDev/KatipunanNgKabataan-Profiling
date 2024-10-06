@@ -141,7 +141,8 @@
                                     <div class="container" data-aos="fade-up">
 
                                         <div class="d-flex justify-content-end mt-3">
-                                            <button class="btn btn-secondary btn-sm"><i class="bi bi-person-plus"></i>
+                                            <button class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#AddSKOfficial"><i class="bi bi-person-plus"></i>
                                                 Add
                                                 New SK
                                                 Official</button>
@@ -154,79 +155,184 @@
                                                 cupiditate. Et nemo qui impedit suscipit alias ea.</p>
                                         </div> -->
 
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="AddSKOfficial" data-bs-backdrop="static"
+                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Register
+                                                            SK
+                                                            Official</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="admin-code.php" method="POST">
+                                                        <div class="modal-body row g-3">
+                                                            <h5 class="card-title mx-2">Personal Information</h5>
+
+                                                            <div class="col-md-4">
+                                                                <label for="lastname" class="form-label">Last
+                                                                    Name</label>
+                                                                <input type="text" class="form-control" id="lastname"
+                                                                    name="lastname">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="firstname" class="form-label">First
+                                                                    Name</label>
+                                                                <input type="text" class="form-control" id="firstname"
+                                                                    name="firstname">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="middlename" class="form-label">Middle
+                                                                    Name</label>
+                                                                <input type="text" class="form-control" id="middlename"
+                                                                    name="middlename">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="position"
+                                                                    class="form-label">Position</label>
+                                                                <select class="form-control" id="position"
+                                                                    name="position">
+                                                                    <option value="">Select Position</option>
+                                                                    <option value="SK Chairman">SK Chairman</option>
+                                                                    <option value="SK Kagawad">SK Kagawad</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label for="sex" class="form-label">Sex</label>
+                                                                <select class="form-control" id="sex" name="sex">
+                                                                    <option value="">Select Sex</option>
+                                                                    <option value="1">Male</option>
+                                                                    <option value="0">Female</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-2">
+                                                                <label for="age" class="form-label">Age</label>
+                                                                <input type="number" class="form-control" id="age"
+                                                                    name="age">
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label for="dob" class="form-label">Date of
+                                                                    Birth</label>
+                                                                <input type="date" class="form-control" id="dob"
+                                                                    name="dob">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="mobileNumber" class="form-label">Mobile
+                                                                    Number</label>
+                                                                <input type="tel" class="form-control" id="mobileNumber"
+                                                                    name="mobileNumber">
+                                                            </div>
+
+                                                            <div class="col-md-2">
+                                                                <label for="streetNumber" class="form-label">Street
+                                                                    Number</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="streetNumber" name="streetNumber">
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label for="inputAddress"
+                                                                    class="form-label">Address</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="inputAddress" name="address">
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label for="brgyAddress"
+                                                                    class="form-label">Barangay</label>
+                                                                <input type="text" class="form-control" id="brgyAddress"
+                                                                    value="<?= $_GET['Name']?>" readonly>
+                                                                <input type="hidden" class="form-control"
+                                                                    id="brgyAddress" name="barangay"
+                                                                    value="<?= $_GET['Code']?>" readonly>
+                                                            </div>
+
+                                                            <h5 class="card-title mx-2">Login Access</h5>
+
+                                                            <div class="col-md-6">
+                                                                <label for="username"
+                                                                    class="form-label">Username</label>
+                                                                <input type="text" class="form-control" id="username"
+                                                                    name="username">
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <label for="password"
+                                                                    class="form-label">Password</label>
+                                                                <input type="password" class="form-control"
+                                                                    id="password" name="password">
+                                                            </div>
+
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary"
+                                                                name="createAcc">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="row mt-3">
 
-                                            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                                                <div class="member" data-aos="fade-up" data-aos-delay="100">
-                                                    <div class="member-img">
-                                                        <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                                        <div class="social">
-                                                            <a href=""><i class="bi bi-twitter"></i></a>
-                                                            <a href=""><i class="bi bi-facebook"></i></a>
-                                                            <a href=""><i class="bi bi-instagram"></i></a>
-                                                            <a href=""><i class="bi bi-linkedin"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="member-info">
-                                                        <h4>Walter White</h4>
-                                                        <span>Chief Executive Officer</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <?php 
 
-                                            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                                                <div class="member" data-aos="fade-up" data-aos-delay="200">
-                                                    <div class="member-img">
-                                                        <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                                        <div class="social">
-                                                            <a href=""><i class="bi bi-twitter"></i></a>
-                                                            <a href=""><i class="bi bi-facebook"></i></a>
-                                                            <a href=""><i class="bi bi-instagram"></i></a>
-                                                            <a href=""><i class="bi bi-linkedin"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="member-info">
-                                                        <h4>Sarah Jhonson</h4>
-                                                        <span>Product Manager</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            $activeBrgy = $_GET['Name'];
+                                            $activeCode = $_GET['Code'];
+                                            
+                                            // Fetch all officials from the database
+                                            $result = $conn->query("SELECT * FROM sk_officials WHERE brgy_code = $activeCode");
 
-                                            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                                                <div class="member" data-aos="fade-up" data-aos-delay="300">
-                                                    <div class="member-img">
-                                                        <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                                        <div class="social">
-                                                            <a href=""><i class="bi bi-twitter"></i></a>
-                                                            <a href=""><i class="bi bi-facebook"></i></a>
-                                                            <a href=""><i class="bi bi-instagram"></i></a>
-                                                            <a href=""><i class="bi bi-linkedin"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="member-info">
-                                                        <h4>William Anderson</h4>
-                                                        <span>CTO</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    // Assuming the fields in the database include: 'firstname', 'lastname', 'position', and 'image_url'
+                                                    $fullname = htmlspecialchars($row['firstname'] . ' ' . $row['lastname']); // Escape output for security
+                                                    $position = htmlspecialchars($row['position']);
 
-                                            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                                                <div class="member" data-aos="fade-up" data-aos-delay="400">
-                                                    <div class="member-img">
-                                                        <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                                                        <div class="social">
-                                                            <a href=""><i class="bi bi-twitter"></i></a>
-                                                            <a href=""><i class="bi bi-facebook"></i></a>
-                                                            <a href=""><i class="bi bi-instagram"></i></a>
-                                                            <a href=""><i class="bi bi-linkedin"></i></a>
+                                                    // Set default image if the database value is empty or null
+                                                    $imageUrl = !empty($row['image_url']) ? htmlspecialchars($row['image_url']) : 'assets/img/user-profile.png';
+
+                                                    // Output the HTML structure for each member
+                                                    echo '
+                                                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                                                        <div class="member" data-aos="fade-up" data-aos-delay="100">
+                                                            <div class="member-img">
+                                                                <img src="' . $imageUrl . '" class="img-fluid" alt="' . $fullname . '">
+                                                                <div class="social">
+                                                                    <a href=""><i class="bi bi-eye"></i></a>
+                                                                    <a href=""><i class="bi bi-pencil-sqaure"></i></a>
+                                                                    <a href=""><i class="bi bi-instagram"></i></a>
+                                                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="member-info">
+                                                                <h4>' . $fullname . '</h4>
+                                                                <span>' . $position . '</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="member-info">
-                                                        <h4>Amanda Jepson</h4>
-                                                        <span>Accountant</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    </div>';
+                                                }
+                                            } else {
+                                                echo '<p>No officials found.</p>';
+                                            }
+
+                                            // Close the connection
+                                            $conn->close();
+                                            ?>
+
 
                                         </div>
 

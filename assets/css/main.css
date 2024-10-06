@@ -836,14 +836,14 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Why Us Section
+# SK Login Section
 --------------------------------------------------------------*/
-.why-us .img-bg {
+.sk-login .img-bg {
   min-height: 500px;
   position: relative;
 }
 
-.why-us .img-bg img {
+.sk-login .img-bg img {
   position: absolute;
   inset: 0;
   display: block;
@@ -853,70 +853,70 @@ section,
   z-index: 1;
 }
 
-.why-us .slides {
+.sk-login .slides {
   background-color: color-mix(in srgb, var(--default-color), transparent 97%);
 }
 
-.why-us h3 {
+.sk-login h3 {
   font-size: 24px;
   font-weight: 700;
 }
 
-.why-us h4 {
+.sk-login h4 {
   font-size: 18px;
   font-weight: 300;
   color: color-mix(in srgb, var(--default-color), transparent 30%);
 }
 
-.why-us .swiper {
+.sk-login .swiper {
   margin: 140px 140px 120px 140px;
   overflow: hidden;
 }
 
-.why-us .swiper-wrapper {
+.sk-login .swiper-wrapper {
   height: auto;
 }
 
-.why-us .swiper-button-prev:after,
-.why-us .swiper-button-next:after {
+.sk-login .swiper-button-prev:after,
+.sk-login .swiper-button-next:after {
   font-size: 24px;
   color: color-mix(in srgb, var(--default-color), transparent 50%);
 }
 
-.why-us .swiper-button-prev {
+.sk-login .swiper-button-prev {
   left: 80px;
 }
 
-.why-us .swiper-button-next {
+.sk-login .swiper-button-next {
   right: 80px;
 }
 
-.why-us .swiper-pagination {
+.sk-login .swiper-pagination {
   margin-top: 30px;
   position: relative;
 }
 
-.why-us .swiper-pagination .swiper-pagination-bullet {
+.sk-login .swiper-pagination .swiper-pagination-bullet {
   background-color: color-mix(in srgb, var(--default-color), transparent 50%);
 }
 
-.why-us .swiper-pagination .swiper-pagination-bullet-active {
+.sk-login .swiper-pagination .swiper-pagination-bullet-active {
   background-color: var(--accent-color);
 }
 
 @media (max-width: 1200px) {
-  .why-us .swiper {
+  .sk-login .swiper {
     margin: 60px 60px 40px 60px;
   }
 
-  .why-us .swiper-button-prev,
-  .why-us .swiper-button-next {
+  .sk-login .swiper-button-prev,
+  .sk-login .swiper-button-next {
     display: none;
   }
 }
 
 @media (max-width: 575px) {
-  .why-us .swiper {
+  .sk-login .swiper {
     margin: 40px 40px 20px 40px;
   }
 }

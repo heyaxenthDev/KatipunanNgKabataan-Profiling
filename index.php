@@ -1,5 +1,6 @@
 <?php 
 session_start();
+include "includes/conn.php";
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +50,7 @@ session_start();
             </a>
 
             <nav id="navmenu" class="navmenu">
+                <a href="admin-login"><i class="bi bi-person"></i></a>
 
                 <i class="mobile-nav-toggle d-xl-none d-none bi bi-list"></i>
             </nav>
@@ -73,15 +75,97 @@ session_start();
                             </p>
                         </blockquote>
                         <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
-                            <a href="admin-login" class="btn-get-started">Get Started</a>
-                            <a href="#" class="glightbox btn-watch-video d-flex align-items-center"><i
-                                    class="bi bi-play-circle"></i><span>Watch Video</span></a>
+                            <a href="#sk-login" class="btn-get-started">Get Started</a>
+                            <!-- <a href="#" class="glightbox btn-watch-video d-flex align-items-center"><i
+                                    class="bi bi-play-circle"></i><span>Watch Video</span></a> -->
                         </div>
                     </div>
                 </div>
             </div>
         </section>
         <!-- /Hero Section -->
+
+        <!-- Why Us Section -->
+        <section id="sk-login" class="sk-login section">
+
+            <div class="container">
+
+                <div class="row g-0">
+
+                    <div class="col-xl-5 img-bg" data-aos="fade-up" data-aos-delay="100">
+                        <img src="assets/img/why-us-bg.jpg" alt="">
+                    </div>
+
+                    <div class="col-xl-7 p-5">
+                        <div class="m-5">
+                            <h3 class="mb-3">Welcome Back!</h3>
+                            <p>Please enter your credentials to log in.</p>
+                            <form action="reg-code.php" method="POST">
+
+                                <div class="mb-3">
+                                    <?php 
+                                    // Fetch Available Barangays from the database
+                                    $sql = "SELECT * FROM barangay";
+                                    $stmt = $conn->prepare($sql);
+                                    $stmt->execute();
+                                    $results = $stmt->get_result(); // Use get_result to fetch multiple rows
+
+                                    // Check if any barangays are available
+                                    if ($results->num_rows > 0) {
+                                        echo '<select class="form-select form-select-lg" id="barangayCode" name="barangayCode" required>';
+                                        echo '<option value="" selected>Select your Barangay</option>';
+
+                                        // Loop through the results and add each barangay to the dropdown
+                                        while ($row = $results->fetch_assoc()) {
+                                            $barangayCode = $row['barangay_code']; // Assuming you have a column named 'barangay_code'
+                                            $barangayName = $row['barangay_name']; // Assuming you have a column named 'barangay_name'
+                                            echo "<option value='$barangayCode'>$barangayName</option>";
+                                        }
+
+                                        echo '</select>';
+                                    } else {
+                                        // If no barangays found, display a message or handle as necessary
+                                        echo '<p>No barangays available</p>';
+                                    }
+
+                                    // Close the statement
+                                    $stmt->close();
+
+                                    ?>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        placeholder="Your Username"
+                                        value="<?php echo isset($_SESSION['entered_username']) ? $_SESSION['entered_username'] : ''; ?>"
+                                        required>
+                                    <label for="username"><i class="bi bi-at"></i> Username</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Your Password" required>
+                                    <label for="password"><i class="bi bi-lock"></i> Password</label>
+                                </div>
+
+                                <div class="mt-3 text-end mb-3">
+                                    <a href="forgot_password.php" class="link-primary">Forgot Password?</a>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary" name="sk-login">Login</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- /Why Us Section -->
     </main>
 
     <!-- Scroll Top -->

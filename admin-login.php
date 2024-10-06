@@ -61,18 +61,18 @@ session_start();
 
                                     <div class="pt-4 pb-4">
                                         <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                                        <p class="text-center small">Enter your email & password to login</p>
+                                        <p class="text-center small">Enter your username & password to login</p>
                                     </div>
 
                                     <form class="row g-3" action="reg-code.php" method="POST">
 
                                         <div class="col-12 mb-2">
-                                            <label for="yourEmail" class="form-label"><i class="bi bi-envelope"></i>
-                                                Email</label>
-                                            <input type="email" name="email" class="form-control" id="yourEmail"
+                                            <label for="yourusername" class="form-label"><i class="bi bi-at"></i>
+                                                Username</label>
+                                            <input type="text" name="username" class="form-control" id="yourUsername"
                                                 required
-                                                value="<?php echo isset($_SESSION['entered_email']) ? $_SESSION['entered_email'] : ''; ?>">
-                                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                                                value="<?php echo isset($_SESSION['entered_username']) ? $_SESSION['entered_username'] : ''; ?>">
+                                            <div class="invalid-feedback">Please enter a valid username address.</div>
                                         </div>
 
                                         <div class="col-12 mb-3">
@@ -127,7 +127,7 @@ session_start();
     <script src="assets/vendor/quill/quill.min.js"></script>
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="assets/vendor/php-username-form/validate.js"></script>
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
