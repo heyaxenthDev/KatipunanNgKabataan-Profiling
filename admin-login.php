@@ -37,7 +37,7 @@ session_start();
 
 <body>
     <?php 
-    include "includes/alert.php";
+    include "alert.php";
     ?>
     <main>
         <div class="container">

@@ -10,7 +10,7 @@ if (isset($_SESSION['client_auth']) || $_SESSION['client_auth'] == true) {
     $_SESSION['status_code'] = "info";
 
      // Unset session variables
-     session_destroy();
+    //  session_destroy();
 
     // Redirect to index page
     header("Location: index");

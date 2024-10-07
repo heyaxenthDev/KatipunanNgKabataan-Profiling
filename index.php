@@ -35,11 +35,6 @@ include "includes/conn.php";
     <link href="assets/css/main.css" rel="stylesheet" />
 </head>
 
-
-<?php 
-  include "includes/alert.php";
-?>
-
 <body class="index-page">
     <header id="header" class="header d-flex align-items-center fixed-top">
         <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
@@ -56,6 +51,10 @@ include "includes/conn.php";
             </nav>
         </div>
     </header>
+
+    <?php 
+    include "alert.php";
+    ?>
 
     <main class="main">
         <!-- Hero Section -->
@@ -85,18 +84,18 @@ include "includes/conn.php";
         </section>
         <!-- /Hero Section -->
 
-        <!-- Why Us Section -->
+        <!-- SK Login Section -->
         <section id="sk-login" class="sk-login section">
 
             <div class="container">
 
                 <div class="row g-0">
 
-                    <div class="col-xl-5 img-bg" data-aos="fade-up" data-aos-delay="100">
+                    <div class="col-xl-6 col-md-6 img-bg" data-aos="fade-up" data-aos-delay="100">
                         <img src="assets/img/why-us-bg.jpg" alt="">
                     </div>
 
-                    <div class="col-xl-7 p-5">
+                    <div class="col-xl-6 col-md-6 p-md-5">
                         <div class="m-5">
                             <h3 class="mb-3">Welcome Back!</h3>
                             <p>Please enter your credentials to log in.</p>
@@ -112,7 +111,7 @@ include "includes/conn.php";
 
                                     // Check if any barangays are available
                                     if ($results->num_rows > 0) {
-                                        echo '<select class="form-select form-select-lg" id="barangayCode" name="barangayCode" required>';
+                                        echo '<select class="form-select" id="barangayCode" name="barangayCode" required>';
                                         echo '<option value="" selected>Select your Barangay</option>';
 
                                         // Loop through the results and add each barangay to the dropdown
@@ -165,7 +164,7 @@ include "includes/conn.php";
 
             </div>
 
-        </section><!-- /Why Us Section -->
+        </section><!--  SK Login Section -->
     </main>
 
     <!-- Scroll Top -->
