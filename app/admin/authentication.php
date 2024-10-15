@@ -9,7 +9,7 @@ function checkLogin(){
         $_SESSION['status_code'] = "warning";
         
         // Redirect to login page
-        header("Location: /FurryTect/index.php");
+        header("Location: \KatipunanNgKabataan-Profiling/index.php");
         exit; // Exit script to prevent further execution
     }
 }
