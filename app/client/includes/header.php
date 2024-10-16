@@ -54,6 +54,9 @@ if (mysqli_num_rows($run_query) > 0) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="assets/js/address.js"></script>
+
 </head>
 
 <body>

@@ -75,56 +75,55 @@
                         </div>
                     </div>
 
-
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select id="inputRegion" class="form-select" aria-label="Region">
-                                <option selected>Choose Region...</option>
-                                <option>Region 1</option>
-                                <option>Region 2</option>
-                                <option>Region 3</option>
-                                <!-- Add more regions as needed -->
-                            </select>
-                            <label for="inputRegion">Region</label>
+                            <?php
+                                    $sql = "SELECT * FROM `refregion`";
+                                    $result = mysqli_query($conn, $sql);
+                                    
+                                    // Check if there are any rows returned
+                                    if(mysqli_num_rows($result) > 0 ){
+                                        echo '<select class="form-select" id="regionSelect" name="Region" aria-label="Region Select">';
+                                        echo '<option selected>Select Region</option>';
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo '<option value="'.$row['regCode'].'">'.$row['regDesc'].'</option>';
+                                        }
+                                        echo '</select>';
+                                    }else {
+                                        echo 'No regions found.';
+                                    }
+                                    ?>
+                            <label for="regionSelect">Region</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select id="inputProvince" class="form-select" aria-label="Province">
-                                <option selected>Choose Province...</option>
-                                <option>Province 1</option>
-                                <option>Province 2</option>
-                                <option>Province 3</option>
-                                <!-- Add more provinces as needed -->
+                            <select class="form-select" id="provinceSelect" name="Province"
+                                aria-label="Province Select">
+                                <option selected>Select Province</option>
                             </select>
-                            <label for="inputProvince">Province</label>
+                            <label for="provinceSelect">Province</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select id="inputMunicipality" class="form-select" aria-label="Municipality">
-                                <option selected>Choose Municipality...</option>
-                                <option>Municipality 1</option>
-                                <option>Municipality 2</option>
-                                <option>Municipality 3</option>
-                                <!-- Add more municipalities as needed -->
+                            <select class="form-select" id="municipalitySelect" name="Municipality"
+                                aria-label="City Select">
+                                <option selected>Select City/Municipality</option>
                             </select>
-                            <label for="inputMunicipality">Municipality</label>
+                            <label for="municipalitySelect">City/Municipality</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select id="inputBarangay" class="form-select" aria-label="Barangay">
-                                <option selected>Choose Barangay...</option>
-                                <option>Barangay 1</option>
-                                <option>Barangay 2</option>
-                                <option>Barangay 3</option>
-                                <!-- Add more barangays as needed -->
+                            <select class="form-select" id="barangaySelect" name="Barangay"
+                                aria-label="Barangay Select">
+                                <option selected>Select Barangay</option>
                             </select>
-                            <label for="inputBarangay">Barangay</label>
+                            <label for="barangaySelect">Barangay</label>
                         </div>
                     </div>
 
@@ -139,16 +138,25 @@
                     <label for="PersonalInformation" class="form-label fw-semibold">Personal Information</label>
 
                     <div class="col-md-4">
-                        <div class="form-floating">
-                            <select id="inputGender" class="form-select" aria-label="Gender">
-                                <option selected>Choose Gender...</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                            </select>
-                            <label for="inputGender">Gender</label>
+                        <label class="form-label d-block mb-2">Gender <span class="text-danger">*</span></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male"
+                                required>
+                            <label class="form-check-label" for="genderMale">Male</label>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female">
+                            <label class="form-check-label" for="genderFemale">Female</label>
+                        </div>
+                        <!-- Optional: Uncomment the third option if needed -->
+                        <!--
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="genderOther" value="Other">
+                            <label class="form-check-label" for="genderOther">Other</label>
+                        </div>
+                        -->
                     </div>
+
 
                     <div class="col-md-4">
                         <div class="form-floating">
