@@ -361,6 +361,12 @@ h6 {
   margin-right: 6px;
 }
 
+.sebaste-logo img {
+  max-height: 110px;
+  margin-right: 0px;
+  margin-left: 110px;
+}
+
 .logo span {
   font-size: 26px;
   font-weight: 700;

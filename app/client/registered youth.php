@@ -19,48 +19,65 @@
         <div class="row">
             <div class="col-lg-12">
 
-                <div class="card">
+                <div class="card pt-3">
                     <div class="card-body">
 
-                        <!-- Table with stripped rows -->
+                        <!-- Registered Youth -->
+                        <?php
+                        // Database connection
+                        include "includes/conn.php";
+
+                        // Query to fetch all registered youth
+                        $sql = "SELECT regCode, first_name, last_name, age, gender, youth_classification, street FROM registered";
+                        $result = mysqli_query($conn, $sql);
+
+                        ?>
+
                         <table class="table datatable">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <b>N</b>ame
-                                    </th>
-                                    <th>Ext.</th>
-                                    <th>City</th>
-                                    <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                    <th>Completion</th>
+                                    <th>Registration #</th>
+                                    <th><b>Name</b></th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Youth Class</th>
+                                    <th>Purok/Street</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Unity Pugh</td>
-                                    <td>9958</td>
-                                    <td>Curicó</td>
-                                    <td>2005/02/11</td>
-                                    <td>37%</td>
-                                </tr>
-                                <tr>
-                                    <td>Theodore Duran</td>
-                                    <td>8971</td>
-                                    <td>Dhanbad</td>
-                                    <td>1999/04/07</td>
-                                    <td>97%</td>
-                                </tr>
-                                <tr>
-                                    <td>Kylie Bishop</td>
-                                    <td>3147</td>
-                                    <td>Norman</td>
-                                    <td>2005/09/08</td>
-                                    <td>63%</td>
-                                </tr>
-
+                                <?php
+                                // Check if there are any rows returned
+                                if (mysqli_num_rows($result) > 0) {
+                                    // Loop through each row and populate the table
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row['regCode'] . "</td>";
+                                        echo "<td>" . $row['first_name'] . " " . $row['last_name'] . "</td>";
+                                        echo "<td>" . $row['age'] . "</td>";
+                                        echo "<td>" . $row['gender'] . "</td>";
+                                        echo "<td>" . $row['youth_classification'] . "</td>";
+                                        echo "<td>" . $row['street'] . "</td>";
+                                        echo "<td>
+                                            <button class='btn btn-success btn-sm' type='button'><i class='bi bi-eye'></i></button>
+                                            <button class='btn btn-primary btn-sm' type='button'><i class='bi bi-pencil-square'></i></button>
+                                            <button class='btn btn-danger btn-sm' type='button'><i class='bi bi-trash'></i></button>
+                                        </td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7'>No records found</td></tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
-                        <!-- End Table with stripped rows -->
+
+                        <?php
+                        // Close the database connection
+                        mysqli_close($conn);
+                        ?>
+
+                        <!-- End Registered Youth -->
 
                     </div>
                 </div>
