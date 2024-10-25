@@ -19,6 +19,7 @@
         <div class="card">
             <form class="card-body" action="submit-form.php" method="POST" enctype="multipart/form-data">
 
+                <input type="hidden" name="brgyCode" id="brgyCode" value="<?=$_GET['Code']?>">
 
                 <div class="container-fluid">
                     <div class="row align-items-center pt-5">

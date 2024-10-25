@@ -79,58 +79,113 @@
 
                                 <h5 class="card-title">Youth Registered</h5>
 
+                                <!-- Registered Youth -->
+                                <?php
+
+                                // Query to fetch all registered youth
+                                $sql = "SELECT * FROM registered WHERE brgyCode = $getCode";
+                                $result = mysqli_query($conn, $sql);
+
+                                ?>
+
                                 <!-- Youth Registered Table -->
                                 <table class="table datatable">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                <b>N</b>ame
-                                            </th>
-                                            <th>Ext.</th>
-                                            <th>City</th>
-                                            <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                            <th>Completion</th>
+                                            <th>Registration #</th>
+                                            <th><b>Name</b></th>
+                                            <th>Age</th>
+                                            <th>Gender</th>
+                                            <th>Youth Class</th>
+                                            <th>Purok/Street</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php
+                                        // Check if there are any rows returned
+                                        if (mysqli_num_rows($result) > 0) {
+                                            // Loop through each row and populate the table
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                        ?>
                                         <tr>
-                                            <td>Unity Pugh</td>
-                                            <td>9958</td>
-                                            <td>Curicó</td>
-                                            <td>2005/02/11</td>
-                                            <td>37%</td>
+                                            <td><?=$row['regCode'] ?></td>
+                                            <td><?=$row['first_name'] . " ". $row['last_name'] ?></td>
+                                            <td><?=$row['age'] ?></td>
+                                            <td><?=($row['gender']== 0 ? "Male" : "Female") ?></td>
+                                            <td><?=$row['youth_classification'] ?></td>
+                                            <td><?=$row['street'] ?></td>
+                                            <td>
+                                                <button class='btn btn-success btn-sm' type='button'><i
+                                                        class='bi bi-eye'></i></button>
+                                                <button class='btn btn-primary btn-sm' type='button'><i
+                                                        class='bi bi-pencil-square'></i></button>
+                                                <button class='btn btn-danger btn-sm' type='button'><i
+                                                        class='bi bi-trash'></i></button>
+                                            </td>
                                         </tr>
-
+                                        <?php
+                                            }
+                                        }
+                                        ?>
                                     </tbody>
                                 </table>
                                 <!-- End Youth Registered Table -->
+
                             </div>
                             <div class="tab-pane fade" id="pills-unregistered" role="tabpanel"
                                 aria-labelledby="unregistered-tab">
                                 <h5 class="card-title">Youth Unregistered</h5>
 
+                                <!-- Registered Youth -->
+                                <?php
+
+                                // Query to fetch all registered youth
+                                $sql = "SELECT * FROM unregistered WHERE brgyCode = $getCode";
+                                $result = mysqli_query($conn, $sql);
+
+                                ?>
+
                                 <!-- Youth Registered Table -->
                                 <table class="table datatable">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                <b>N</b>ame
-                                            </th>
-                                            <th>Ext.</th>
-                                            <th>City</th>
-                                            <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                            <th>Completion</th>
+                                            <th>Registration #</th>
+                                            <th><b>Name</b></th>
+                                            <th>Age</th>
+                                            <th>Gender</th>
+                                            <th>Youth Class</th>
+                                            <th>Purok/Street</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php
+                                        // Check if there are any rows returned
+                                        if (mysqli_num_rows($result) > 0) {
+                                            // Loop through each row and populate the table
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                        ?>
                                         <tr>
-                                            <td>Unity Pugh</td>
-                                            <td>9958</td>
-                                            <td>Curicó</td>
-                                            <td>2005/02/11</td>
-                                            <td>37%</td>
+                                            <td><?=$row['regCode'] ?></td>
+                                            <td><?=$row['first_name'] . " ". $row['last_name'] ?></td>
+                                            <td><?=$row['age'] ?></td>
+                                            <td><?=($row['gender']== 0 ? "Male" : "Female") ?></td>
+                                            <td><?=$row['youth_classification'] ?></td>
+                                            <td><?=$row['street'] ?></td>
+                                            <td>
+                                                <button class='btn btn-success btn-sm' type='button'><i
+                                                        class='bi bi-eye'></i></button>
+                                                <button class='btn btn-primary btn-sm' type='button'><i
+                                                        class='bi bi-pencil-square'></i></button>
+                                                <button class='btn btn-danger btn-sm' type='button'><i
+                                                        class='bi bi-trash'></i></button>
+                                            </td>
                                         </tr>
-
+                                        <?php
+                                            }
+                                        }
+                                        ?>
                                     </tbody>
                                 </table>
                                 <!-- End Youth Registered Table -->

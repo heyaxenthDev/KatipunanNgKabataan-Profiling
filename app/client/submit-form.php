@@ -4,6 +4,7 @@ include "includes/conn.php";
 
 if (isset($_POST['RegYouth'])) {
     // Sanitize inputs (or use prepared statements)
+    $brgyCode = mysqli_real_escape_string($conn, $_POST['brgyCode']);
     $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $middleName = mysqli_real_escape_string($conn, $_POST['middleName']);
@@ -115,21 +116,24 @@ if (isset($_POST['RegYouth'])) {
 
     // Insert data
     $sql = $table === "unregistered"
-        ? "INSERT INTO unregistered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" // Adjust fields as needed
-        : "INSERT INTO registered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ? "INSERT INTO unregistered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" // Adjust fields as needed
+        : "INSERT INTO registered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssssssssssssssssssssss", $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote);
+    $stmt->bind_param("ssssssssssssssssssssssssssss", $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote, $brgyCode);
     if ($stmt->execute()) {
         $_SESSION['status'] = "Success!";
-        $_SESSION['status_text'] = "Record added!";
+        $_SESSION['status_text'] = "Youth Registered!";
         $_SESSION['status_code'] = "success";
+        $_SESSION['status_btn'] = "Done";
+        
     } else {
         $_SESSION['status'] = "Error!";
         $_SESSION['status_text'] = "Error: " . $stmt->error;
         $_SESSION['status_code'] = "error";
+        $_SESSION['status_btn'] = "Okay";
     }
 
     $stmt->close();

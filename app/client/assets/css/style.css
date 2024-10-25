@@ -816,17 +816,22 @@ h6 {
   flex-grow: 0;
 }
 
-.dashboard .sales-card .card-icon {
+.dashboard .male-card .card-icon {
   color: #4154f1;
-  background: #f6f6fe;
+  background: #dedeff;
 }
 
-.dashboard .revenue-card .card-icon {
+.dashboard .female-card .card-icon {
+  color: #ff1dbf;
+  background: #ffdff5;
+}
+
+.dashboard .registered-card .card-icon {
   color: #2eca6a;
   background: #e0f8e9;
 }
 
-.dashboard .customers-card .card-icon {
+.dashboard .unregistered-card .card-icon {
   color: #ff771d;
   background: #ffecdf;
 }

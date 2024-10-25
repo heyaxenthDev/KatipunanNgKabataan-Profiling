@@ -28,7 +28,7 @@
                         $code = $_GET['Code'];
 
                         // Query to fetch all registered youth
-                        $sql = "SELECT * FROM registered WHERE brgyCode = $code";
+                        $sql = "SELECT * FROM unregistered WHERE brgyCode = $code";
                         $result = mysqli_query($conn, $sql);
 
                         ?>

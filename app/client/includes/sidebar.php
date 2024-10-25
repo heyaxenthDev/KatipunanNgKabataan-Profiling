@@ -25,8 +25,8 @@
         </li><!-- End Register Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'unregister youth') ? '' : 'collapsed' ?>"
-                href="unregister youth?Code=<?=$BrgyCode?>">
+            <a class="nav-link <?= ($current_page == 'unregistered youth') ? '' : 'collapsed' ?>"
+                href="unregistered youth?Code=<?=$BrgyCode?>">
                 <i class="bi bi-person-dash"></i>
                 <span>Unregistered</span>
             </a>
