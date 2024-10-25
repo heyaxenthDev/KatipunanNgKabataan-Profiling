@@ -225,6 +225,7 @@ Toast.fire({
 
                                 <script>
                                 document.addEventListener("DOMContentLoaded", () => {
+
                                     const given_code = "<?php echo $code; ?>";
 
                                     // Fetch the data from the PHP backend
@@ -365,10 +366,10 @@ Toast.fire({
                         <script>
                         document.addEventListener("DOMContentLoaded", () => {
                             // Get the PHP variable and pass it to the fetch request
-                            const code = "<?php echo $code; ?>";
+                            const given_code = "<?php echo $code; ?>";
 
                             // Fetch the data from the PHP backend with the dynamic code
-                            fetch(`get_youth_age_groups_data.php?Code=${code}`)
+                            fetch(`get_youth_age_groups_data.php?Code=${given_code}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     // Create the chart with dynamic data
