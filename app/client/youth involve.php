@@ -52,27 +52,82 @@
                             <div class="col-sm-10">
                                 <select class="form-select" id="types" name="types" required>
                                     <option selected>-- Select Type --</option>
-                                    <optgroup label="Sports">
-                                        <option value="basketball">Basketball</option>
-                                        <option value="volleyball">Volleyball</option>
-                                        <option value="tournament_playing">Tournament Playing</option>
-                                        <option value="mobile_legend">Mobile Legend</option>
-                                    </optgroup>
-                                    <optgroup label="Education">
-                                        <option value="free_printing">Free Printing</option>
-                                        <option value="library_hub">Library Hub</option>
-                                        <option value="distribution_school_supplies">Distribution of School Supplies
-                                        </option>
-                                    </optgroup>
-                                    <optgroup label="Health Environment">
-                                        <option value="health_environment">Health Environment</option>
-                                    </optgroup>
-                                    <optgroup label="Feeding">
-                                        <option value="malnourish_low_weight">Malnourish/Low Weight</option>
-                                    </optgroup>
                                 </select>
                             </div>
                         </div>
+
+                        <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            // Types data mapped by program
+                            const typesData = {
+                                sports: [{
+                                        value: "basketball",
+                                        text: "Basketball"
+                                    },
+                                    {
+                                        value: "volleyball",
+                                        text: "Volleyball"
+                                    },
+                                    {
+                                        value: "tournament_playing",
+                                        text: "Tournament Playing"
+                                    },
+                                    {
+                                        value: "mobile_legend",
+                                        text: "Mobile Legend"
+                                    }
+                                ],
+                                education: [{
+                                        value: "free_printing",
+                                        text: "Free Printing"
+                                    },
+                                    {
+                                        value: "library_hub",
+                                        text: "Library Hub"
+                                    },
+                                    {
+                                        value: "distribution_school_supplies",
+                                        text: "Distribution of School Supplies"
+                                    }
+                                ],
+                                health_environment: [{
+                                    value: "health_environment",
+                                    text: "Health Environment"
+                                }],
+                                feeding: [{
+                                    value: "malnourish_low_weight",
+                                    text: "Malnourish/Low Weight"
+                                }],
+                                tree_planting: [{
+                                    value: "tree_planting",
+                                    text: "Tree Planting"
+                                }]
+                            };
+
+                            // References to DOM elements
+                            const programsSelect = document.getElementById("programs");
+                            const typesSelect = document.getElementById("types");
+
+                            // Update types dropdown based on selected program
+                            programsSelect.addEventListener("change", function() {
+                                const selectedProgram = this.value;
+
+                                // Clear current types options
+                                typesSelect.innerHTML = "<option selected>-- Select Type --</option>";
+
+                                // Populate new options based on the selected program
+                                if (selectedProgram && typesData[selectedProgram]) {
+                                    typesData[selectedProgram].forEach(type => {
+                                        const option = document.createElement("option");
+                                        option.value = type.value;
+                                        option.textContent = type.text;
+                                        typesSelect.appendChild(option);
+                                    });
+                                }
+                            });
+                        });
+                        </script>
+
 
                         <div class="row mb-3">
                             <label for="forCategory" class="col-sm-2 col-form-label">For: </label>
@@ -152,8 +207,8 @@
                             <div class="col-sm-8">
                                 <select class="form-select" id="venue" name="venue" required>
                                     <option selected>-- Select Venue --</option>
-                                    <option value="Poblacion Sebaste Gym">rgy. Alegre Cover Court">Brgy. Alegre Cover
-                                        Court</option>
+                                    <option value="Poblacion Sebaste Gym">Poblacion Sebaste Gym</option>
+                                    <option value="Brgy. Alegre Cover Court">Brgy. Alegre Cover Court</option>
                                     <option value="Brgy. Aras-Asan Cover Court">Brgy. Aras-Asan Cover Court</option>
                                     <option value="Brgy. Bacalan Cover Court">Brgy. Bacalan Cover Court</option>
                                     <option value="Brgy. Agela Cover Court">Brgy. Agela Cover Court</option>
@@ -221,7 +276,7 @@
                 </div>
                 <div class="text-end pt-3">
                     <button type="submit" class="btn btn-primary" name="YouthInvolve">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="reset" class="btn btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>
@@ -231,5 +286,4 @@
 
 <?php 
 include "includes/footer.php";
-?>Poblacion Sebaste Gym</option>
-<option value="B
+?>
