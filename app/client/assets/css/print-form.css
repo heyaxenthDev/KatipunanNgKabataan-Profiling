@@ -1,0 +1,57 @@
+/* Hide all content except the card when printing */
+@media print {
+  body * {
+    visibility: hidden;
+    /* Hide everything initially */
+    margin: 0;
+    /* Remove margin from hidden elements */
+  }
+
+  /* Display adjustments specifically for print */
+  #printableCard,
+  #printableCard * {
+    visibility: visible;
+    /* Only make the card visible */
+    box-shadow: none;
+  }
+
+  #printableCard {
+    position: absolute;
+    /* Position the card at the top left */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 20px; /* Reduce padding around the card */
+    font-size: 12px; /* Reduce font size for all text within the card */
+  }
+
+  /* Adjust text size for the header when printing */
+  .text-header h5 {
+    font-size: 14px; /* Slightly smaller font size for header */
+  }
+
+  /* Scale down logo image size for printing */
+  .sebaste-logo img {
+    max-width: 85px; /* Adjust logo size to save space */
+  }
+
+  .img-prev .division {
+    margin: 0px;
+    padding-right: 60px;
+    /* Reduce padding-right to save space */
+  }
+
+  .img-prev img {
+    margin-top: 10px;
+    max-width: 120px; /* Adjust image size to save space */
+  }
+
+  /* Optional: Reduce the height of the card */
+  #printableCard {
+    height: auto; /* Ensure the card height can adjust based on content */
+  }
+
+  .buttons {
+    display: none;
+  }
+}

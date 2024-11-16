@@ -27,15 +27,15 @@
                     <!-- Left Side Column -->
                     <div class="col-md-6">
                         <div class="row mb-3">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Date: </label>
-                            <div class="col-sm-10">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Date of Submission: </label>
+                            <div class="col-sm-8">
                                 <input type="date" class="form-control" id="inputText" required>
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <label for="programs" class="col-sm-2 col-form-label">Programs: </label>
-                            <div class="col-sm-10">
+                            <label for="programs" class="col-sm-4 col-form-label">Programs: </label>
+                            <div class="col-sm-8">
                                 <select class="form-select" id="programs" name="programs" required>
                                     <option selected>-- Select Program --</option>
                                     <option value="sports">Sports</option>
@@ -48,8 +48,8 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="types" class="col-sm-2 col-form-label">Types: </label>
-                            <div class="col-sm-10">
+                            <label for="types" class="col-sm-4 col-form-label">Types: </label>
+                            <div class="col-sm-8">
                                 <select class="form-select" id="types" name="types" required>
                                     <option selected>-- Select Type --</option>
                                 </select>
@@ -130,8 +130,8 @@
 
 
                         <div class="row mb-3">
-                            <label for="forCategory" class="col-sm-2 col-form-label">For: </label>
-                            <div class="col-sm-10">
+                            <label for="forCategory" class="col-sm-4 col-form-label">For: </label>
+                            <div class="col-sm-8">
                                 <select class="form-select" id="forCategory" name="forCategory" required>
                                     <option selected>-- Select For --</option>
                                     <option value="female">Female</option>
@@ -142,8 +142,8 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="ageCategory" class="col-sm-2 col-form-label">Age: </label>
-                            <div class="col-sm-10">
+                            <label for="ageCategory" class="col-sm-4 col-form-label">Age: </label>
+                            <div class="col-sm-8">
                                 <select class="form-select" id="ageCategory" name="ageCategory" required>
                                     <option selected>-- Select Age Category --</option>
                                     <option value="15-30">15-30</option>

@@ -136,7 +136,7 @@ include "includes/conn.php";
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username"
                                         placeholder="Your Username"
-                                        value="<?php echo isset($_SESSION['entered_username']) ? $_SESSION['entered_username'] : ''; ?>"
+                                        value="<?php echo isset($_SESSION['entered_username_sk']) ? $_SESSION['entered_username_sk'] : ''; ?>"
                                         required>
                                     <label for="username"><i class="bi bi-at"></i> Username</label>
                                 </div>

@@ -41,7 +41,7 @@
                                 <img src="assets/img/user-profile.png" id="userImage"
                                     class="img-fluid rounded img-thumbnail mb-3" alt="User Image">
                                 <input type="file" class="form-control" id="userImageInput" name="userImage"
-                                    accept="image/*">
+                                    accept="image/*" required>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="text" class="form-control" id="floatingLastName" name="lastName"
-                                placeholder="Last Name">
+                                placeholder="Last Name" required>
                             <label for="floatingLastName">Last Name</label>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="text" class="form-control" id="floatingFirstName" name="firstName"
-                                placeholder="First Name">
+                                placeholder="First Name" required>
                             <label for="floatingFirstName">First Name</label>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="text" class="form-control" id="floatingMiddleName" name="middleName"
-                                placeholder="Middle Name">
+                                placeholder="Middle Name" required>
                             <label for="floatingMiddleName">Middle Name</label>
                         </div>
                     </div>
@@ -82,7 +82,8 @@
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="Street" name="street" placeholder="Street">
+                            <input type="text" class="form-control" id="Street" name="street" placeholder="Street"
+                                required>
                             <label for="Street">Street</label>
                         </div>
                     </div>
@@ -95,7 +96,7 @@
                                     
                                     // Check if there are any rows returned
                                     if(mysqli_num_rows($result) > 0 ){
-                                        echo '<select class="form-select" id="regionSelect" name="Region" aria-label="Region Select">';
+                                        echo '<select class="form-select" id="regionSelect" name="Region" aria-label="Region Select" required>';
                                         echo '<option selected>Select Region</option>';
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<option value="'.$row['regCode'].'">'.$row['regDesc'].'</option>';
@@ -111,8 +112,8 @@
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select class="form-select" id="provinceSelect" name="Province"
-                                aria-label="Province Select">
+                            <select class="form-select" id="provinceSelect" name="Province" aria-label="Province Select"
+                                required>
                                 <option selected>Select Province</option>
                             </select>
                             <label for="provinceSelect">Province</label>
@@ -122,7 +123,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <select class="form-select" id="municipalitySelect" name="Municipality"
-                                aria-label="City Select">
+                                aria-label="City Select" required>
                                 <option selected>Select City/Municipality</option>
                             </select>
                             <label for="municipalitySelect">City/Municipality</label>
@@ -131,8 +132,8 @@
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select class="form-select" id="barangaySelect" name="Barangay"
-                                aria-label="Barangay Select">
+                            <select class="form-select" id="barangaySelect" name="Barangay" aria-label="Barangay Select"
+                                required>
                                 <option selected>Select Barangay</option>
                             </select>
                             <label for="barangaySelect">Barangay</label>
@@ -142,7 +143,8 @@
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="inputZip" name="inputZip" placeholder=" ">
+                            <input type="text" class="form-control" id="inputZip" name="inputZip" placeholder=" "
+                                required>
                             <label for="inputZip">Zip</label>
                         </div>
                     </div>
@@ -172,7 +174,8 @@
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <input type="number" class="form-control" id="inputAge" name="inputAge" placeholder="Age">
+                            <input type="number" class="form-control" id="inputAge" name="inputAge" placeholder="Age"
+                                required>
                             <label for="inputAge">Age</label>
                         </div>
                     </div>
@@ -180,7 +183,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="date" class="form-control" id="inputBirthdate" name="inputBirthdate"
-                                placeholder="Birthdate">
+                                placeholder="Birthdate" required>
                             <label for="inputBirthdate">Birthdate</label>
                         </div>
                     </div>
@@ -188,7 +191,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <select id="inputCivilStatus" class="form-select" name="inputCivilStatus"
-                                aria-label="Civil Status">
+                                aria-label="Civil Status" required>
                                 <option selected value="">Choose Civil Status...</option>
                                 <option value="single">Single</option>
                                 <option value="married">Married</option>
@@ -203,7 +206,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="email" class="form-control" id="inputEmail" name="inputEmail"
-                                placeholder="name@example.com">
+                                placeholder="name@example.com" required>
                             <label for="inputEmail">Email Address</label>
                         </div>
                     </div>
@@ -211,7 +214,7 @@
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="tel" class="form-control" id="inputContact" name="inputContact"
-                                placeholder="09123456789">
+                                placeholder="09123456789" required>
                             <label for="inputContact">Contact Number</label>
                         </div>
                     </div>
@@ -221,7 +224,7 @@
                     <div class="col-md-6">
                         <div class="form-floating">
                             <select id="inputYouthAgeGroup" name="inputYouthAgeGroup" class="form-select"
-                                aria-label="Youth Age Group">
+                                aria-label="Youth Age Group" required>
                                 <option selected value="">Choose Youth Age Group...</option>
                                 <option value="unregistered">Unregistered Youth <small>(below 15 years old)</small>
                                 </option>
@@ -236,7 +239,7 @@
                     <div class="col-md-6">
                         <div class="form-floating">
                             <select id="inputYouthClassification" name="inputYouthClassification" class="form-select"
-                                aria-label="Youth Classification">
+                                aria-label="Youth Classification" required>
                                 <option selected>Choose Youth Classification...</option>
                                 <option value="In School">In School</option>
                                 <option value="Out of School Youth">Out of School Youth</option>
@@ -258,7 +261,7 @@
                             <div class="col-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="elementaryLevel" value="Elementary Level">
+                                        id="elementaryLevel" value="Elementary Level" required>
                                     <label class="form-check-label" for="elementaryLevel">Elementary Level</label>
                                 </div>
                                 <div class="form-check">
@@ -327,7 +330,7 @@
                             <div class="col-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="workStatus" id="employed"
-                                        value="Employed">
+                                        value="Employed" required>
                                     <label class="form-check-label" for="employed">Employed</label>
                                 </div>
                                 <div class="form-check">
@@ -353,6 +356,11 @@
                                         value="Not interested in looking for a job">
                                     <label class="form-check-label" for="notInterested">Not interested in looking for a
                                         job</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="workStatus" id="stillStudying"
+                                        value="Still Studying">
+                                    <label class="form-check-label" for="stillStudying">Still Studying</label>
                                 </div>
                             </div>
                         </div>

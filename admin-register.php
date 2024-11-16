@@ -37,7 +37,7 @@ session_start();
 
 <body>
     <?php 
-    include "includes/alert.php";
+    include "alert.php";
     ?>
 
     <main>
@@ -82,10 +82,10 @@ session_start();
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="yourEmail" class="form-label">Your Email</label>
-                                            <input type="email" name="email" class="form-control" id="yourEmail"
+                                            <label for="yourUsername" class="form-label">Username</label>
+                                            <input type="text" name="username" class="form-control" id="yourUsername"
                                                 required>
-                                            <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                                            <div class="invalid-feedback">Please enter your Username!</div>
                                         </div>
 
                                         <div class="col-12">
@@ -109,7 +109,8 @@ session_start();
                                                 Account</button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Already have an account? <a href="#">Log in</a></p>
+                                            <p class="small mb-0">Already have an account? <a href="admin-login">Log
+                                                    in</a></p>
                                         </div>
                                     </form>
 

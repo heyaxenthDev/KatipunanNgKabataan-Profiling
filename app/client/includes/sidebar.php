@@ -78,13 +78,14 @@
             </a>
         </li><!-- End Reports Page Nav -->
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'calendar') ? '' : 'collapsed' ?>"
                 href="calendar?Code=<?=$BrgyCode?>">
                 <i class="bi bi-calendar-week"></i>
                 <span>Calendar</span>
             </a>
-        </li><!-- End Calendar Page Nav -->
+        </li> -->
+        <!-- End Calendar Page Nav -->
 
         <li class="nav-heading">User</li>
 

@@ -155,7 +155,7 @@ if (isset($_POST['sk-login'])) {
               exit();
           } else {
               // Invalid password
-              $_SESSION['entered_username'] = $username;
+              $_SESSION['entered_username_sk'] = $username;
               $_SESSION['status'] = "Invalid Password!";
               $_SESSION['status_text'] = "Incorrect password. Please try again.";
               $_SESSION['status_code'] = "error";
