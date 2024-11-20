@@ -147,6 +147,12 @@ h6 {
   z-index: 997;
 }
 
+.sebaste-logo img {
+  max-height: 180px;
+  margin-right: 0px;
+  margin-left: 110px;
+}
+
 .header .logo {
   line-height: 1;
 }

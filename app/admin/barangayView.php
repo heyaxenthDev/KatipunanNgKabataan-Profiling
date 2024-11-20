@@ -193,10 +193,10 @@
                             <div class="tab-pane fade" id="pills-sk-official" role="tabpanel"
                                 aria-labelledby="sk-official-tab">
                                 <section class="team" id="team">
-                                    <div class="container" data-aos="fade-up">
+                                    <div data-aos="fade-up">
 
                                         <div class="d-flex justify-content-end mt-3">
-                                            <button class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#AddSKOfficial"><i class="bi bi-person-plus"></i>
                                                 Add
                                                 New SK
@@ -362,7 +362,7 @@
 
                                                     // Output the HTML structure for each member
                                                     echo '
-                                                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                                                    <div class="col-lg-2 col-md-6 col-6 d-flex align-items-stretch">
                                                         <div class="member" data-aos="fade-up" data-aos-delay="100">
                                                             <div class="member-img">
                                                                 <img src="' . $imageUrl . '" class="img-fluid" alt="' . $fullname . '">

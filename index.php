@@ -45,8 +45,12 @@ include "includes/conn.php";
             </a>
 
             <nav id="navmenu" class="navmenu">
-                <a href="admin-login"><i class="bi bi-person"></i></a>
-
+                <ul>
+                    <li><a href="youth-registration">Youth Registration</a></li>
+                    <li>
+                        <a href="admin-login"><i class="bi bi-person"></i></a>
+                    </li>
+                </ul>
                 <i class="mobile-nav-toggle d-xl-none d-none bi bi-list"></i>
             </nav>
         </div>
