@@ -8,6 +8,8 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
+        <li class="nav-heading">Main</li>
+
         <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'homepage') ? '' : 'collapsed' ?>"
                 href="homepage?Code=<?=$BrgyCode?>">
@@ -48,6 +50,8 @@
             </a>
         </li><!-- End Youth Involve Page Nav -->
 
+        <li class="nav-heading">Documents</li>
+
         <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'cbydp') ? '' : 'collapsed' ?>" href="cbydp?Code=<?=$BrgyCode?>">
                 <i class="bi bi-file-earmark-text"></i>
@@ -63,10 +67,10 @@
         </li><!-- End ABYIP Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'documents') ? '' : 'collapsed' ?>"
-                href="documents?Code=<?=$BrgyCode?>">
-                <i class="bi bi-folder2-open"></i>
-                <span>Documents</span>
+            <a class="nav-link <?= ($current_page == 'notice of the meeting') ? '' : 'collapsed' ?>"
+                href="notice of the meeting?Code=<?=$BrgyCode?>">
+                <i class="bi bi-bell"></i>
+                <span>Notice of the Meeting</span>
             </a>
         </li><!-- End Documents Page Nav -->
 

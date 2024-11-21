@@ -75,7 +75,7 @@ if (isset($_POST['RegYouth'])) {
     if (isset($_FILES['userImage']) && $_FILES['userImage']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['userImage']['tmp_name'];
         $fileName = uniqid() . '_' . $_FILES['userImage']['name'];
-        $filePath = 'uploads/' . basename($fileName);
+        $filePath = 'app/client/uploads/' . basename($fileName);
         if (move_uploaded_file($fileTmpPath, $filePath)) {
             $userImage = $filePath;
         }

@@ -56,6 +56,7 @@ if (mysqli_num_rows($run_query) > 0) {
     <link href="assets/css/print-form.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/js/address.js"></script>
 
 </head>
@@ -78,8 +79,19 @@ if (mysqli_num_rows($run_query) > 0) {
             $role = $row['role'];
             $lastname = $row['lastname'];
             $username = $row['username'];
+            $brgy_code = $row['brgy_code'];
+            $user_picture = $row['picture'];
             $dc = date("M d, Y", strtotime($row['date_created']));
 
+        }
+    }
+
+    $getBrgyName = "SELECT * FROM barangay WHERE barangay_code = $brgy_code";
+    $brgy_name = mysqli_query($conn, $getBrgyName);
+
+    if ($brgy_name && mysqli_num_rows($brgy_name) > 0) {
+        while ($row = mysqli_fetch_assoc($brgy_name)) {
+            $BrgyName = $row['barangay_name'];
         }
     }
     ?>
@@ -101,7 +113,12 @@ if (mysqli_num_rows($run_query) > 0) {
                 <li class="nav-item dropdown pe-3">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="assets/img/user-profile.png" alt="Profile" class="rounded-circle">
+                        <?php
+                        // Check if $user_picture is empty
+                        $profilePicture = empty($user_picture) ? 'assets/img/user-profile.png' : $user_picture;
+                        ?>
+
+                        <img src="<?= htmlspecialchars($profilePicture); ?>" alt="Profile" class="rounded-circle">
                         <span class="d-none d-md-block dropdown-toggle ps-2"><?= $user?></span>
                     </a><!-- End Profile Iamge Icon -->
 

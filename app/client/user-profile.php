@@ -29,7 +29,13 @@
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <?php
+                        // Check if $user_picture is empty
+                        $profilePicture = empty($user_picture) ? 'assets/img/user-profile.png' : $user_picture;
+                        ?>
+
+                        <img src="<?= htmlspecialchars($profilePicture); ?>" alt="Profile" class="rounded-circle">
+
                         <h2><?= $fullname?></h2>
                         <h3><?= $role?></h3>
                         <!-- <div class="social-links mt-2">
@@ -48,24 +54,44 @@
                 <div class="card">
                     <div class="card-body pt-3">
                         <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered">
-
+                        <ul class="nav nav-tabs nav-tabs-bordered" id="profile-tabs">
                             <li class="nav-item">
                                 <button class="nav-link active" data-bs-toggle="tab"
                                     data-bs-target="#profile-overview">Overview</button>
                             </li>
-
                             <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
                                     Profile</button>
                             </li>
-
                             <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="tab"
                                     data-bs-target="#profile-change-password">Change Password</button>
                             </li>
-
                         </ul>
+
+                        <script>
+                        // Check if there's a saved active tab in localStorage and activate it
+                        window.onload = function() {
+                            let activeTab = localStorage.getItem('activeTab');
+                            if (activeTab) {
+                                let tabElement = document.querySelector(`[data-bs-target="${activeTab}"]`);
+                                if (tabElement) {
+                                    let tabInstance = new bootstrap.Tab(tabElement);
+                                    tabInstance.show();
+                                }
+                            }
+                        };
+
+                        // Add event listener to each tab button to store the active tab in localStorage
+                        document.querySelectorAll('#profile-tabs button').forEach(tab => {
+                            tab.addEventListener('shown.bs.tab', function(event) {
+                                let activeTab = event.target.getAttribute('data-bs-target');
+                                localStorage.setItem('activeTab', activeTab);
+                            });
+                        });
+                        </script>
+
+
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
@@ -89,7 +115,7 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Barangay</div>
-                                    <div class="col-lg-9 col-md-8"><?= $_GET['Code']?></div>
+                                    <div class="col-lg-9 col-md-8"><?= $BrgyName ?></div>
                                 </div>
 
                                 <div class="row">
@@ -98,7 +124,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Date Created</div>
+                                    <div class="col-lg-3 col-md-4 label">Date Account Created</div>
                                     <div class="col-lg-9 col-md-8"><?= $dc?></div>
                                 </div>
 
@@ -122,62 +148,96 @@
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                 <!-- Profile Edit Form -->
-                                <form>
+                                <form action="code.php" method="POST" enctype="multipart/form-data">
                                     <div class="row mb-3">
                                         <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
                                             Image</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <img src="assets/img/profile-img.jpg" alt="Profile">
+                                            <?php
+                                            // Check if $user_picture is empty
+                                            $profilePicture = empty($user_picture) ? 'assets/img/user-profile.png' : $user_picture;
+                                            ?>
+
+                                            <img id="profilePreview" src="<?= htmlspecialchars($profilePicture); ?>"
+                                                alt="Profile" class="rounded-circle"
+                                                style="width: 100px; height: 100px; object-fit: cover;">
+
                                             <div class="pt-2">
-                                                <a href="#" class="btn btn-primary btn-sm"
-                                                    title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                <a href="#" class="btn btn-danger btn-sm"
-                                                    title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                <label for="profileImageUpload"
+                                                    class="btn btn-primary text-white btn-sm"
+                                                    title="Upload new profile image">
+                                                    <i class="bi bi-upload"></i> Upload
+                                                </label>
+                                                <input type="file" name="profileImage" id="profileImageUpload"
+                                                    accept="image/*" style="display: none;">
                                             </div>
+
+                                            <script>
+                                            document.getElementById('profileImageUpload').addEventListener('change',
+                                                function(event) {
+                                                    const file = event.target.files[0]; // Get the selected file
+                                                    if (file) {
+                                                        const reader =
+                                                            new FileReader(); // Create a FileReader to read the file
+                                                        reader.onload = function(e) {
+                                                            const preview = document.getElementById(
+                                                                'profilePreview'); // Get the img element
+                                                            preview.src = e.target
+                                                                .result; // Set the src to the file content
+                                                        };
+                                                        reader.readAsDataURL(file); // Read the file as a data URL
+                                                    }
+                                                });
+                                            </script>
+
                                         </div>
                                     </div>
 
+                                    <input type="hidden" name="brgy_code" id="brgy_code" value="<?= $_GET['Code']?>">
+                                    <input type="hidden" name="id" id="id" value="<?= $id?>">
+
                                     <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                        <label for="username" class="col-md-4 col-lg-3 col-form-label">Username</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="fullName" type="text" class="form-control" id="fullName"
-                                                value="Kevin Anderson">
+                                            <input name="username" type="text" class="form-control" id="username"
+                                                value="<?=$username?>" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                        <label for="lastName" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about"
-                                                style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+                                            <input name="lastName" type="text" class="form-control" id="lastName"
+                                                value="<?=$lastname?>">
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
+                                        <label for="firstName" class="col-md-4 col-lg-3 col-form-label">First
+                                            Name</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company"
-                                                value="Lueilwitz, Wisoky and Leuschke">
+                                            <input name="firstName" type="text" class="form-control" id="firstName"
+                                                value="<?=$firstname?>">
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
+                                        <label for="barangay" class="col-md-4 col-lg-3 col-form-label">Barangay</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job"
-                                                value="Web Designer">
+                                            <input name="barangay" type="text" class="form-control" id="barangay"
+                                                value="<?= $BrgyName?>" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                                        <label for="Position" class="col-md-4 col-lg-3 col-form-label">Position</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country"
-                                                value="USA">
+                                            <input name="role" type="text" class="form-control" id="Position"
+                                                value="<?= $role?>" disabled>
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="address" type="text" class="form-control" id="Address"
@@ -199,46 +259,11 @@
                                             <input name="email" type="email" class="form-control" id="Email"
                                                 value="k.anderson@example.com">
                                         </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="twitter" type="text" class="form-control" id="Twitter"
-                                                value="https://twitter.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="facebook" type="text" class="form-control" id="Facebook"
-                                                value="https://facebook.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="instagram" type="text" class="form-control" id="Instagram"
-                                                value="https://instagram.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="linkedin" type="text" class="form-control" id="Linkedin"
-                                                value="https://linkedin.com/#">
-                                        </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <button type="submit" class="btn btn-primary" name="updateAcc">Save
+                                            Changes</button>
                                     </div>
                                 </form><!-- End Profile Edit Form -->
 
@@ -246,39 +271,74 @@
 
                             <div class="tab-pane fade pt-3" id="profile-change-password">
                                 <!-- Change Password Form -->
-                                <form>
+                                <form action="code.php" method="POST">
 
+                                    <input type="hidden" name="id" id="id" value="<?= $id?>">
+
+                                    <!-- Current Password -->
                                     <div class="row mb-3">
                                         <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current
                                             Password</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="password" type="password" class="form-control"
-                                                id="currentPassword">
+                                                id="currentPassword" required>
                                         </div>
                                     </div>
 
+                                    <!-- New Password -->
                                     <div class="row mb-3">
                                         <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
                                             Password</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="newpassword" type="password" class="form-control"
-                                                id="newPassword">
+                                                id="newPassword" required>
                                         </div>
                                     </div>
 
+                                    <!-- Re-enter New Password -->
                                     <div class="row mb-3">
                                         <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New
                                             Password</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="renewpassword" type="password" class="form-control"
-                                                id="renewPassword">
+                                                id="renewPassword" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Checkbox to show/hide all passwords -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-8 col-lg-9 offset-md-4 offset-lg-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="showPasswordsCheckbox">
+                                                <label class="form-check-label" for="showPasswordsCheckbox">
+                                                    Show all passwords
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                        <button type="submit" class="btn btn-primary" name="passwordChange">Change
+                                            Password</button>
                                     </div>
                                 </form><!-- End Change Password Form -->
+
+                                <script>
+                                $(document).ready(function() {
+                                    // Listen for the checkbox change event
+                                    $('#showPasswordsCheckbox').on('change', function() {
+                                        // Check if the checkbox is checked
+                                        if ($(this).prop('checked')) {
+                                            // Change all password input fields to text to show passwords
+                                            $('input[type="password"]').attr('type', 'text');
+                                        } else {
+                                            // Change all password input fields back to password to hide passwords
+                                            $('input[type="text"]').attr('type', 'password');
+                                        }
+                                    });
+                                });
+                                </script>
 
                             </div>
 
