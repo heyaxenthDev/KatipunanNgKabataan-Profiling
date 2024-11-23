@@ -57,7 +57,7 @@
 
         <!-- Page Title -->
         <div class="page-title dark-background" data-aos="fade"
-            style="background-image: url(assets/img/about-page-title-bg.jpg);">
+            style="background-image: url(assets/img/RGB-Where-the-youth-lead-service.png);">
             <div class="container">
                 <h1>Youth Registration Form</h1>
                 <nav class="breadcrumbs">
