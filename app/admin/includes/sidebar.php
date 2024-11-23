@@ -4,12 +4,23 @@
     <?php 
     // Get the current file name
     $current_page = basename($_SERVER['PHP_SELF'], ".php");
+
+    // Function to check if a file exists, fallback to Page404.html if not
+    function get_page_link($page_name) {
+        $file_path = $page_name . '.php';
+        if (file_exists($file_path)) {
+            return $file_path;
+        } else {
+            return 'pages-error-404.html';
+        }
+    }
     ?>
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link <?php echo $current_page == 'homepage' ? '' : 'collapsed'; ?>" href="homepage">
+            <a class="nav-link <?php echo $current_page == 'homepage' ? '' : 'collapsed'; ?>"
+                href="<?= get_page_link('homepage') ?>">
                 <i class="bi bi-grid-1x2"></i>
                 <span>Dashboard</span>
             </a>
@@ -38,9 +49,10 @@
                         $barangayName = $row['barangay_name'];
                         $barangayCode = $row['barangay_code'];
                         $isActive = ($current_page == 'barangayView' && $_GET['Code'] == $barangayCode) ? 'class="active"' : '';
+                        $link = get_page_link('barangayView') . "?Name=" . urlencode($barangayName) . "&Code=" . urlencode($barangayCode);
                         echo '
                         <li>
-                            <a href="barangayView?Name='.$barangayName.'&Code='.$barangayCode.'" '.$isActive.'>
+                            <a href="'.$link.'" '.$isActive.'>
                                 <i class="bi bi-circle"></i><span>' . htmlspecialchars($barangayName) . '</span>
                             </a>
                         </li>';
@@ -74,12 +86,14 @@
                 class="nav-content collapse <?php echo $current_page == 'cbyp' || $current_page == 'abyp' ? 'show' : ''; ?>"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="cbyp" <?php echo $current_page == 'cbyp' ? 'class="active"' : ''; ?>>
+                    <a href="<?= get_page_link('cbyp') ?>"
+                        <?php echo $current_page == 'cbyp' ? 'class="active"' : ''; ?>>
                         <i class="bi bi-circle"></i><span>CBYP</span>
                     </a>
                 </li>
                 <li>
-                    <a href="abyp" <?php echo $current_page == 'abyp' ? 'class="active"' : ''; ?>>
+                    <a href="<?= get_page_link('abyp') ?>"
+                        <?php echo $current_page == 'abyp' ? 'class="active"' : ''; ?>>
                         <i class="bi bi-circle"></i><span>ABYP</span>
                     </a>
                 </li>
@@ -88,14 +102,15 @@
 
         <li class="nav-item">
             <a class="nav-link <?php echo $current_page == 'users-profile' ? '' : 'collapsed'; ?>"
-                href="users-profile.html">
+                href="<?= get_page_link('users-profile') ?>">
                 <i class="bi bi-people"></i>
                 <span>Member List</span>
             </a>
         </li><!-- End Member List Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?php echo $current_page == 'pages-faq' ? '' : 'collapsed'; ?>" href="pages-faq.html">
+            <a class="nav-link <?php echo $current_page == 'pages-faq' ? '' : 'collapsed'; ?>"
+                href="<?= get_page_link('pages-faq') ?>">
                 <i class="bi bi-question-circle"></i>
                 <span>Documents</span>
             </a>
