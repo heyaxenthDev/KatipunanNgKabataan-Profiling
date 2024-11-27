@@ -5,8 +5,6 @@
     include "includes/header.php";
     include "includes/sidebar.php";
     include "alert.php";
-
-
 ?>
 
 <main id="main" class="main">
@@ -29,7 +27,8 @@
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-sm-4 col-form-label">Date of Submission: </label>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" id="inputText" required>
+                                <input type="text" class="form-control" id="inputText" value="<?= date("F d, Y")?>"
+                                    required>
                             </div>
                         </div>
 
@@ -37,7 +36,6 @@
                             <label for="programs" class="col-sm-4 col-form-label">Programs: </label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="programs" name="programs" required>
-                                    <option selected>-- Select Program --</option>
                                     <option value="sports">Sports</option>
                                     <option value="education">Education</option>
                                     <option value="health_environment">Health Environment</option>
@@ -51,10 +49,11 @@
                             <label for="types" class="col-sm-4 col-form-label">Types: </label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="types" name="types" required>
-                                    <option selected>-- Select Type --</option>
+                                    <option></option>
                                 </select>
                             </div>
                         </div>
+
 
                         <script>
                         document.addEventListener("DOMContentLoaded", function() {
@@ -133,7 +132,7 @@
                             <label for="forCategory" class="col-sm-4 col-form-label">For: </label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="forCategory" name="forCategory" required>
-                                    <option selected>-- Select For --</option>
+                                    <option value="" selected>-- Select For --</option>
                                     <option value="female">Female</option>
                                     <option value="male">Male</option>
                                     <option value="intermediate">Intermediate</option>
@@ -145,30 +144,30 @@
                             <label for="ageCategory" class="col-sm-4 col-form-label">Age: </label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="ageCategory" name="ageCategory" required>
-                                    <option selected>-- Select Age Category --</option>
-                                    <option value="15-30">15-30</option>
+                                    <option value="" selected>-- Select Age Category --</option>
+                                    <option value="15-20">15-20</option>
+                                    <option value="21-25">21-25</option>
+                                    <option value="26-30">26-30</option>
                                 </select>
                             </div>
                         </div>
 
-
-                    </div>
-                    <!-- End Left Side Column -->
-
-                    <!-- Right Side Column -->
-                    <div class="col-md-6">
                         <div class="row mb-3">
                             <label for="youthClassification" class="col-sm-4 col-form-label">Youth Classification:
                             </label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="youthClassification">
-                                    <option selected>-- Select Youth Class --</option>
+                                    <option value="" selected>-- Select Youth Class --</option>
                                     <option value="Child Youth">Child Youth</option>
                                     <option value="Core Youth">Core Youth</option>
                                     <option value="Young Adult">Young Adult</option>
                                 </select>
                             </div>
                         </div>
+
+                    </div>
+
+                    <div class="col-md-6">
 
                         <?php 
                         // Get Available Officials per barangay record
@@ -281,6 +280,59 @@
             </form>
         </div>
     </section>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Fetch suggestions from the backend
+        fetch("decision-making.php?Code=<?=$_GET['Code']?>")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok " + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Populate the programs and types dropdown
+                const programsSelect = document.getElementById("programs");
+                const typesSelect = document.getElementById("types");
+
+                if (data.program) {
+                    programsSelect.value = data.program;
+                    programsSelect.dispatchEvent(new Event(
+                        "change")); // Trigger change event to populate types
+                }
+
+                if (data.type) {
+                    setTimeout(() => { // Ensure types are loaded before setting value
+                        typesSelect.value = data.type;
+                    }, 500);
+                }
+
+                // Populate "For" category
+                const forCategorySelect = document.getElementById("forCategory");
+                if (data.forCategory) {
+                    forCategorySelect.value = data.forCategory;
+                    forCategorySelect.dispatchEvent(new Event("change"));
+                }
+
+                // Populate "Age" category
+                const ageCategorySelect = document.getElementById("ageCategory");
+                if (data.ageCategory) {
+                    ageCategorySelect.value = data.ageCategory;
+                    ageCategorySelect.dispatchEvent(new Event("change"));
+                }
+
+                // Populate "Youth Classification"
+                const youthClassificationSelect = document.getElementById("youthClassification");
+                if (data.youthClassification) {
+                    youthClassificationSelect.value = data.youthClassification;
+                    youthClassificationSelect.dispatchEvent(new Event("change"));
+                }
+            })
+            .catch(error => console.error("Error fetching suggestions:", error));
+    });
+    </script>
+
 
 </main><!-- End #main -->
 
