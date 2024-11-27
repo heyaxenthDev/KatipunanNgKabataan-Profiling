@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2024 at 06:41 AM
+-- Generation Time: Nov 27, 2024 at 06:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -35,6 +35,7 @@ CREATE TABLE `accounts` (
   `firstname` varchar(255) NOT NULL,
   `lastname` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
+  `picture` varchar(255) NOT NULL,
   `date_created` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -42,11 +43,11 @@ CREATE TABLE `accounts` (
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `brgy_code`, `username`, `password`, `firstname`, `lastname`, `role`, `date_created`) VALUES
-(1, 'Admin', 'hyacynth', '$2y$10$Xnyv4XBrcNcShLaXEgSsTebv9.ZoToPTJRH4XaQSFyCqW0KWanjLC', 'Hya Cynth', 'Dojillo', 'Administrative', '2024-09-25'),
-(2, '001', 'hyacynth', '$2y$10$sLgDppZoY8jLjKrJZeVpx.j2KWaVRbMhqymC9k.Bqvn3soZ7/.RZy', 'Hya Cynth', 'Dojillo', 'SK Chairman', '2024-10-06'),
-(3, '001', 'HelloWorld', '$2y$10$PN0ViSKShsPuWsPzQvFNVe33ef0pzwf50r6FL5jfFlQmchI9z9CP.', 'Hello', 'World', 'SK Kagawad', '2024-10-06'),
-(4, '002', 'helloworld', '$2y$10$BU.dzCt3tQBuuFutvMjg7.4D1ljId7T5ZjqX9pGM4zbLl08e8vYm2', 'Hello', 'Again', 'SK Chairman', '2024-10-24');
+INSERT INTO `accounts` (`id`, `brgy_code`, `username`, `password`, `firstname`, `lastname`, `role`, `picture`, `date_created`) VALUES
+(1, 'Admin', 'hyacynth', '$2y$10$XidgObfxweMucxTVHABp9.OlWNSuTIHCvaZsA69zRutyOd9z32Dy6', 'Hya Cynth', 'Dojillo', 'Administrative', 'uploads/profile_67416ef6594f52.01078182.png', '2024-09-25'),
+(2, '001', 'hyacynth', '$2y$10$rlVFE6Kem6ReVJF70OkmtuMPWYsX97vF40FNmIbWo1hvz76fgm1Xy', 'Hya Cynth', 'Dojillo', 'SK Chairman', 'uploads/profile_673ee51d858697.47842682.png', '2024-10-06'),
+(3, '001', 'HelloWorld', '$2y$10$PN0ViSKShsPuWsPzQvFNVe33ef0pzwf50r6FL5jfFlQmchI9z9CP.', 'Hello', 'World', 'SK Kagawad', '', '2024-10-06'),
+(4, '002', 'helloworld', '$2y$10$BU.dzCt3tQBuuFutvMjg7.4D1ljId7T5ZjqX9pGM4zbLl08e8vYm2', 'Hello', 'Again', 'SK Chairman', 'uploads/profile_674162f2abf415.77256848.png', '2024-10-24');
 
 -- --------------------------------------------------------
 
@@ -44031,10 +44032,6 @@ CREATE TABLE `registered` (
 -- Dumping data for table `registered`
 --
 
-INSERT INTO `registered` (`id`, `regCode`, `last_name`, `first_name`, `middle_name`, `street`, `region`, `province`, `municipality`, `barangay`, `zip`, `civil_status`, `user_image`, `gender`, `age`, `birthdate`, `email`, `contact`, `youth_age_group`, `youth_classification`, `educational_background`, `work_status`, `sk_voter`, `national_voter`, `kk_assembly`, `kk_assembly_times`, `kk_assembly_why`, `vote`, `brgyCode`, `created_at`) VALUES
-(1, '20241023 - 3969 - 1', 'Dojillo', 'Hya Cynth', 'Genodepa', 'Purok 3', 'REGION VI (WESTERN VISAYAS)', 'ANTIQUE', 'SEBASTE', 'Alegre', '5709', 'Single', 'uploads/6718b23b7fac9_000195.JPG', 1, 24, '2000-08-04', 'hyacynth@gmail.com', '09651168472', 'core', 'Working Youth', 'College Graduate', 'Employed', 'Yes', 'Yes', 'Yes', '3-4', '', 'Yes', '001', '2024-10-23'),
-(2, '20241024 - 3223 - 2', 'Luis', 'Melissa Jane', 'Rios', 'Purok 5', 'REGION VI (WESTERN VISAYAS)', 'ANTIQUE', 'SEBASTE', 'Alegre', '5709', 'single', 'uploads/6719f2e1ae681_news_preview_mob_image__preview_11368.png', 1, 16, '2008-05-05', 'luis.mj@gmail.com', '09123456789', 'child', 'In School', 'High School Level', 'Unemployed', 'Yes', 'No', 'Yes', '1-2', '', 'Yes', '001', '2024-10-24'),
-(3, '20241025 - 3350 - 3', 'Example', 'User', 'Sample', 'Purok', 'REGION VI (WESTERN VISAYAS)', 'ANTIQUE', 'SEBASTE', 'Alegre', '5709', 'single', 'uploads/671b26b52cd30_10A-FRONT-NAVYBLUE.webp', 1, 20, '2004-08-08', 'sampleUser@gmail.com', '09123456789', 'core', 'In School', 'College Level', 'Not interested in looking for a job', 'Yes', 'Yes', 'No', '', 'Not interested to attend', 'Yes', '001', '2024-10-25');
 
 -- --------------------------------------------------------
 
@@ -44062,11 +44059,6 @@ CREATE TABLE `sk_officials` (
 --
 -- Dumping data for table `sk_officials`
 --
-
-INSERT INTO `sk_officials` (`id`, `brgy_code`, `firstname`, `lastname`, `middlename`, `position`, `sex`, `age`, `dob`, `mobile_num`, `address`, `street_num`, `image_url`, `date_created`) VALUES
-(1, '001', 'Hya Cynth', 'Dojillo', 'Genodepa', 'SK Chairman', 0, 24, '2000-08-04', '09651168472', 'Unahan crossing pa iloilo halin Triangle', '3', '', '2024-10-06 17:40:50'),
-(2, '001', 'Hello', 'World', 'There', 'SK Kagawad', 1, 20, '2004-01-01', '094556745771', 'Somewhere', '2', '', '2024-10-06 17:50:24'),
-(3, '002', 'Hello', 'Again', 'World', 'SK Chairman', 1, 24, '2000-01-01', '09123456789', 'Sitio', '5', '', '2024-10-24 15:24:45');
 
 -- --------------------------------------------------------
 
@@ -44111,8 +44103,6 @@ CREATE TABLE `unregistered` (
 -- Dumping data for table `unregistered`
 --
 
-INSERT INTO `unregistered` (`id`, `regCode`, `last_name`, `first_name`, `middle_name`, `street`, `region`, `province`, `municipality`, `barangay`, `zip`, `civil_status`, `user_image`, `gender`, `age`, `birthdate`, `email`, `contact`, `youth_age_group`, `youth_classification`, `educational_background`, `work_status`, `sk_voter`, `national_voter`, `kk_assembly`, `kk_assembly_times`, `kk_assembly_why`, `vote`, `brgyCode`, `created_at`) VALUES
-(1, '20241024 - 9627 - 1', 'Dela Cruz', 'Juan ', 'Alejandro', 'Purok 2', 'REGION VI (WESTERN VISAYAS)', 'ANTIQUE', 'SEBASTE', 'Alegre', '5709', 'single', 'uploads/6719dee9b8c06_team-1.jpg', 0, 14, '2010-09-28', 'juandc@gmail.com', '09123456789', 'unregistered', 'In School', 'High School Level', 'Unemployed', 'No', 'No', 'No', '', 'There was no KK Assembly Meeting', 'No', '001', '2024-10-24');
 
 -- --------------------------------------------------------
 
