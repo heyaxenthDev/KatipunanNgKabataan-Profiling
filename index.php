@@ -33,6 +33,8 @@ include "includes/conn.php";
 
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body class="index-page">
@@ -146,10 +148,15 @@ include "includes/conn.php";
                                 </div>
 
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="password" name="password"
+                                    <input type="password" class="form-control" id="yourPassword" name="password"
                                         placeholder="Your Password" required>
+                                    <span hidden="hidden" class="field-icon toggle-password bi bi-eye-fill" id="icon"
+                                        style="position: absolute; right: 12px; transform: translate(0, -50%); top: 53%; cursor: pointer;"></span>
+                                    <div class="invalid-feedback">Please enter your password!</div>
                                     <label for="password"><i class="bi bi-lock"></i> Password</label>
                                 </div>
+                                <script src="js/show-password.js"></script>
+
 
                                 <div class="mt-3 text-end mb-3">
                                     <a href="forgot_password.php" class="link-primary">Forgot Password?</a>
