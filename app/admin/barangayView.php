@@ -83,7 +83,7 @@
                                 <?php
 
                                 // Query to fetch all registered youth
-                                $sql = "SELECT * FROM registered WHERE brgyCode = $getCode";
+                                $sql = "SELECT * FROM registered WHERE brgyCode = $getCode AND acc_type = 'registered'";
                                 $result = mysqli_query($conn, $sql);
 
                                 ?>
@@ -141,7 +141,7 @@
                                 <?php
 
                                 // Query to fetch all registered youth
-                                $sql = "SELECT * FROM unregistered WHERE brgyCode = $getCode";
+                                $sql = "SELECT * FROM registered WHERE brgyCode = $getCode AND acc_type = 'unregistered'";
                                 $result = mysqli_query($conn, $sql);
 
                                 ?>
@@ -347,18 +347,19 @@
 
                                             $activeBrgy = $_GET['Name'];
                                             $activeCode = $_GET['Code'];
+                                            $src = '\KatipunanNgKabataan-Profiling/app/client/';
                                             
                                             // Fetch all officials from the database
-                                            $result = $conn->query("SELECT * FROM sk_officials WHERE brgy_code = $activeCode");
+                                            $result = $conn->query("SELECT * FROM `accounts` WHERE `brgy_code` = $activeCode AND `term_until` > NOW()");
 
                                             if ($result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {
-                                                    // Assuming the fields in the database include: 'firstname', 'lastname', 'position', and 'image_url'
+                                                    // Assuming the fields in the database include: 'firstname', 'lastname', 'role', and 'picture'
                                                     $fullname = htmlspecialchars($row['firstname'] . ' ' . $row['lastname']); // Escape output for security
-                                                    $position = htmlspecialchars($row['position']);
+                                                    $role = htmlspecialchars($row['role']);
 
                                                     // Set default image if the database value is empty or null
-                                                    $imageUrl = !empty($row['image_url']) ? htmlspecialchars($row['image_url']) : 'assets/img/user-profile.png';
+                                                    $imageUrl = !empty($row['picture']) ? $src. htmlspecialchars($row['picture']) : 'assets/img/user-profile.png';
 
                                                     // Output the HTML structure for each member
                                                     echo '
@@ -375,7 +376,7 @@
                                                             </div>
                                                             <div class="member-info">
                                                                 <h4>' . $fullname . '</h4>
-                                                                <span>' . $position . '</span>
+                                                                <span>' . $role . '</span>
                                                             </div>
                                                         </div>
                                                     </div>';

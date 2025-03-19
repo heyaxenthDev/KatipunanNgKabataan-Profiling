@@ -21,8 +21,9 @@ include "alert.php";
                         <?php
                         if (isset($_GET['Code'])) {
                             $code = $_GET['Code'];
-                            $stmt = $conn->prepare("SELECT * FROM registered WHERE brgyCode = ?");
-                            $stmt->bind_param("s", $code);
+                            $acc_type = "registered";
+                            $stmt = $conn->prepare("SELECT * FROM registered WHERE brgyCode = ? AND acc_type = ?");
+                            $stmt->bind_param("ss", $code, $acc_type);
                             $stmt->execute();
                             $result = $stmt->get_result();
                         ?>

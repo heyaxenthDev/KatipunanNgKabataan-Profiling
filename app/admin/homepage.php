@@ -66,12 +66,12 @@ Toast.fire({
                         FROM barangay b
                         LEFT JOIN (
                             SELECT brgyCode, COUNT(*) AS registered_count
-                            FROM registered
+                            FROM registered WHERE acc_type = 'registered'
                             GROUP BY brgyCode
                         ) r ON b.barangay_code = r.brgyCode
                         LEFT JOIN (
                             SELECT brgyCode, COUNT(*) AS unregistered_count
-                            FROM unregistered
+                            FROM registered WHERE acc_type = 'unregistered'
                             GROUP BY brgyCode
                         ) u ON b.barangay_code = u.brgyCode
                     ");

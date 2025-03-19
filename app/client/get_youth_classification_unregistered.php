@@ -13,7 +13,7 @@ $sql = "
         SUM(CASE WHEN youth_classification = 'Person w/ Disability' THEN 1 ELSE 0 END) AS person_disability,
         SUM(CASE WHEN youth_classification = 'Children in conflict w/ Law' THEN 1 ELSE 0 END) AS conflict_law,
         SUM(CASE WHEN youth_classification = 'Indigenous People' THEN 1 ELSE 0 END) AS indigenous_people
-    FROM unregistered WHERE brgyCode = '$code'
+    FROM registered WHERE brgyCode = '$code' AND acc_type = 'unregistered'
 ";
 
 // Execute the query

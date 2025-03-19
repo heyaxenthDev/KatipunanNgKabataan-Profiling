@@ -104,6 +104,13 @@
                                 </div>
 
                                 <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">Email</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <?= ($email == "") ? '<span class="bg-danger badge">--Set up Email--</span>' : $email?>
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">Last Name</div>
                                     <div class="col-lg-9 col-md-8"><?= $lastname?></div>
                                 </div>
@@ -201,6 +208,14 @@
                                         <div class="col-md-8 col-lg-9">
                                             <input name="username" type="text" class="form-control" id="username"
                                                 value="<?=$username?>" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="username" class="col-md-4 col-lg-3 col-form-label">Username</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="username" type="text" class="form-control" id="username"
+                                                value="<?=$email?>" disabled>
                                         </div>
                                     </div>
 

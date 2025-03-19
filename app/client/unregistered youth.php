@@ -18,19 +18,17 @@
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="card pt-3">
                     <div class="card-body">
-
                         <!-- Registered Youth -->
                         <?php
-                        // Get current brgy code
-                        $code = $_GET['Code'];
-
-                        // Query to fetch all registered youth
-                        $sql = "SELECT * FROM unregistered WHERE brgyCode = $code";
-                        $result = mysqli_query($conn, $sql);
-
+                        if (isset($_GET['Code'])) {
+                            $code = $_GET['Code'];
+                            $acc_type = "unregistered";
+                            $stmt = $conn->prepare("SELECT * FROM registered WHERE brgyCode = ? AND acc_type = ?");
+                            $stmt->bind_param("ss", $code, $acc_type);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
                         ?>
 
                         <table class="table datatable">
@@ -47,26 +45,25 @@
                             </thead>
                             <tbody>
                                 <?php
-                                // Check if there are any rows returned
-                                if (mysqli_num_rows($result) > 0) {
-                                    // Loop through each row and populate the table
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        ?>
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
                                 <tr>
                                     <td><?=$row['regCode'] ?></td>
-                                    <td><?=$row['first_name'] . " ". $row['last_name'] ?></td>
-                                    <td><?=$row['age'] ?></td>
-                                    <td><?=($row['gender']== 0 ? "Male" : "Female") ?></td>
-                                    <td><?=$row['youth_classification'] ?></td>
-                                    <td><?=$row['street'] ?></td>
+                                    <td><?=htmlspecialchars($row['first_name'] . " " . $row['last_name']) ?></td>
+                                    <td><?=htmlspecialchars($row['age']) ?></td>
+                                    <td><?=($row['gender'] == 0 ? "Male" : "Female") ?></td>
+                                    <td><?=htmlspecialchars($row['youth_classification']) ?></td>
+                                    <td><?=htmlspecialchars($row['street']) ?></td>
                                     <td>
                                         <button class='btn btn-success btn-sm' type='button'><i
                                                 class='bi bi-eye'></i></button>
                                         <button class='btn btn-primary btn-sm' type='button'><i
                                                 class='bi bi-pencil-square'></i></button>
-                                        <button class='btn btn-danger btn-sm' type='button'><i
-                                                class='bi bi-trash'></i></button>
+                                        <button class='btn btn-secondary btn-sm' onclick="printForm('printableCard')"
+                                            type='button'><i class='bi bi-printer'></i></button>
                                     </td>
+
                                 </tr>
                                 <?php
                                     }
@@ -76,18 +73,26 @@
                         </table>
 
                         <?php
-                        // Close the database connection
+                            $stmt->close();
+                        } else {
+                            echo "<p class='text-warning'>No code specified in the URL.</p>";
+                        }
                         mysqli_close($conn);
                         ?>
 
-                        <!-- End Registered Youth -->
-
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
+
+    <?php // include "print-form.php" ?>
+
+    <script>
+    function printForm() {
+        window.print();
+    }
+    </script>
 
 </main><!-- End #main -->
 

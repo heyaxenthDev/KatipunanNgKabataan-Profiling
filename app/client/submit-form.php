@@ -9,66 +9,10 @@ if (isset($_POST['RegYouth'])) {
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $middleName = mysqli_real_escape_string($conn, $_POST['middleName']);
     $street = mysqli_real_escape_string($conn, $_POST['street'] ?? '');
-
-    // Get Region Description using prepared statements
-    $regionCode = $_POST['Region'] ?? '';
-    $region = null;
-    if ($regionCode) {
-        $stmt = $conn->prepare("SELECT `regDesc` FROM `refregion` WHERE `regCode` = ?");
-        $stmt->bind_param("s", $regionCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $regionData = $result->fetch_assoc();
-            $region = $regionData['regDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Get Province Description similarly
-    $provinceCode = $_POST['Province'] ?? '';
-    $province = null;
-    if ($provinceCode) {
-        $stmt = $conn->prepare("SELECT `provDesc` FROM `refprovince` WHERE `provCode` = ?");
-        $stmt->bind_param("s", $provinceCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $ProvData = $result->fetch_assoc();
-            $province = $ProvData['provDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Get Municipality Description
-    $municipalityCode = $_POST['Municipality'] ?? '';
-    $municipality = null;
-    if ($municipalityCode) {
-        $stmt = $conn->prepare("SELECT `citymunDesc` FROM `refcitymun` WHERE `citymunCode` = ?");
-        $stmt->bind_param("s", $municipalityCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $municipalData = $result->fetch_assoc();
-            $municipality = $municipalData['citymunDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Get Barangay Description
-    $barangayCode = $_POST['Barangay'] ?? '';
-    $barangay = null;
-    if ($barangayCode) {
-        $stmt = $conn->prepare("SELECT `brgyDesc` FROM `refbrgy` WHERE `brgyCode` = ?");
-        $stmt->bind_param("s", $barangayCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $BarangayData = $result->fetch_assoc();
-            $barangay = $BarangayData['brgyDesc'];
-        }
-        $stmt->close();
-    }
+    $region = mysqli_real_escape_string($conn, $_POST['Region'] ?? '');
+    $province = mysqli_real_escape_string($conn, $_POST['Province'] ?? '');
+    $municipality = mysqli_real_escape_string($conn, $_POST['Municipality'] ?? '');
+    $barangay = mysqli_real_escape_string($conn, $_POST['Barangay'] ?? '');
 
     // Handle Image Upload
     $userImage = null;
@@ -101,28 +45,25 @@ if (isset($_POST['RegYouth'])) {
     $vote = mysqli_real_escape_string($conn, $_POST['vote'] ?? '');
 
     // Generate registration code
-    function generateRegistrationCode($conn, $table) {
+    function generateRegistrationCode($conn) {
         $dateRegistered = date('Ymd');
         $randomNumbers = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-        $lastIdQuery = "SELECT MAX(id) as last_id FROM $table";
+        $lastIdQuery = "SELECT MAX(id) as last_id FROM registered";
         $result = mysqli_query($conn, $lastIdQuery);
         $row = mysqli_fetch_assoc($result);
         $primaryKey = $row['last_id'] + 1;
         return "$dateRegistered - $randomNumbers - $primaryKey";
     }
 
-    $table = $age < 15 ? "unregistered" : "registered";
-    $registrationCode = generateRegistrationCode($conn, $table);
+    $acc_type = $age < 15 ? "unregistered" : "registered";
+    $registrationCode = generateRegistrationCode($conn, $acc_type);
 
     // Insert data
-    $sql = $table === "unregistered"
-        ? "INSERT INTO unregistered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" // Adjust fields as needed
-        : "INSERT INTO registered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO registered (acc_type, regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssssssssssssssssssssssss", $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote, $brgyCode);
+    $stmt->bind_param("sssssssssssssssssssssssssssss", $acc_type, $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote, $brgyCode);
     if ($stmt->execute()) {
         $_SESSION['status'] = "Success!";
         $_SESSION['status_text'] = "Youth Registered!";

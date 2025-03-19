@@ -10,11 +10,7 @@ $sql = "
         SUM(CASE WHEN youth_age_group = 'child' THEN 1 ELSE 0 END) AS child_youth,
         SUM(CASE WHEN youth_age_group = 'core' THEN 1 ELSE 0 END) AS core_youth,
         SUM(CASE WHEN youth_age_group = 'young adult' THEN 1 ELSE 0 END) AS young_adult
-     FROM (
-        SELECT youth_age_group FROM registered WHERE brgyCode = '$code'
-        UNION ALL
-        SELECT youth_age_group FROM unregistered WHERE brgyCode = '$code'
-    ) AS combined
+     FROM registered WHERE brgyCode = '$code'
 ";
 
 // Execute the query

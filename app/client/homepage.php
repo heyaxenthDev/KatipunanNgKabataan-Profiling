@@ -69,7 +69,7 @@ Toast.fire({
                                         $code = $_GET['Code'];
                                         
                                         // Get data count from registered table
-                                        $regCount = "SELECT COUNT(*) AS total_reg FROM `registered` WHERE `brgyCode` = $code";
+                                        $regCount = "SELECT COUNT(*) AS total_reg FROM `registered` WHERE `brgyCode` = $code AND `acc_type` = 'registered'";
                                         $run = mysqli_query($conn, $regCount);
 
                                         if ($run) {
@@ -104,7 +104,7 @@ Toast.fire({
                                     <?php 
                                         // Get data count from unregistered table
 
-                                        $regCount = "SELECT COUNT(*) AS total_unreg FROM `unregistered` WHERE `brgyCode` = $code";
+                                        $regCount = "SELECT COUNT(*) AS total_unreg FROM `registered` WHERE `brgyCode` = $code AND `acc_type` = 'unregistered'";
                                         $run = mysqli_query($conn, $regCount);
 
                                         if ($run) {
@@ -139,13 +139,8 @@ Toast.fire({
                                     <?php 
                                         // Get data count from registered table
 
-                                        $regCount = "SELECT COUNT(*) AS total_male 
-                                                        FROM (
-                                                            SELECT `gender` FROM `registered` WHERE `gender` = 0 AND `brgyCode` = $code
-                                                            UNION ALL
-                                                            SELECT `gender` FROM `unregistered` WHERE `gender` = 0 AND `brgyCode` = $code
-                                                        ) AS combined;
-                                                        ";
+                                        $regCount = "SELECT COUNT(*) AS total_male FROM `registered` WHERE `gender` = 0 AND `brgyCode` = $code";
+
                                         $run = mysqli_query($conn, $regCount);
 
                                         if ($run) {
@@ -182,13 +177,7 @@ Toast.fire({
                                     <?php 
                                         // Get data count from registered table
 
-                                        $regCount = "SELECT COUNT(*) AS total_female 
-                                                        FROM (
-                                                            SELECT `gender` FROM `registered` WHERE `gender` = 1 AND `brgyCode` = $code
-                                                            UNION ALL
-                                                            SELECT `gender` FROM `unregistered` WHERE `gender` = 1 AND `brgyCode` = $code
-                                                        ) AS combined;
-                                                        ";
+                                        $regCount = "SELECT COUNT(*) AS total_female FROM `registered` WHERE `gender` = 1 AND `brgyCode` = $code";
                                         $run = mysqli_query($conn, $regCount);
 
                                         if ($run) {

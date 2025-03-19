@@ -90,61 +90,74 @@
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <?php
-                                    $sql = "SELECT * FROM `refregion`";
-                                    $result = mysqli_query($conn, $sql);
-                                    
-                                    // Check if there are any rows returned
-                                    if(mysqli_num_rows($result) > 0 ){
-                                        echo '<select class="form-select" id="regionSelect" name="Region" aria-label="Region Select" required>';
-                                        echo '<option selected>Select Region</option>';
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo '<option value="'.$row['regCode'].'">'.$row['regDesc'].'</option>';
-                                        }
-                                        echo '</select>';
-                                    }else {
-                                        echo 'No regions found.';
-                                    }
-                                    ?>
-                            <label for="regionSelect">Region</label>
+                            <input type="text" class="form-control" id="regionInput" name="Region" value="VI" readonly>
+                            <label for="regionInput">Region</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select class="form-select" id="provinceSelect" name="Province" aria-label="Province Select"
-                                required>
-                                <option selected>Select Province</option>
-                            </select>
-                            <label for="provinceSelect">Province</label>
+                            <input type="text" class="form-control" id="provinceInput" name="Province" value="Antique"
+                                readonly>
+                            <label for="provinceInput">Province</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <select class="form-select" id="municipalitySelect" name="Municipality"
-                                aria-label="City Select" required>
-                                <option selected>Select City/Municipality</option>
-                            </select>
-                            <label for="municipalitySelect">City/Municipality</label>
+                            <input type="text" class="form-control" id="municipalityInput" name="Municipality"
+                                value="Sebaste" readonly>
+                            <label for="municipalityInput">City/Municipality</label>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                         <div class="form-floating">
+                            <?php 
+                                $provCode = "0606";
+                                $citymunCode = "060615";
+
+                                $stmt = $conn->prepare("SELECT * FROM `refbrgy` WHERE provCode = ? AND citymunCode = ?");
+                                $stmt->bind_param("ss", $provCode, $citymunCode);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                            ?>
+
                             <select class="form-select" id="barangaySelect" name="Barangay" aria-label="Barangay Select"
                                 required>
                                 <option selected>Select Barangay</option>
+                                <?php 
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<option value='".$row['brgyCode']."'>".$row['brgyDesc']."</option>";
+                                    }
+                                ?>
                             </select>
                             <label for="barangaySelect">Barangay</label>
+                        </div>
+                    </div> -->
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <?php 
+                                $brgyCode = $_GET['Code'] ?? '';
+
+                                $stmt = $conn->prepare("SELECT * FROM `barangay` WHERE barangay_code = ?");
+                                $stmt->bind_param("s", $brgyCode);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $getBrgy = $result->fetch_assoc();
+                                $brgyName = $getBrgy['barangay_name'];
+                            ?>
+                            <input type="text" class="form-control" id="barangayInput" name="Barangay"
+                                value="<?= $brgyName?>" readonly>
+                            <label for="barangayInput">Barangay</label>
                         </div>
                     </div>
 
 
                     <div class="col-md-4">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="inputZip" name="inputZip" placeholder=" "
-                                required>
+                            <input type="text" class="form-control" id="inputZip" name="inputZip" value="5709" readonly>
                             <label for="inputZip">Zip</label>
                         </div>
                     </div>
@@ -171,15 +184,6 @@
                         -->
                     </div>
 
-
-                    <div class="col-md-4">
-                        <div class="form-floating">
-                            <input type="number" class="form-control" id="inputAge" name="inputAge" placeholder="Age"
-                                required>
-                            <label for="inputAge">Age</label>
-                        </div>
-                    </div>
-
                     <div class="col-md-4">
                         <div class="form-floating">
                             <input type="date" class="form-control" id="inputBirthdate" name="inputBirthdate"
@@ -187,6 +191,41 @@
                             <label for="inputBirthdate">Birthdate</label>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="inputAge" name="inputAge" placeholder="Age"
+                                readonly>
+                            <label for="inputAge">Age</label>
+                        </div>
+                    </div>
+
+                    <script>
+                    document.getElementById("inputBirthdate").addEventListener("input", function() {
+                        let birthdate = this.value;
+                        let ageInput = document.getElementById("inputAge");
+
+                        if (birthdate) {
+                            let birthDateObj = new Date(birthdate);
+                            let today = new Date();
+                            let age = today.getFullYear() - birthDateObj.getFullYear();
+                            let monthDiff = today.getMonth() - birthDateObj.getMonth();
+                            let dayDiff = today.getDate() - birthDateObj.getDate();
+
+                            // Adjust age if birthday hasn't occurred yet this year
+                            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                                age--;
+                            }
+
+                            ageInput.value = age;
+                        } else {
+                            ageInput.value = "";
+                        }
+                    });
+                    </script>
+
+
+
 
                     <div class="col-md-4">
                         <div class="form-floating">

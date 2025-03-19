@@ -79,6 +79,7 @@ if (mysqli_num_rows($run_query) > 0) {
             $role = $row['role'];
             $lastname = $row['lastname'];
             $username = $row['username'];
+            $email = $row['email'];
             $brgy_code = $row['brgy_code'];
             $user_picture = $row['picture'];
             $dc = date("M d, Y", strtotime($row['date_created']));
