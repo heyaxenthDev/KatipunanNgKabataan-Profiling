@@ -94,7 +94,7 @@
                         }
 
                         // Close the statement
-                        $stmt->close();
+                        // $stmt->close();
 
                     ?>
                 </div>
@@ -182,66 +182,71 @@
 
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <?php
-                                    $sql = "SELECT * FROM `refregion`";
-                                    $result = mysqli_query($conn, $sql);
-                                    
-                                    // Check if there are any rows returned
-                                    if(mysqli_num_rows($result) > 0 ){
-                                        echo '<select class="form-select" id="regionSelect" name="Region" aria-label="Region Select" required>';
-                                        echo '<option selected>Select Region</option>';
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo '<option value="'.$row['regCode'].'">'.$row['regDesc'].'</option>';
-                                        }
-                                        echo '</select>';
-                                    }else {
-                                        echo 'No regions found.';
+                                    <input type="text" class="form-control" id="regionInput" name="Region" value="VI"
+                                        readonly>
+                                    <label for="regionInput">Region</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="provinceInput" name="Province"
+                                        value="Antique" readonly>
+                                    <label for="provinceInput">Province</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="municipalityInput" name="Municipality"
+                                        value="Sebaste" readonly>
+                                    <label for="municipalityInput">City/Municipality</label>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-md-4">
+                        <div class="form-floating">
+                            <?php 
+                                $provCode = "0606";
+                                $citymunCode = "060615";
+
+                                $stmt = $conn->prepare("SELECT * FROM `refbrgy` WHERE provCode = ? AND citymunCode = ?");
+                                $stmt->bind_param("ss", $provCode, $citymunCode);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                            ?>
+
+                            <select class="form-select" id="barangaySelect" name="Barangay" aria-label="Barangay Select"
+                                required>
+                                <option selected>Select Barangay</option>
+                                <?php 
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<option value='".$row['brgyCode']."'>".$row['brgyDesc']."</option>";
                                     }
-                                    ?>
-                                    <label for="regionSelect">Region</label>
-                                </div>
-                            </div>
+                                ?>
+                            </select>
+                            <label for="barangaySelect">Barangay</label>
+                        </div>
+                    </div> -->
 
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <select class="form-select" id="provinceSelect" name="Province"
-                                        aria-label="Province Select" required>
-                                        <option selected>Select Province</option>
-                                    </select>
-                                    <label for="provinceSelect">Province</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <select class="form-select" id="municipalitySelect" name="Municipality"
-                                        aria-label="City Select" required>
-                                        <option selected>Select City/Municipality</option>
-                                    </select>
-                                    <label for="municipalitySelect">City/Municipality</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <select class="form-select" id="barangaySelect" name="Barangay"
-                                        aria-label="Barangay Select" required>
-                                        <option selected>Select Barangay</option>
-                                    </select>
-                                    <label for="barangaySelect">Barangay</label>
+                                    <input type="text" class="form-control" id="barangayInput" name="Barangay" readonly>
+                                    <label for="barangayInput">Barangay</label>
                                 </div>
                             </div>
 
 
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="inputZip" name="inputZip"
-                                        placeholder=" " required>
+                                    <input type="text" class="form-control" id="inputZip" name="inputZip" value="5709"
+                                        readonly>
                                     <label for="inputZip">Zip</label>
                                 </div>
                             </div>
 
-                            <label for="PersonalInformation" class="form-label fw-semibold">Personal Information</label>
+                            <label for="PersonalInformation" class="form-label fw-semibold">Personal
+                                Information</label>
 
                             <div class="col-md-4">
                                 <label class="form-label d-block mb-2">Gender <span class="text-danger">*</span></label>
@@ -264,15 +269,6 @@
                         -->
                             </div>
 
-
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="number" class="form-control" id="inputAge" name="inputAge"
-                                        placeholder="Age" required>
-                                    <label for="inputAge">Age</label>
-                                </div>
-                            </div>
-
                             <div class="col-md-4">
                                 <div class="form-floating">
                                     <input type="date" class="form-control" id="inputBirthdate" name="inputBirthdate"
@@ -280,6 +276,48 @@
                                     <label for="inputBirthdate">Birthdate</label>
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="inputAge" name="inputAge"
+                                        placeholder="Age" readonly>
+                                    <label for="inputAge">Age</label>
+                                </div>
+                            </div>
+
+                            <script>
+                            document.getElementById("inputBirthdate").addEventListener("input", function() {
+                                const birthdate = this.value;
+                                const ageInput = document.getElementById("inputAge");
+
+                                if (birthdate) {
+                                    const birthDateObj = new Date(birthdate);
+                                    const today = new Date();
+
+                                    // Calculate the age
+                                    let age = today.getFullYear() - birthDateObj.getFullYear();
+                                    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+                                    const dayDiff = today.getDate() - birthDateObj.getDate();
+
+                                    // Adjust the age if the birthday hasn't occurred this year
+                                    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                                        age--;
+                                    }
+
+                                    // Handle invalid or future dates
+                                    if (age < 0 || isNaN(birthDateObj)) {
+                                        ageInput.value = "Invalid Date";
+                                    } else {
+                                        ageInput.value = age;
+                                    }
+                                } else {
+                                    ageInput.value = ""; // Clear age input if no birthdate is provided
+                                }
+                            });
+                            </script>
+
+
+
 
                             <div class="col-md-4">
                                 <div class="form-floating">
@@ -409,12 +447,14 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="educationalBackground"
                                                 id="masterGraduate" value="Master Graduate">
-                                            <label class="form-check-label" for="masterGraduate">Master Graduate</label>
+                                            <label class="form-check-label" for="masterGraduate">Master
+                                                Graduate</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="educationalBackground"
                                                 id="doctorateLevel" value="Doctorate Level">
-                                            <label class="form-check-label" for="doctorateLevel">Doctorate Level</label>
+                                            <label class="form-check-label" for="doctorateLevel">Doctorate
+                                                Level</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="educationalBackground"
@@ -451,8 +491,8 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="workStatus"
                                                 id="currentlyLooking" value="Currently looking for a job">
-                                            <label class="form-check-label" for="currentlyLooking">Currently looking for
-                                                a
+                                            <label class="form-check-label" for="currentlyLooking">Currently looking
+                                                for a
                                                 job</label>
                                         </div>
                                         <div class="form-check">
@@ -465,7 +505,8 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="workStatus"
                                                 id="stillStudying" value="Still Studying">
-                                            <label class="form-check-label" for="stillStudying">Still Studying</label>
+                                            <label class="form-check-label" for="stillStudying">Still
+                                                Studying</label>
                                         </div>
                                     </div>
                                 </div>
@@ -549,13 +590,15 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="kkAssemblyWhy"
                                                 id="NoAssembly" value="There was no KK Assembly Meeting">
-                                            <label class="form-check-label" for="NoAssembly">There was no KK Assembly
+                                            <label class="form-check-label" for="NoAssembly">There was no KK
+                                                Assembly
                                                 Meeting</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="kkAssemblyWhy"
                                                 id="NotInterested" value="Not interested to attend">
-                                            <label class="form-check-label" for="NotInterested">Not interested to attend
+                                            <label class="form-check-label" for="NotInterested">Not interested to
+                                                attend
                                             </label>
                                         </div>
                                     </div>
@@ -570,7 +613,8 @@
                                         $("#ifNo").hide(); // Hide 'No' section if 'Yes' is selected
                                     } else if ($(this).val() == "No") {
                                         $("#ifNo").show();
-                                        $("#ifYes").hide(); // Hide 'Yes' section if 'No' is selected
+                                        $("#ifYes")
+                                            .hide(); // Hide 'Yes' section if 'No' is selected
                                     }
                                 });
                             });
@@ -602,7 +646,6 @@
                                 <button type="reset" class="btn btn-secondary">Reset</button>
                             </div>
                         </div><!-- End Multi Columns Form -->
-
                     </form>
                 </div>
             </div>
@@ -614,11 +657,14 @@
         // Get references to the select and input elements
         const barangaySelect = document.getElementById('barangayCode');
         const barangayCodeInput = document.getElementById('brgyCode');
+        const barangayNameInput = document.getElementById('barangayInput');
         const form = document.getElementById('registrationForm');
 
         // Update the input when a barangay is selected
         barangaySelect.addEventListener('change', function() {
             barangayCodeInput.value = this.value; // Set the input value to the selected barangay code
+            barangayNameInput.value = this.options[this.selectedIndex]
+                .text; // Set the input value to the selected barangay name
         });
 
         // Validate the form before submission

@@ -3,15 +3,17 @@
     checkLogin(); // Call the function to check if the user is logged in
     include "includes/conn.php";
     include "includes/header.php";
-    include "includes/sidebar.php";
-    include "alert.php";
 
-
-?>
+    if ($email_verify_status == 0 && $email === null || empty($email)) {
+        include 'includes/email-setup.php';
+    }else if ($email_verify_status == 0 && !empty($email)) {
+        include 'includes/verify-email.php';
+    }else{ // Do nothing, user is verified and email is set up
+    ?>
 <script src="assets/js/sweetalert2.all.min.js"></script>
 <?php
-if (isset($_SESSION['logged'])) {
-?>
+        if (isset($_SESSION['logged'])) {
+        ?>
 <script type="text/javascript">
 const Toast = Swal.mixin({
     toast: true,
@@ -33,9 +35,13 @@ Toast.fire({
 });
 </script>
 <?php
-    unset($_SESSION['logged']);
-}
-?>
+        unset($_SESSION['logged']);
+    }
+    }
+    include "includes/sidebar.php";
+    include "alert.php";
+    ?>
+
 <main id="main" class="main">
 
     <div class="pagetitle">

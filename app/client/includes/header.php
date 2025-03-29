@@ -76,6 +76,8 @@ if (mysqli_num_rows($run_query) > 0) {
             $user = substr($row['firstname'], 0, 1) . ". " . $row['lastname'];
             $fullname = $row['firstname'] . " " . $row['lastname'];
             $firstname = $row['firstname'];
+            $email = $row['email'];
+            $email_verify_status = $row['email_verify'];
             $role = $row['role'];
             $lastname = $row['lastname'];
             $username = $row['username'];

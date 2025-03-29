@@ -65,7 +65,7 @@ include "includes/conn.php";
     <main class="main">
         <!-- Hero Section -->
         <section id="hero" class="hero section dark-background">
-            <img src="assets/img/tibiao-sk.jpg" alt="" data-aos="fade-in" />
+            <img src="assets/img/bg-index.jpg" alt="" data-aos="fade-in" />
 
             <div class="container">
                 <div class="row">
@@ -159,7 +159,7 @@ include "includes/conn.php";
 
 
                                 <div class="mt-3 text-end mb-3">
-                                    <a href="forgot_password.php" class="link-primary">Forgot Password?</a>
+                                    <a href="forgot-password.php" class="link-primary">Forgot Password?</a>
                                 </div>
 
                                 <div class="d-grid">
