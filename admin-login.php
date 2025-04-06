@@ -76,15 +76,20 @@ session_start();
                                             <div class="invalid-feedback">Please enter a valid username address.</div>
                                         </div>
 
-                                        <div class="col-12 mb-3">
+                                        <div class="col-12">
                                             <label for="yourPassword" class="form-label"><i class="bi bi-lock"></i>
                                                 Password</label>
                                             <input type="password" name="password" class="form-control"
                                                 id="yourPassword" required>
                                             <span hidden="hidden" class="field-icon toggle-password bi bi-eye-fill"
                                                 id="icon"
-                                                style="position: absolute; right: 12px; transform: translate(-88%, -40%); top: 66%; cursor: pointer;"></span>
+                                                style="position: absolute; right: 12px; transform: translate(-85%, -40%); top: 58.3%; cursor: pointer;"></span>
                                             <div class="invalid-feedback">Please enter your password!</div>
+                                        </div>
+
+                                        <div class="text-end mb-3">
+                                            <a href="forgot-password-admin.php" class="link-primary small">Forgot
+                                                Password?</a>
                                         </div>
 
                                         <script src="js/show-password.js"></script>
@@ -97,7 +102,7 @@ session_start();
                                                 <label class="form-check-label" for="rememberMe">Remember me</label>
                                             </div>
                                         </div> -->
-                                        <div class="col-12">
+                                        <div class="col-12 mb-3">
                                             <button class="btn btn-primary w-100" type="submit"
                                                 name="admin-login">Login</button>
                                         </div>

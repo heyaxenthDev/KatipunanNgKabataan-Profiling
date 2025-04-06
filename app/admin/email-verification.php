@@ -1,8 +1,7 @@
-<?php
+<?php 
 session_start();
-
 include "includes/conn.php";
-include "app/client/includes/phpmailer_cred.php";
+include "includes/phpmailer_cred.php";
 
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
@@ -15,7 +14,7 @@ require 'vendor/autoload.php';
 
 //Create an instance; passing `true` enables exceptions
 
-function sendPasswordToken($email, $token, $officialEmail, $officialEmailPassword) {
+function sendVerificationCode($email, $username, $token, $officialEmail, $officialEmailPassword) {
     $mail = new PHPMailer(true);
 
     // Server settings
@@ -33,7 +32,7 @@ function sendPasswordToken($email, $token, $officialEmail, $officialEmailPasswor
 
     // Email content
     $mail->isHTML(true);
-    $mail->Subject = "Password Reset Request";
+    $mail->Subject = "Account Verification Code";
 
     $email_template = "
         <html>
@@ -64,10 +63,10 @@ function sendPasswordToken($email, $token, $officialEmail, $officialEmailPasswor
         </head>
         <body>
             <div class='container'>
-                <p class='header'>Hello</p>
-                <p>We received a request to reset your password. Please use the following One-Time Password (OTP) to complete your email verification process:</p>
+                <p class='header'>Hello $username,</p>
+                <p>We received a request to verify your email address. Please use the following One-Time Password (OTP) to complete your email verification process:</p>
                 <p class='otp'>$token</p>
-                <p>If you did not request a password reset, please ignore this email or contact support immediately.</p>
+                <p>If you did not request this verification, please ignore this email or contact support immediately.</p>
                 <p class='footer'>Best regards,<br><strong>Katipunan ng Kabataan Profiling System</strong></p>
             </div>
         </body>
@@ -79,7 +78,7 @@ function sendPasswordToken($email, $token, $officialEmail, $officialEmailPasswor
     echo 'Verification code has been sent successfully.';
 }
 
-function resetPasswordSuccess($email, $officialEmail, $officialEmailPassword) {
+function sendVerificationSuccessEmail($email, $username, $officialEmail, $officialEmailPassword) {
     $mail = new PHPMailer(true);
 
     // Server settings
@@ -97,7 +96,7 @@ function resetPasswordSuccess($email, $officialEmail, $officialEmailPassword) {
 
     // Email content
     $mail->isHTML(true);
-    $mail->Subject = "Password Reset Successful";
+    $mail->Subject = "Account Verification Successful";
 
     $email_template = "
         <html>
@@ -132,10 +131,10 @@ function resetPasswordSuccess($email, $officialEmail, $officialEmailPassword) {
         </head>
         <body>
             <div class='container'>
-                <p class='header'>Hello</p>
-                <p class='message'>Your password has been successfully reset. You can now log in to your account using your new password.</p>
-                <p class='success'>If you did not request this change, please contact our support team immediately.</p>
-                <p class='message'>For any questions or further assistance, feel free to reach out to our support team.</p>
+                <p class='header'>Hello $username,</p>
+                <p class='message'>We are pleased to inform you that your email has been successfully verified. Your account is now fully activated, and you can access all features.</p>
+                <p class='success'>Welcome to Katipunan ng Kabataan Profiling System!</p>
+                <p class='message'>If you have any questions or need further assistance, feel free to reach out to our support team.</p>
                 <p class='footer'>Best regards,<br><strong>Katipunan ng Kabataan Profiling System Team</strong></p>
             </div>
         </body>
@@ -148,21 +147,23 @@ function resetPasswordSuccess($email, $officialEmail, $officialEmailPassword) {
 
 
 
-if (isset($_POST['resetRequestCode']) && $_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['sendVerification']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $userID = $_SESSION['user']['id'];
+    $username = $_SESSION['user']['user_username'];
     $token = rand(100000, 999999);
 
-    $stmt = $conn->prepare("UPDATE accounts SET password_token = ? WHERE email = ? LIMIT 1");
-    $stmt->bind_param("ss", $token, $email);
+    $stmt = $conn->prepare("UPDATE accounts SET verificationCode = ?, email = ? WHERE id = ? AND username = ? AND role = 'Administrative'");
+    $stmt->bind_param("ssis", $token, $email, $userID, $username);
 
     if ($stmt->execute()) {
-        sendPasswordToken($email, $token, $officialEmail, $officialEmailPassword);
+        sendVerificationCode($email, $username, $token, $officialEmail, $officialEmailPassword);
         
         $_SESSION['entered_email'] = $email;
-        $_SESSION['codeSent'] = true;
+        $_SESSION['email_sent'] = true;
         $_SESSION['status'] = "Success!";
-        $_SESSION['status_text'] = "Reset code sent! Please Check your email.";
+        $_SESSION['status_text'] = "Verification code sent!";
         $_SESSION['status_code'] = "success";
         $_SESSION['status_btn'] = "Done";
     }else {
@@ -178,100 +179,71 @@ if (isset($_POST['resetRequestCode']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmCode'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['VerifyEmail'])) {
     
-    $code = mysqli_real_escape_string($conn, $_POST['verificationCode']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $verifyCode = mysqli_real_escape_string($conn, $_POST['verificationCode']);
+    $userID = $_SESSION['user']['id'];
+    $username = $_SESSION['user']['user_username'];
+    $email = $_SESSION['entered_email'];
          
 
     // Prepare and execute the query
-    $checkCode = "SELECT password_token FROM accounts WHERE email = ? LIMIT 1";
+    $checkCode = "SELECT verificationCode FROM accounts WHERE id = ? AND username = ? AND role = 'Administrative'";
     $stmt = mysqli_prepare($conn, $checkCode);
     
     if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_bind_param($stmt, "is", $userID, $username);
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $dbPasswordToken);
+        mysqli_stmt_bind_result($stmt, $dbVerificationCode);
         mysqli_stmt_fetch($stmt);
         mysqli_stmt_close($stmt);
 
         // Check if the verification code matches
-        if ($dbPasswordToken) {
-            if ($code === $dbPasswordToken) {
+        if ($dbVerificationCode) {
+            if ($verifyCode === $dbVerificationCode) {
+                // Update account to mark email as verified
+                $updateQuery = "UPDATE accounts SET email_verify = 1 WHERE id = ?";
+                $updateStmt = mysqli_prepare($conn, $updateQuery);
+                if ($updateStmt) {
+                    mysqli_stmt_bind_param($updateStmt, "i", $userID);
+                    mysqli_stmt_execute($updateStmt);
+                    mysqli_stmt_close($updateStmt);
+                    
+                    $_SESSION['status'] = "Success!";
+                    $_SESSION['status_text'] = "Your email has been successfully verified.";
+                    $_SESSION['status_code'] = "success";
+                    $_SESSION['status_btn'] = "Done";
 
-                    // Update the password token to NULL after successful verification
-                    $updateQuery = "UPDATE accounts SET password_token = NULL WHERE email = ? LIMIT 1";
-                    $updateStmt = mysqli_prepare($conn, $updateQuery);
-                    if ($updateStmt) {
-                        mysqli_stmt_bind_param($updateStmt, "s", $email);
-                        mysqli_stmt_execute($updateStmt);
-                        mysqli_stmt_close($updateStmt);
-
+                    sendVerificationSuccessEmail($email, $username, $officialEmail, $officialEmailPassword);
                     unset($_SESSION['entered_email']);
-                    unset($_SESSION['codeSent']);
+                    unset($_SESSION['email_sent']);
+                } else {
+                    $_SESSION['status'] = "Database Error!";
+                    $_SESSION['status_text'] = "Could not update verification status.";
+                    $_SESSION['status_code'] = "error";
+                    $_SESSION['status_btn'] = "Try Again";
 
-                    header("Location: reset-password.php?email=$email&token=$code");
-                    }else{
-                        $_SESSION['status'] = "Error!";
-                        $_SESSION['status_text'] = "Failed to update the password token.";
-                        $_SESSION['status_code'] = "error";
-                        $_SESSION['status_btn'] = "Try Again";
-                        header("Location: {$_SERVER['HTTP_REFERER']}");
-                    }
+                }
             } else {
                 $_SESSION['status'] = "Invalid Code!";
                 $_SESSION['status_text'] = "The verification code you entered is incorrect.";
                 $_SESSION['status_code'] = "error";
                 $_SESSION['status_btn'] = "Retry";
-                header("Location: {$_SERVER['HTTP_REFERER']}");
-
             }
         } else {
             $_SESSION['status'] = "Error!";
             $_SESSION['status_text'] = "No verification code found for this account.";
             $_SESSION['status_code'] = "error";
             $_SESSION['status_btn'] = "Retry";
-            header("Location: {$_SERVER['HTTP_REFERER']}");
         }
     } else {
         $_SESSION['status'] = "Database Error!";
         $_SESSION['status_text'] = "Failed to execute the query.";
         $_SESSION['status_code'] = "error";
         $_SESSION['status_btn'] = "Try Again";
-        header("Location: {$_SERVER['HTTP_REFERER']}");
     }
 
-    exit();
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['resetPassword'])) {
-    
-    $newPassword = mysqli_real_escape_string($conn, $_POST['newPassword']);
-    $confirmPassword = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-
-    if ($newPassword === $confirmPassword) {
-
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-
-        $stmt = $conn->prepare("UPDATE accounts SET password = ? WHERE email = ? LIMIT 1");
-        $stmt->bind_param("ss", $hashedPassword, $email);
-        if ($stmt->execute()) {
-            resetPasswordSuccess($email, $officialEmail, $officialEmailPassword);
-            $_SESSION['status'] = "Success!";
-            $_SESSION['status_text'] = "Your password has been successfully reset.";
-            $_SESSION['status_code'] = "success";
-            $_SESSION['status_btn'] = "Done";
-            header("Location: index.php");
-            
-    }else{
-            $_SESSION['status'] = "Error!";
-            $_SESSION['status_text'] = "Failed to reset the password.";
-            $_SESSION['status_code'] = "error";
-            $_SESSION['status_btn'] = "Try Again";
-            header("Location: {$_SERVER['HTTP_REFERER']}");
-        }
-    }
+    header("Location: {$_SERVER['HTTP_REFERER']}");
     exit();
 }
 ?>

@@ -9,7 +9,7 @@ include "includes/conn.php";
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Reset Password - Katipunan ng Kabataan Profiling System</title>
+    <title>Admin Forgot Password - Katipunan ng Kabataan Profiling System</title>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 
@@ -68,76 +68,105 @@ include "includes/conn.php";
         <div class="page-title dark-background" data-aos="fade"
             style="background-image: url(assets/img/undraw_forgot-password_odai.jpg);">
             <div class="container">
-                <h1>Reset Your Password</h1>
+                <h1>Forgot Password?</h1>
             </div>
         </div><!-- End Page Title -->
 
         <!-- Forgot Password Section -->
         <section id="forgot-password" class="forgot-password section">
             <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
+
+
+                <?php 
+                if (isset($_SESSION['codeSent'])) {
+                ?>
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="section-header text-center">
-                            <p>Enter new password and confirm to reset your password</p>
+                            <p>Enter Verification code sent to your email</p>
                         </div>
 
                         <form action="process_forgot_password.php" method="POST" data-aos="fade-up"
                             data-aos-delay="200">
-
-                            <input type="hidden" id="email" class="form-control" name="email" placeholder="Email"
-                                value="<?= $_GET['email']?>" required>
-
                             <div class="form-floating mb-3">
-                                <input type="password" id="newPassword" class="form-control" name="newPassword"
-                                    placeholder="New Password" required>
-                                <label for="newPassword">New Password</label>
+                                <input type="email" id="email" class="form-control" name="email"
+                                    placeholder="Email Address" value="<?= $_SESSION['entered_email']?>" readonly>
+                                <label for="email">Email Address</label>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="password" id="confirmPassword" class="form-control" name="confirmPassword"
-                                    placeholder="Confirm Password" required>
-                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="text" id="verificationCode" class="form-control" name="verificationCode"
+                                    placeholder="Verification Code" required>
+                                <label for="verificationCode">Verification Code</label>
                             </div>
-
-                            <small id="password-message" class="text-danger"></small>
-
-                            <!-- Show Password Checkbox -->
-                            <div class="form-check mt-2 mb-5">
-                                <input class="form-check-input" type="checkbox" id="showPassword">
-                                <label class="form-check-label" for="showPassword">Show Password</label>
-                            </div>
-
-                            <script>
-                            document.getElementById("confirmPassword").addEventListener("keyup", function() {
-                                var newPassword = document.getElementById("newPassword").value;
-                                var confirmPassword = this.value;
-                                var message = document.getElementById("password-message");
-
-                                if (newPassword !== confirmPassword) {
-                                    message.textContent = "Passwords do not match!";
-                                } else {
-                                    message.textContent = "";
-                                }
-                            });
-
-                            // Toggle Password Visibility
-                            document.getElementById("showPassword").addEventListener("change", function() {
-                                var newPassword = document.getElementById("newPassword");
-                                var confirmPassword = document.getElementById("confirmPassword");
-                                var type = this.checked ? "text" : "password";
-
-                                newPassword.type = type;
-                                confirmPassword.type = type;
-                            });
-                            </script>
 
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary" name="resetPassword">Reset
+                                <button type="submit" class="btn btn-primary" name="confirmCode">Reset
                                     Password</button>
                             </div>
                         </form>
                     </div>
                 </div>
+                <?php
+                }else{
+                    ?>
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="section-header text-center">
+                            <p>Enter your email to reset your password</p>
+                        </div>
+                        <form action="process_forgot_password.php" method="POST" data-aos="fade-up" data-aos-delay="200"
+                            id="resetPasswordForm">
+                            <div class="form-floating mb-3">
+                                <input type="email" id="email" class="form-control" name="email"
+                                    placeholder="Email Address" required>
+                                <label for="email">Email Address</label>
+                                <small id="email-status" class="text-danger"></small>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" id="resetRequestCode" class="btn btn-primary"
+                                    name="resetRequestCode">Reset
+                                    Password <span id="spinner"
+                                        class="spinner-border spinner-border-sm d-none"></span></button>
+                            </div>
+                        </form>
+
+                        <script>
+                        $(document).ready(function() {
+                            $("#email").keyup(function() {
+                                var email = $(this).val().trim();
+                                if (email !== "") {
+                                    $.ajax({
+                                        url: "check_email.php",
+                                        method: "POST",
+                                        data: {
+                                            email: email
+                                        },
+                                        success: function(response) {
+                                            $("#email-status").html(response);
+                                        }
+                                    });
+                                } else {
+                                    $("#email-status").html("");
+                                }
+                            });
+                        });
+
+                        document.getElementById("myForm").addEventListener("submit", function(event) {
+                            var submitBtn = document.getElementById("resetRequestCode");
+                            var spinner = document.getElementById("spinner");
+
+                            // Show spinner and disable button
+                            spinner.classList.remove("d-none");
+                            submitBtn.disabled = true;
+                        });
+                        </script>
+                    </div>
+                </div>
+                <?php
+                }
+                // unset($_SESSION['codeSent']);
+                ?>
 
             </div>
         </section><!-- /Forgot Password Section -->

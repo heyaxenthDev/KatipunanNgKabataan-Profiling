@@ -93,14 +93,14 @@
             </a>
         </li><!-- End Reports Page Nav -->
 
-        <!-- <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'calendar') ? '' : 'collapsed' ?>"
-                href="<?= get_page_link('calendar', "Code=$BrgyCode") ?>">
-                <i class="bi bi-calendar-week"></i>
-                <span>Calendar</span>
+        <li class="nav-item">
+            <a class="nav-link <?= ($current_page == 'print youth data') ? '' : 'collapsed' ?>"
+                href="<?= get_page_link('print youth data', "Code=$BrgyCode") ?>">
+                <i class="bi bi-printer"></i>
+                <span>Print Youth Data</span>
             </a>
-        </li> -->
-        <!-- End Calendar Page Nav -->
+        </li>
+        <!-- End Print Youth Data Page Nav -->
 
         <li class="nav-heading">User</li>
 

@@ -33,6 +33,8 @@ session_start();
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -89,11 +91,24 @@ session_start();
                                         </div>
 
                                         <div class="col-12">
+                                            <label for="yourEmail" class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control" id="yourEmail"
+                                                required>
+                                            <div class="invalid-feedback">Please enter your Email!</div>
+                                        </div>
+
+                                        <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
                                             <input type="password" name="password" class="form-control"
                                                 id="yourPassword" required>
+                                            <span hidden="hidden" class="field-icon toggle-password bi bi-eye-fill"
+                                                id="icon"
+                                                style="position: absolute; right: 12px; transform: translate(-85%, -40%); top: 75%; cursor: pointer;"></span>
                                             <div class="invalid-feedback">Please enter your password!</div>
                                         </div>
+
+                                        <script src="js/show-password.js"></script>
+
 
                                         <div class="col-12">
                                             <div class="form-check">
@@ -104,6 +119,7 @@ session_start();
                                                 <div class="invalid-feedback">You must agree before submitting.</div>
                                             </div>
                                         </div>
+
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit" name="CreateAcc">Create
                                                 Account</button>

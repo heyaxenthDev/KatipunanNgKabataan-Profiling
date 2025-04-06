@@ -5,7 +5,17 @@ include "includes/conn.php";
 include "includes/header.php";
 include "includes/sidebar.php";
 include "alert.php";
+
+$brgyCode = $_GET['Code'] ?? '';
+
+$stmt = $conn->prepare("SELECT * FROM `barangay` WHERE barangay_code = ?");
+$stmt->bind_param("s", $brgyCode);
+$stmt->execute();
+$result = $stmt->get_result();
+$getBrgy = $result->fetch_assoc();
+$brgyName = $getBrgy['barangay_name'];
 ?>
+
 
 <main id="main" class="main">
     <div class="pagetitle">
@@ -53,12 +63,13 @@ include "alert.php";
                                     <td><?=htmlspecialchars($row['youth_classification']) ?></td>
                                     <td><?=htmlspecialchars($row['street']) ?></td>
                                     <td>
-                                        <button class='btn btn-success btn-sm' type='button'><i
-                                                class='bi bi-eye'></i></button>
-                                        <button class='btn btn-primary btn-sm' type='button'><i
-                                                class='bi bi-pencil-square'></i></button>
-                                        <button class='btn btn-secondary btn-sm' onclick="printForm('printableCard')"
-                                            type='button'><i class='bi bi-printer'></i></button>
+                                        <button class="btn btn-success btn-sm view-details" data-id="<?=$row['id']?>"><i
+                                                class="bi bi-eye"></i>
+                                            View</button>
+                                        <button class="btn btn-primary btn-sm edit-details"
+                                            data-edit-id=<?= $row['id']?>><i class="bi bi-pencil-square"></i></button>
+                                        <!-- <button class="btn btn-secondary btn-sm" onclick="printForm('printableCard')"
+                                            type="button"><i class="bi bi-printer"></i></button> -->
                                     </td>
 
                                 </tr>
@@ -81,15 +92,21 @@ include "alert.php";
                 </div>
             </div>
         </div>
+
+        <?php 
+        include "modal/viewModal.php";
+        include "modal/editModal.php";
+        ?>
+
+
+
+        <script src="assets/js/details.js"></script>
+        <script src="assets/js/edit.js"></script>
+        <script src="assets/js/print.js"></script>
+
     </section>
 
-    <?php // include "print-form.php" ?>
 
-    <script>
-    function printForm() {
-        window.print();
-    }
-    </script>
 </main><!-- End #main -->
 
 <?php include "includes/footer.php"; ?>

@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>Administrative - Katipunan ng Kabataan Profiling System</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
@@ -30,6 +29,8 @@
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
@@ -40,7 +41,7 @@
     $id = $_SESSION['user']['id'];
     $user_username = $_SESSION['user']['user_username'];
 
-    $query = "SELECT * FROM `accounts` WHERE `id` = '$id' AND `username` = '$user_username'";
+    $query = "SELECT * FROM `accounts` WHERE `id` = '$id' AND `username` = '$user_username' AND `role` = 'Administrative'";
     $result = mysqli_query($conn, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
@@ -49,6 +50,8 @@
             $fullname = $row['firstname'] . " " . $row['lastname'];
             $firstname = $row['firstname'];
             $role = $row['role'];
+            $email = $row['email'];
+            $email_verify_status = $row['email_verify'];
             $lastname = $row['lastname'];
             $username = $row['username'];
             $user_picture = $row['picture'];

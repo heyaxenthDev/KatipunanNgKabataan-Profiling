@@ -9,15 +9,43 @@
 
 ?>
 
+<script src="assets/js/sweetalert2.all.min.js"></script>
+<script src="assets/js/sweetalert.min.js"></script>
+
 <main id="main" class="main">
 
     <div class="pagetitle pb-3">
-        <h1>Registration Form</h1>
+        <h1>Print Youth Data</h1>
     </div><!-- End Page Title -->
     <section class="section">
 
+
+        <!-- <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div> -->
+        <!-- End Search Bar -->
+
+        <div class="row">
+            <div class="search-bar col-md-4 mb-3">
+                <form class="search-form d-flex align-items-center" method="POST" action="#">
+                    <label for="searchbar" class="m-2">Search</label>
+                    <input type="text" name="query" placeholder="Enter Registration Number" title="Enter " required>
+                    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                </form>
+            </div><!-- End Search Bar -->
+
+            <div class="col-md-6 align-items-end buttons">
+                <button type="button" onclick="printForm()" class="btn btn-info"><i class="bi bi-printer"></i> Print
+                    Preview</button>
+            </div>
+        </div>
+
+
         <div class="card" id="printableCard">
-            <form class="card-body" action="submit-form.php" method="POST" enctype="multipart/form-data">
+            <form class="card-body" action="#" method="POST" enctype="multipart/form-data">
 
                 <input type="hidden" name="brgyCode" id="brgyCode" value="<?=$_GET['Code']?>">
 
@@ -46,8 +74,6 @@
                 </div>
 
 
-                <script src="assets/js/load-img.js"></script>
-
                 <!-- Multi Columns Form -->
                 <div class="row g-3">
                     <label for="YourName" class="form-label fw-semibold">Name of Respondent</label>
@@ -55,7 +81,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-dark border-bottom">
-                                <input type="text" class="form-control border-0" id="LastName" name="lastName" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="LastName"
+                                    name="lastName" readonly>
                             </div>
                             <label for="LastName">Last Name</label>
                         </div>
@@ -64,8 +91,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-dark border-bottom">
-                                <input type="text" class="form-control border-0" id="FirstName" name="firstName"
-                                    required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="FirstName"
+                                    name="firstName" readonly>
                             </div>
                             <label for="FirstName">First Name</label>
                         </div>
@@ -74,8 +101,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="MiddleName" name="middleName"
-                                    required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="MiddleName"
+                                    name="middleName" readonly>
                             </div>
                             <label for="MiddleName">Middle Name</label>
                         </div>
@@ -86,7 +113,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="Street" name="street" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Street"
+                                    name="street" readonly>
                             </div>
                             <label for="Street">Street</label>
                         </div>
@@ -95,7 +123,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="Region" name="Region" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Region"
+                                    name="Region" readonly>
                             </div>
                             <label for="Region">Region</label>
                         </div>
@@ -104,7 +133,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="Province" name="Province" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Province"
+                                    name="Province" readonly>
                             </div>
                             <label for="Province">Province</label>
                         </div>
@@ -113,8 +143,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="Municipality" name="Municipality"
-                                    required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Municipality"
+                                    name="Municipality" readonly>
                             </div>
                             <label for="Municipality">City/Municipality</label>
                         </div>
@@ -123,7 +153,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="Barangay" name="Barangay" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Barangay"
+                                    name="Barangay" readonly>
                             </div>
                             <label for="Barangay">Barangay</label>
                         </div>
@@ -132,9 +163,10 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="inputZip" name="inputZip" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Zip" name="Zip"
+                                    readonly>
                             </div>
-                            <label for="inputZip">Zip</label>
+                            <label for="Zip">Zip</label>
                         </div>
                     </div>
 
@@ -145,7 +177,7 @@
                         <label class="form-label d-block mb-2">Gender <span class="text-danger">*</span></label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="gender" id="genderMale" value="0"
-                                required>
+                                readonly>
                             <label class="form-check-label" for="genderMale">Male</label>
                         </div>
                         <div class="form-check">
@@ -165,49 +197,50 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="inputAge" name="inputAge" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="Age" name="Age"
+                                    readonly>
                             </div>
-                            <label for="inputAge">Age</label>
+                            <label for="Age">Age</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="inputBirthdate"
-                                    name="inputBirthdate" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="birthdate"
+                                    name="birthdate" readonly>
                             </div>
-                            <label for="inputBirthdate">Birthdate</label>
+                            <label for="birthdate">Birthdate</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control border-0" id="inputCivilStatus"
-                                    name="inputCivilStatus" required>
+                                <input type="text" class="form-control text-center border-0 fw-bold" id="CivilStatus"
+                                    name="CivilStatus" readonly>
                             </div>
-                            <label for="inputCivilStatus">Civil Status</label>
+                            <label for="CivilStatus">Civil Status</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="email" class="form-control border-0" id="inputEmail" name="inputEmail"
-                                    required>
+                                <input type="email" class="form-control text-center border-0 fw-bold" id="Email"
+                                    name="Email" readonly>
                             </div>
-                            <label for="inputEmail">Email Address</label>
+                            <label for="Email">Email Address</label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="tel" class="form-control border-0" id="inputContact" name="inputContact"
-                                    required>
+                                <input type="tel" class="form-control text-center border-0 fw-bold" id="Contact"
+                                    name="Contact" readonly>
                             </div>
-                            <label for="inputContact">Contact Number</label>
+                            <label for="Contact">Contact Number</label>
                         </div>
                     </div>
 
@@ -218,20 +251,20 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control border-0" id="inputYouthAgeGroup"
-                                        name="inputYouthAgeGroup" required>
+                                    <input type="text" class="form-control text-center border-0 fw-bold"
+                                        id="YouthAgeGroup" name="YouthAgeGroup" readonly>
                                 </div>
-                                <label for="inputYouthAgeGroup">Youth Age Group</label>
+                                <label for="YouthAgeGroup">Youth Age Group</label>
                             </div>
                         </div>
 
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control border-0" id="inputYouthClassification"
-                                        name="inputYouthClassification" required>
+                                    <input type="text" class="form-control text-center border-0 fw-bold"
+                                        id="YouthClassification" name="YouthClassification" readonly>
                                 </div>
-                                <label for="inputYouthClassification">Youth Classification</label>
+                                <label for="YouthClassification">Youth Classification</label>
                             </div>
                         </div>
 
@@ -239,8 +272,8 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control border-0" id="EducationalBackground"
-                                        name="educationalBackground" required>
+                                    <input type="text" class="form-control text-center border-0 fw-bold"
+                                        id="EducationalBackground" name="educationalBackground" readonly>
                                 </div>
                                 <label for="EducationalBackground" class="form-label">Educational
                                     Background</label>
@@ -251,8 +284,8 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control border-0" id="WorkStatus" name="workStatus"
-                                        required>
+                                    <input type="text" class="form-control text-center border-0 fw-bold" id="WorkStatus"
+                                        name="workStatus" readonly>
                                 </div>
                                 <label for="WorkStatus" class="form-label">Work Status</label>
                             </div>
@@ -269,7 +302,7 @@
                                 <label>Registered SK Voter?</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="skVoter" id="skVoterYes"
-                                        value="Yes" required>
+                                        value="Yes" readonly>
                                     <label class="form-check-label" for="skVoterYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -282,7 +315,7 @@
                                 <label>Registered National Voter?</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="nationalVoter"
-                                        id="nationalVoterYes" value="Yes" required>
+                                        id="nationalVoterYes" value="Yes" readonly>
                                     <label class="form-check-label" for="nationalVoterYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -303,7 +336,7 @@
                                 <label>Have you already attended a KK Assembly?</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="kkAssembly" id="kkAssemblyYes"
-                                        value="Yes" required>
+                                        value="Yes" readonly>
                                     <label class="form-check-label" for="kkAssemblyYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -350,20 +383,6 @@
                         </div>
                     </div>
 
-                    <script>
-                    $(document).ready(function() {
-                        $('input[name="kkAssembly"]').change(function() {
-                            if ($(this).val() == "Yes") {
-                                $("#ifYes").show();
-                                $("#ifNo").hide(); // Hide 'No' section if 'Yes' is selected
-                            } else if ($(this).val() == "No") {
-                                $("#ifNo").show();
-                                $("#ifYes").hide(); // Hide 'Yes' section if 'No' is selected
-                            }
-                        });
-                    });
-                    </script>
-
 
                     <!-- Vote History Section -->
                     <div class="mb-1">
@@ -373,7 +392,7 @@
                             <div class="col-md-6">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="vote" id="voteYes" value="Yes"
-                                        required>
+                                        readonly>
                                     <label class="form-check-label" for="voteYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -384,15 +403,13 @@
                         </div>
                     </div>
 
-                    <div class="text-center pt-5 buttons">
-                        <button type="submit" class="btn btn-primary" name="RegYouth">Submit</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
-                        <button type="button" onclick="printForm()" class="btn btn-info">Print Preview</button>
-                    </div>
+
                 </div><!-- End Multi Columns Form -->
 
             </form>
         </div>
+
+        <script src="assets/js/search.js"></script>
 
         <script>
         function printForm() {
