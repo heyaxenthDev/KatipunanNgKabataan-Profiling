@@ -9,6 +9,8 @@
 
 ?>
 
+<link href="assets/css/print-form.css" rel="stylesheet">
+
 <script src="assets/js/sweetalert2.all.min.js"></script>
 <script src="assets/js/sweetalert.min.js"></script>
 
@@ -81,8 +83,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-dark border-bottom">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="LastName"
-                                    name="lastName" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="LastName" name="lastName" readonly>
                             </div>
                             <label for="LastName">Last Name</label>
                         </div>
@@ -91,8 +93,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-dark border-bottom">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="FirstName"
-                                    name="firstName" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="FirstName" name="firstName" readonly>
                             </div>
                             <label for="FirstName">First Name</label>
                         </div>
@@ -101,8 +103,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="MiddleName"
-                                    name="middleName" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="MiddleName" name="middleName" readonly>
                             </div>
                             <label for="MiddleName">Middle Name</label>
                         </div>
@@ -113,8 +115,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Street"
-                                    name="street" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Street" name="street" readonly>
                             </div>
                             <label for="Street">Street</label>
                         </div>
@@ -123,8 +125,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Region"
-                                    name="Region" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Region" name="Region" readonly>
                             </div>
                             <label for="Region">Region</label>
                         </div>
@@ -133,8 +135,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Province"
-                                    name="Province" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Province" name="Province" readonly>
                             </div>
                             <label for="Province">Province</label>
                         </div>
@@ -143,8 +145,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Municipality"
-                                    name="Municipality" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Municipality" name="Municipality" readonly>
                             </div>
                             <label for="Municipality">City/Municipality</label>
                         </div>
@@ -153,8 +155,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Barangay"
-                                    name="Barangay" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Barangay" name="Barangay" readonly>
                             </div>
                             <label for="Barangay">Barangay</label>
                         </div>
@@ -163,8 +165,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Zip" name="Zip"
-                                    readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold" id="Zip"
+                                    name="Zip" readonly>
                             </div>
                             <label for="Zip">Zip</label>
                         </div>
@@ -197,8 +199,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="Age" name="Age"
-                                    readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold" id="Age"
+                                    name="Age" readonly>
                             </div>
                             <label for="Age">Age</label>
                         </div>
@@ -207,8 +209,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="birthdate"
-                                    name="birthdate" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="birthdate" name="birthdate" readonly>
                             </div>
                             <label for="birthdate">Birthdate</label>
                         </div>
@@ -217,8 +219,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="text" class="form-control text-center border-0 fw-bold" id="CivilStatus"
-                                    name="CivilStatus" readonly>
+                                <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                    id="CivilStatus" name="CivilStatus" readonly>
                             </div>
                             <label for="CivilStatus">Civil Status</label>
                         </div>
@@ -227,8 +229,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="email" class="form-control text-center border-0 fw-bold" id="Email"
-                                    name="Email" readonly>
+                                <input type="email" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Email" name="Email" readonly>
                             </div>
                             <label for="Email">Email Address</label>
                         </div>
@@ -237,8 +239,8 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="border-bottom border-dark">
-                                <input type="tel" class="form-control text-center border-0 fw-bold" id="Contact"
-                                    name="Contact" readonly>
+                                <input type="tel" class="form-control text-value text-center border-0 fw-bold"
+                                    id="Contact" name="Contact" readonly>
                             </div>
                             <label for="Contact">Contact Number</label>
                         </div>
@@ -251,7 +253,7 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control text-center border-0 fw-bold"
+                                    <input type="text" class="form-control text-value text-center border-0 fw-bold"
                                         id="YouthAgeGroup" name="YouthAgeGroup" readonly>
                                 </div>
                                 <label for="YouthAgeGroup">Youth Age Group</label>
@@ -261,7 +263,7 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control text-center border-0 fw-bold"
+                                    <input type="text" class="form-control text-value text-center border-0 fw-bold"
                                         id="YouthClassification" name="YouthClassification" readonly>
                                 </div>
                                 <label for="YouthClassification">Youth Classification</label>
@@ -272,7 +274,7 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control text-center border-0 fw-bold"
+                                    <input type="text" class="form-control text-value text-center border-0 fw-bold"
                                         id="EducationalBackground" name="educationalBackground" readonly>
                                 </div>
                                 <label for="EducationalBackground" class="form-label">Educational
@@ -284,8 +286,8 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <div class="border-bottom border-dark">
-                                    <input type="text" class="form-control text-center border-0 fw-bold" id="WorkStatus"
-                                        name="workStatus" readonly>
+                                    <input type="text" class="form-control text-value text-center border-0 fw-bold"
+                                        id="WorkStatus" name="workStatus" readonly>
                                 </div>
                                 <label for="WorkStatus" class="form-label">Work Status</label>
                             </div>

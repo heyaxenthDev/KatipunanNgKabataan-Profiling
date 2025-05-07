@@ -55,7 +55,11 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
 
         <div class="card">
 
-            <form class="card-body" action="#" method="POST" enctype="multipart/form-data">
+            <form class="card-body" id="decisionForm" enctype="multipart/form-data">
+
+                <input type="hidden" name="brgyCode" id="brgyCode" value="<?= $_GET['Code'] ?>">
+
+
 
                 <script>
                 document.addEventListener("DOMContentLoaded", function() {
@@ -116,7 +120,11 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">Dominant Youth Classification:</label>
+                            <label class="col-sm-4 col-form-label">
+                                Dominant Youth Classification:
+                                <span id="labelClassification" class="badge bg-info text-dark ms-2"></span>
+                            </label>
+
                             <div class="col-sm-8">
                                 <select class="form-select" id="youthClassification" name="youthClassification"
                                     required>
@@ -134,7 +142,11 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">Dominant Gender:</label>
+                            <label class="col-sm-4 col-form-label">
+                                Dominant Gender:
+                                <span id="labelGender" class="badge bg-info text-dark ms-2"></span>
+                            </label>
+
                             <div class="col-sm-8">
                                 <select class="form-select" id="dominantGender" name="dominantGender" required>
                                     <option value="">-- Select Gender --</option>
@@ -145,7 +157,11 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">Dominant Age Group:</label>
+                            <label class="col-sm-4 col-form-label">
+                                Dominant Age Group:
+                                <span id="labelAge" class="badge bg-info text-dark ms-2"></span>
+                            </label>
+
                             <div class="col-sm-8">
                                 <select class="form-select" id="ageCategory" name="ageCategory" required>
                                     <option value="">-- Select Age Group --</option>
@@ -162,8 +178,8 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Suggested Program:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="suggestedProgram" name="suggestedProgram"
-                                    readonly>
+                                <input type="text" class="form-control" id="suggestedProgram" name="suggestedProgram">
+
                             </div>
                         </div>
 
@@ -200,6 +216,62 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                     <button type="reset" class="btn btn-secondary">Reset</button>
                 </div>
             </form>
+
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+            $("#decisionForm").on("submit", function(e) {
+                e.preventDefault(); // prevent full page reload
+
+                $.ajax({
+                    url: "decision_process.php",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            alert("Decision saved successfully!");
+                            $("#decisionForm")[0].reset(); // Optional: clear form
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert("An error occurred while processing the request.");
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                const brgyCode = $("#brgyCode").val();
+
+                $.ajax({
+                    url: "fetch_dominant.php",
+                    method: "GET",
+                    data: {
+                        brgyCode: brgyCode
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            // Auto-fill selects
+                            $("#youthClassification").val(data.classification).trigger("change");
+                            $("#dominantGender").val(data.gender).trigger("change");
+                            $("#ageCategory").val(data.age).trigger("change");
+
+                            // Show badges for guidance
+                            $("#labelClassification").text(data.classification);
+                            $("#labelGender").text(data.gender);
+                            $("#labelAge").text(data.age);
+                        } else {
+                            alert("Failed to fetch dominant info.");
+                        }
+                    },
+                    error: function() {
+                        alert("Error fetching data.");
+                    }
+                });
+            });
+            </script>
+
 
         </div>
     </section>

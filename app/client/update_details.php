@@ -16,22 +16,22 @@ if (isset($_POST['updateDetails']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $municipality = mysqli_real_escape_string($conn, $_POST['Municipality'] ?? '');
     $barangay = mysqli_real_escape_string($conn, $_POST['Barangay'] ?? '');
 
-// Handle Image Upload
-$userImage = null;
-if (isset($_FILES['userImage']) && $_FILES['userImage']['error'] === UPLOAD_ERR_OK) {
-    $fileTmpPath = $_FILES['userImage']['tmp_name'];
-    $fileName = uniqid() . '_' . $_FILES['userImage']['name'];
-    $filePath = 'uploads/' . basename($fileName);
-    if (move_uploaded_file($fileTmpPath, $filePath)) {
-        $userImage = $filePath;
+    // Handle Image Upload
+    $userImage = null;
+    if (isset($_FILES['userImage']) && $_FILES['userImage']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['userImage']['tmp_name'];
+        $fileName = uniqid() . '_' . $_FILES['userImage']['name'];
+        $filePath = 'uploads/' . basename($fileName);
+        if (move_uploaded_file($fileTmpPath, $filePath)) {
+            $userImage = $filePath;
+        }
     }
-}
 
     // Get other form fields
     $zip = mysqli_real_escape_string($conn, $_POST['inputZip'] ?? '');
     $civilStatus = mysqli_real_escape_string($conn, $_POST['inputCivilStatus'] ?? '');
     $gender = mysqli_real_escape_string($conn, $_POST['gender'] ?? '');
-    $age = (int) $_POST['inputAge'] ?? 0;
+    $age = (int) $_POST['inputAge'] ?? 0;  
     $birthdate = mysqli_real_escape_string($conn, $_POST['inputBirthdate'] ?? '');
     $email = mysqli_real_escape_string($conn, $_POST['inputEmail'] ?? '');
     $contact = mysqli_real_escape_string($conn, $_POST['inputContact'] ?? '');

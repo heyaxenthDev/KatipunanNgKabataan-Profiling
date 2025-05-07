@@ -102,7 +102,7 @@ $brgyName = $getBrgy['barangay_name'];
 
         <script src="assets/js/details.js"></script>
         <script src="assets/js/edit.js"></script>
-        <script src="assets/js/print.js"></script>
+        <!-- <script src="assets/js/print.js"></script> -->
 
     </section>
 

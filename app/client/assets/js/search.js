@@ -63,29 +63,38 @@ $(document).ready(function () {
               } else {
                 $("#genderMale").prop("checked", true);
               }
-              $("#birthdate").val(data.birthdate || "");
+
+              if (data.birthdate) {
+                const birthdate = new Date(data.birthdate);
+                const options = {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                };
+                const formattedDate = birthdate.toLocaleDateString(
+                  "en-US",
+                  options
+                );
+                $("#birthdate").val(formattedDate);
+              } else {
+                $("#birthdate").val("");
+              }
+
               $("#CivilStatus").val(data.civil_status || "");
               $("#Email").val(data.email || "");
               $("#Contact").val(data.contact || "");
 
-              let youthAgeGroup = data.youth_age_group || "";
-              switch (youthAgeGroup) {
-                case "core":
-                  $("#YouthAgeGroup").val("Core Youth (18-24 years old)");
-                  break;
-                case "child":
-                  $("#YouthAgeGroup").val("Child Youth (15-17 years old)");
-                  break;
-                case "young_adult":
-                  $("#YouthAgeGroup").val("Young Adult (25-30 years old)");
-                case "unregistered":
-                  $("#YouthAgeGroup").val(
-                    "Unregistered Youth (below 15 years old)"
-                  );
-                  break;
-                default:
-                  break;
-              }
+              const ageGroupMap = {
+                core: "Core Youth",
+                child: "Child Youth",
+                young_adult: "Young Adult",
+                unregistered: "Unregistered Youth",
+              };
+
+              const youth_age_group =
+                ageGroupMap[data.youth_age_group] || "Unknown";
+              $("#YouthAgeGroup").val(youth_age_group || "");
+
               $("#YouthClassification").val(data.youth_classification || "");
               $("#EducationalBackground").val(
                 data.educational_background || ""

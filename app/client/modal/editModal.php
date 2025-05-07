@@ -37,8 +37,12 @@
                           </div>
 
                           <div class="col-md-4">
-                              <img src="" id="editPicture" class="img-fluid" alt="">
+                              <img src="" id="editPicture" class="img-fluid mb-2" alt="Profile Picture"
+                                  style="max-height: 200px;">
+                              <input type="file" id="editPictureInput" name="userImage" accept="image/*"
+                                  class="form-control form-control-sm">
                           </div>
+
 
                           <label class="form-label fw-semibold">Location</label>
 
@@ -230,39 +234,41 @@
                                       </div>
                                       <div class="form-check">
                                           <input class="form-check-input" type="radio" name="educationalBackground"
-                                              id="editCollegeLevel" value="College Level">
-                                          <label class="form-check-label" for="editCollegeLevel">College Level</label>
+                                              id="editCollegeLevel" value="College Undergraduate">
+                                          <label class="form-check-label" for="editCollegeLevel">College
+                                              Undergraduate</label>
                                       </div>
                                       <div class="form-check">
                                           <input class="form-check-input" type="radio" name="educationalBackground"
-                                              id="editCollegeGraduate" value="College Graduate">
-                                          <label class="form-check-label" for="editCollegeGraduate">College
-                                              Graduate</label>
+                                              id="editCollegeGraduate" value="Bachelor's Degree">
+                                          <label class="form-check-label" for="editCollegeGraduate">Bachelor's
+                                              Degree</label>
                                       </div>
                                   </div>
                                   <div class="col-md-4">
                                       <div class="form-check">
                                           <input class="form-check-input" type="radio" name="educationalBackground"
-                                              id="editMasterLevel" value="Master Level">
-                                          <label class="form-check-label" for="editMasterLevel">Master Level</label>
-                                      </div>
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="radio" name="educationalBackground"
-                                              id="editMasterGraduate" value="Master Graduate">
-                                          <label class="form-check-label" for="editMasterGraduate">Master
-                                              Graduate</label>
-                                      </div>
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="radio" name="educationalBackground"
-                                              id="editDoctorateLevel" value="Doctorate Level">
-                                          <label class="form-check-label" for="editDoctorateLevel">Doctorate
+                                              id="editMasterLevel" value="Post Graduate Level">
+                                          <label class="form-check-label" for="editMasterLevel">Post Graduate
                                               Level</label>
                                       </div>
                                       <div class="form-check">
                                           <input class="form-check-input" type="radio" name="educationalBackground"
-                                              id="editDoctorateGraduate" value="Doctorate Graduate">
+                                              id="editMasterGraduate" value="Master's Degree">
+                                          <label class="form-check-label" for="editMasterGraduate">Master's
+                                              Degree</label>
+                                      </div>
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="educationalBackground"
+                                              id="editDoctorateLevel" value="Doctoral Level">
+                                          <label class="form-check-label" for="editDoctorateLevel">Doctoral
+                                              Level</label>
+                                      </div>
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="educationalBackground"
+                                              id="editDoctorateGraduate" value="Doctorate Degree">
                                           <label class="form-check-label" for="editDoctorateGraduate">Doctorate
-                                              Graduate</label>
+                                              Degree</label>
                                       </div>
                                   </div>
                               </div>

@@ -328,35 +328,35 @@
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="collegeLevel" value="College Level">
-                                    <label class="form-check-label" for="collegeLevel">College Level</label>
+                                        id="collegeLevel" value="College Undergraduate">
+                                    <label class="form-check-label" for="collegeLevel">College Undergraduate</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="collegeGraduate" value="College Graduate">
-                                    <label class="form-check-label" for="collegeGraduate">College Graduate</label>
+                                        id="collegeGraduate" value="Bachelor's Degree">
+                                    <label class="form-check-label" for="collegeGraduate">Bachelor's Degree</label>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="masterLevel" value="Master Level">
-                                    <label class="form-check-label" for="masterLevel">Master Level</label>
+                                        id="masterLevel" value="Post Graduate Level">
+                                    <label class="form-check-label" for="masterLevel">Post Graduate Level</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="masterGraduate" value="Master Graduate">
-                                    <label class="form-check-label" for="masterGraduate">Master Graduate</label>
+                                        id="masterGraduate" value="Master's Degree">
+                                    <label class="form-check-label" for="masterGraduate">Master's Degree</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="doctorateLevel" value="Doctorate Level">
-                                    <label class="form-check-label" for="doctorateLevel">Doctorate Level</label>
+                                        id="doctorateLevel" value="Doctoral Level">
+                                    <label class="form-check-label" for="doctorateLevel">Doctoral Level</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="educationalBackground"
-                                        id="doctorateGraduate" value="Doctorate Graduate">
-                                    <label class="form-check-label" for="doctorateGraduate">Doctorate Graduate</label>
+                                        id="doctorateGraduate" value="Doctorate Degree">
+                                    <label class="form-check-label" for="doctorateGraduate">Doctorate Degree</label>
                                 </div>
                             </div>
                         </div>

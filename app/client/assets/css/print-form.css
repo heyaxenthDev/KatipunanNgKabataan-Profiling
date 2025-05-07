@@ -38,6 +38,10 @@
     font-size: 14px; /* Slightly smaller font size for header */
   }
 
+  .text-value {
+    font-size: 13px;
+  }
+
   /* Scale down logo image size for printing */
   .sebaste-logo img {
     max-width: 85px; /* Adjust logo size to save space */
