@@ -77,13 +77,14 @@
             </a>
         </li><!-- End ABYIP Page Nav -->
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'notice of the meeting') ? '' : 'collapsed' ?>"
                 href="<?= get_page_link('notice of the meeting', "Code=$BrgyCode") ?>">
                 <i class="bi bi-bell"></i>
                 <span>Notice of the Meeting</span>
             </a>
-        </li><!-- End Documents Page Nav -->
+        </li> -->
+        <!-- End Documents Page Nav -->
 
         <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'reports') ? '' : 'collapsed' ?>"

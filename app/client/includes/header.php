@@ -57,6 +57,8 @@ if (mysqli_num_rows($run_query) > 0) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/js/address.js"></script>
+    <script src="assets/js/sweetalert2.all.min.js"></script>
+
 
 </head>
 

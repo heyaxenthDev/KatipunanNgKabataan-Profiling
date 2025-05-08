@@ -1,6 +1,6 @@
 <?php
-    include "includes/conn.php";
-
+header('Content-Type: application/json');
+include 'includes/conn.php'; // your DB connection
 // Fetch data from the `registered` table
 $sql = "SELECT youth_classification, gender, age FROM registered";
 $result = mysqli_query($conn, $sql);

@@ -1,32 +1,74 @@
 <?php
 // decision_process.php
 header('Content-Type: application/json');
-include 'includes/conn.php'; // your DB connection
+session_start();
+include "includes/conn.php";
 
-// Get POST data
-$brgyCode = $_POST['brgyCode'];
-$youthClass = $_POST['youthClassification'];
-$gender = $_POST['dominantGender'];
-$ageGroup = $_POST['ageCategory'];
-$suggestedProgram = $_POST['suggestedProgram'];
-$venue = $_POST['venue'];
-$budget = $_POST['budget'];
-$needs = $_POST['needs'];
-$dateSubmitted = date("Y-m-d");
+// Check if the request is POST
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['generateDecision'])) {
+    // Get form data
+    $brgyCode = $conn->real_escape_string($_POST['brgyCode']);
+    $programs = $conn->real_escape_string($_POST['suggestedProgram']);
+    $types = $conn->real_escape_string($_POST['types']);
+    $for_gender = $conn->real_escape_string($_POST['dominantGender']);
+    $age_category = $conn->real_escape_string($_POST['ageCategory']);
+    $youth_classification = $conn->real_escape_string($_POST['youthClassification']);
+    $venue = $conn->real_escape_string($_POST['venue']);
+    $budget = $conn->real_escape_string($_POST['budget']);
+    $needs = $conn->real_escape_string($_POST['needs']);
+    $committee_assigned = $conn->real_escape_string($_POST['committee_assigned']);
 
-// INSERT into your table (replace 'decision_data' with your actual table name)
-$stmt = $conn->prepare("INSERT INTO decision_data 
-    (brgy_code, youth_classification, gender, age_group, suggested_program, venue, budget, needs, date_submitted) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // Set default values for attachment fields
+    $attachment_type = NULL;
+    $attachment_file = NULL;
 
-$stmt->bind_param("sssssssss", $brgyCode, $youthClass, $gender, $ageGroup, $suggestedProgram, $venue, $budget, $needs, $dateSubmitted);
+    // Prepare the SQL statement
+    $sql = "INSERT INTO youth_programs (brgyCode, programs, types, for_gender, age_category, 
+            youth_classification, committee_assigned, venue, budget, needs, attachment_type, attachment_file) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-if ($stmt->execute()) {
-    echo json_encode(['success' => true]);
+    // Prepare and bind parameters
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssssssss", 
+        $brgyCode, 
+        $programs, 
+        $types, 
+        $for_gender, 
+        $age_category, 
+        $youth_classification, 
+        $committee_assigned, 
+        $venue, 
+        $budget, 
+        $needs, 
+        $attachment_type, 
+        $attachment_file
+    );
+
+    // Execute the statement
+    if ($stmt->execute()) {
+        $_SESSION['status'] = "Success";
+        $_SESSION['status_text'] = "Youth program data saved successfully!";
+        $_SESSION['status_code'] = "success";
+        $_SESSION['status_btn'] = "Ok";
+        header("Location: {$_SERVER['HTTP_REFERER']}");
+    } else {
+        $_SESSION['status'] = "Error";
+        $_SESSION['status_text'] = "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['status_code'] = "error";
+        $_SESSION['status_btn'] = "Back";
+        header("Location: {$_SERVER['HTTP_REFERER']}");
+    }
+
+    // Close statement
+    $stmt->close();
 } else {
-    echo json_encode(['success' => false, 'message' => $conn->error]);
+    $_SESSION['status'] = "Error";
+    $_SESSION['status_text'] = "Invalid request method";
+    $_SESSION['status_code'] = "error";
+    $_SESSION['status_btn'] = "Back";
+    header("Location: {$_SERVER['HTTP_REFERER']}");
 }
 
-$stmt->close();
+// Close connection
 $conn->close();
 ?>
