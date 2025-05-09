@@ -116,12 +116,14 @@
                                             <td><?=$row['youth_classification'] ?></td>
                                             <td><?=$row['street'] ?></td>
                                             <td>
-                                                <button class='btn btn-success btn-sm' type='button'><i
-                                                        class='bi bi-eye'></i></button>
-                                                <button class='btn btn-primary btn-sm' type='button'><i
-                                                        class='bi bi-pencil-square'></i></button>
-                                                <button class='btn btn-danger btn-sm' type='button'><i
-                                                        class='bi bi-trash'></i></button>
+                                                <button class="btn btn-success btn-sm view-details"
+                                                    data-id="<?=$row['id']?>"><i class="bi bi-eye"></i>
+                                                    View</button>
+                                                <button class="btn btn-primary btn-sm edit-details"
+                                                    data-edit-id=<?= $row['id']?>><i
+                                                        class="bi bi-pencil-square"></i></button>
+                                                <!-- <button class="btn btn-secondary btn-sm" onclick="printForm('printableCard')"
+                                            type="button"><i class="bi bi-printer"></i></button> -->
                                             </td>
                                         </tr>
                                         <?php
@@ -174,12 +176,12 @@
                                             <td><?=$row['youth_classification'] ?></td>
                                             <td><?=$row['street'] ?></td>
                                             <td>
-                                                <button class='btn btn-success btn-sm' type='button'><i
-                                                        class='bi bi-eye'></i></button>
-                                                <button class='btn btn-primary btn-sm' type='button'><i
-                                                        class='bi bi-pencil-square'></i></button>
-                                                <button class='btn btn-danger btn-sm' type='button'><i
-                                                        class='bi bi-trash'></i></button>
+                                                <button class="btn btn-success btn-sm view-details"
+                                                    data-id="<?=$row['id']?>"><i class="bi bi-eye"></i>
+                                                    View</button>
+                                                <button class="btn btn-primary btn-sm edit-details"
+                                                    data-edit-id=<?= $row['id']?>><i
+                                                        class="bi bi-pencil-square"></i></button>
                                             </td>
                                         </tr>
                                         <?php
@@ -189,6 +191,7 @@
                                     </tbody>
                                 </table>
                                 <!-- End Youth Registered Table -->
+
                             </div>
                             <div class="tab-pane fade" id="pills-sk-official" role="tabpanel"
                                 aria-labelledby="sk-official-tab">
@@ -303,12 +306,13 @@
                                                             </div>
 
                                                             <div class="col-md-3">
-                                                                <label for="brgyAddress"
+                                                                <label for="brgyAddressName"
                                                                     class="form-label">Barangay</label>
-                                                                <input type="text" class="form-control" id="brgyAddress"
-                                                                    value="<?= $_GET['Name']?>" readonly>
+                                                                <input type="text" class="form-control"
+                                                                    id="brgyAddressName" value="<?= $_GET['Name']?>"
+                                                                    readonly>
                                                                 <input type="hidden" class="form-control"
-                                                                    id="brgyAddress" name="barangay"
+                                                                    id="brgyAddressCode" name="barangay"
                                                                     value="<?= $_GET['Code']?>" readonly>
                                                             </div>
 
@@ -403,6 +407,14 @@
             </div>
         </div>
     </section>
+
+    <?php 
+    include "modal/viewModal.php";
+    include "modal/editModal.php";
+    ?>
+
+    <script src="assets/js/details.js"></script>
+    <script src="assets/js/edit.js"></script>
 
 </main><!-- End #main -->
 <?php 
