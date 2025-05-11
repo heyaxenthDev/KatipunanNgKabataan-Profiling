@@ -355,3 +355,105 @@
           </div>
       </div>
   </div>
+
+
+  <!-- View Modal for SK Officials -->
+  <div class="modal fade" id="viewSKOfficialsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="viewSKOfficialsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="viewSKOfficialsModalLabel">SK Official Details</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body row g-3">
+                  <h5 class="card-title mx-2">Personal Information</h5>
+
+                  <div class="col-md-4">
+                      <label for="viewLastname" class="form-label">Last
+                          Name</label>
+                      <input type="text" class="form-control" id="viewLastname" name="viewLastname">
+                  </div>
+
+                  <div class="col-md-4">
+                      <label for="viewFirstname" class="form-label">First
+                          Name</label>
+                      <input type="text" class="form-control" id="viewFirstname" name="viewFirstname">
+                  </div>
+
+                  <div class="col-md-4">
+                      <label for="viewMiddlename" class="form-label">Middle
+                          Name</label>
+                      <input type="text" class="form-control" id="viewMiddlename" name="viewMiddlename">
+                  </div>
+
+                  <div class="col-md-4">
+                      <label for="viewPosition" class="form-label">Position</label>
+                      <input type="text" class="form-control" id="viewPosition" name="viewPosition" readonly>
+                  </div>
+
+                  <div class="col-md-3">
+                      <label for="viewSex" class="form-label">Sex</label>
+                      <input type="text" class="form-control" id="viewSex" name="viewSex" readonly>
+                  </div>
+
+                  <div class="col-md-2">
+                      <label for="viewAge" class="form-label">Age</label>
+                      <input type="text" class="form-control" id="viewSKAge" name="viewSKAge" readonly>
+                  </div>
+
+                  <div class="col-md-3">
+                      <label for="viewDOB" class="form-label">Date of
+                          Birth</label>
+                      <input type="text" class="form-control" id="viewDOB" name="viewDOB">
+                  </div>
+
+                  <div class="col-md-4">
+                      <label for="viewMobileNumber" class="form-label">Mobile
+                          Number</label>
+                      <input type="tel" class="form-control" id="viewMobileNumber" name="viewMobileNumber">
+                  </div>
+
+                  <div class="col-md-2">
+                      <label for="viewStreetNumber" class="form-label">Street
+                          Number</label>
+                      <input type="text" class="form-control" id="viewStreetNumber" name="viewStreetNumber">
+                  </div>
+
+                  <div class="col-md-3">
+                      <label for="viewAddress" class="form-label">Address</label>
+                      <input type="text" class="form-control" id="viewAddress" name="viewAddress">
+                  </div>
+
+                  <div class="col-md-3">
+                      <label for="viewBrgyAddressName" class="form-label">Barangay</label>
+                      <input type="text" class="form-control" id="viewBrgyAddressName" value="<?= $_GET['Name']?>"
+                          readonly>
+                      <input type="hidden" class="form-control" id="viewBrgyAddressCode" name="barangay"
+                          value="<?= $_GET['Code']?>" readonly>
+                  </div>
+
+                  <h5 class="card-title mx-2">Login Access</h5>
+
+                  <div class="col-md-6">
+                      <label for="viewUsername" class="form-label">Username</label>
+                      <input type="text" class="form-control" id="viewUsername" name="viewUsername">
+                  </div>
+
+                  <div class="col-md-6">
+                      <label for="viewPassword" class="form-label">Password</label>
+                      <input type="password" class="form-control" id="viewPassword" name="viewPassword">
+                  </div>
+
+                  <div class="col-md-6">
+                      <label for="viewSKEmail" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="viewSKEmail" name="viewSKEmail">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <!-- <button type="submit" class="btn btn-primary" name="createAcc">Submit</button> -->
+              </div>
+          </div>
+      </div>
+  </div>

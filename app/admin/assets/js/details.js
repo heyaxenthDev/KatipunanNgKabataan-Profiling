@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("viewGenderMale").checked = true;
           }
 
-          // Set birthdate and age
+          // Set dob and age
           if (data.birthdate) {
             const birthdate = new Date(data.birthdate);
             const options = { year: "numeric", month: "long", day: "numeric" };
@@ -99,6 +99,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Show the modal using getOrCreateInstance for accessibility
           const viewModal = document.getElementById("viewYouthModal");
+          const modalInstance = bootstrap.Modal.getOrCreateInstance(viewModal);
+          modalInstance.show();
+        })
+        .catch((error) =>
+          console.error("Error fetching youth details:", error)
+        );
+    });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // View Details Handler
+  document.querySelectorAll(".view-sk-details").forEach((button) => {
+    button.addEventListener("click", () => {
+      const skID = button.getAttribute("data-viewSK-id");
+
+      fetch(`get_sk_details.php?id=${skID}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // Set basic information
+          document.getElementById("viewLastname").value = data.lastname || "";
+          document.getElementById("viewFirstname").value = data.firstname || "";
+          document.getElementById("viewMiddlename").value =
+            data.middlename || "";
+          document.getElementById("viewStreetNumber").value =
+            data.street_num || "";
+
+          // Set sex
+          document.getElementById("viewSex").value =
+            data.sex === 0 ? "Female" : "Male";
+
+          // Set dob and age
+          if (data.dob) {
+            const dob = new Date(data.dob);
+            const options = { year: "numeric", month: "long", day: "numeric" };
+            document.getElementById("viewDOB").value = dob.toLocaleDateString(
+              "en-US",
+              options
+            );
+
+            // Calculate age
+            let currentDate = new Date();
+            let birthDate = new Date(data.dob);
+            let age = currentDate.getFullYear() - birthDate.getFullYear();
+            let monthDiff = currentDate.getMonth() - birthDate.getMonth();
+            if (
+              monthDiff < 0 ||
+              (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())
+            ) {
+              age--;
+            }
+            document.getElementById("viewSKAge").value = age;
+          }
+          document.getElementById("viewSKEmail").value = data.email || "";
+          document.getElementById("viewMobileNumber").value =
+            data.mobile_num || "";
+          document.getElementById("viewAddress").value = data.address || "";
+          document.getElementById("viewPosition").value = data.role || "";
+
+          document.getElementById("viewUsername").value = data.username || "";
+
+          document.getElementById("viewPassword").value = data.password || "";
+
+          // Show the modal using getOrCreateInstance for accessibility
+          const viewModal = document.getElementById("viewSKOfficialsModal");
           const modalInstance = bootstrap.Modal.getOrCreateInstance(viewModal);
           modalInstance.show();
         })

@@ -28,6 +28,8 @@ if (isset($_POST['createAcc'])) {
 
     // Execute the statement for SK officials
     if ($stmt->execute()) {
+        $account_id = $stmt->insert_id;
+        createAccount($conn, $barangayCode, $account_id, $username, $password, $firstname, $lastname, $position);
         $_SESSION['status'] = "Success";
         $_SESSION['status_text'] = "SK Official account created successfully!";
         $_SESSION['status_code'] = "success";
@@ -42,34 +44,30 @@ if (isset($_POST['createAcc'])) {
     // Close the first statement
     $stmt->close();
 
-    // Hash the password before inserting into `accounts` table
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    // Prepare statement for `accounts` table
-    $stmt2 = $conn->prepare("INSERT INTO accounts (brgy_code, username, password, firstname, lastname, role) VALUES (?, ?, ?, ?, ?, ?)");
-    
-    // Bind parameters for `accounts`
-    $stmt2->bind_param("ssssss", $barangayCode, $username, $hashedPassword, $firstname, $lastname, $position);
-
-    // Execute the statement for accounts
-    if ($stmt2->execute()) {
-        $_SESSION['status'] = "Success";
-        $_SESSION['status_text'] = "Login credentials created successfully!";
-        $_SESSION['status_code'] = "success";
-        $_SESSION['status_btn'] = "Ok";
-    } else {
-        $_SESSION['status'] = "Error";
-        $_SESSION['status_text'] = "Error creating login credentials: " . $stmt2->error;
-        $_SESSION['status_code'] = "error";
-        $_SESSION['status_btn'] = "Try Again";
-    }
-
-    // Close second statement and connection
-    $stmt2->close();
-    $conn->close();
-
     // Redirect to the referring page
     header("Location: {$_SERVER['HTTP_REFERER']}");
     exit(); // Make sure to exit after redirecting
 }
+
+function createAccount($conn, $barangayCode, $account_id, $username, $password, $firstname, $lastname, $position) {
+    // Hash the password before inserting into `accounts` table
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+    // Prepare statement for `accounts` table
+    $stmt2 = $conn->prepare("INSERT INTO accounts (account_id, brgy_code, username, password, firstname, lastname, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    
+    // Bind parameters for `accounts`
+    $stmt2->bind_param("sssssss", $account_id, $barangayCode, $username, $hashedPassword, $firstname, $lastname, $position);
+
+    // Execute the statement for accounts
+    if ($stmt2->execute()) {
+        echo "Success";
+    } else {
+       echo $stmt2->error;
+    }
+
+ // Close second statement and connection
+ $stmt2->close();
+}
+
 ?>

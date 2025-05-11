@@ -77,18 +77,18 @@
         </li><!-- End Barangay Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?php echo $current_page == 'cbyp' || $current_page == 'abyp' ? '' : 'collapsed'; ?>"
+            <a class="nav-link <?php echo $current_page == 'cbydp' || $current_page == 'abyp' ? '' : 'collapsed'; ?>"
                 data-bs-toggle="collapse" href="#forms-nav">
                 <i class="bi bi-journal-text"></i><span>Brgy. SK Reports</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="forms-nav"
-                class="nav-content collapse <?php echo $current_page == 'cbyp' || $current_page == 'abyp' ? 'show' : ''; ?>"
+                class="nav-content collapse <?php echo $current_page == 'cbydp' || $current_page == 'abyp' ? 'show' : ''; ?>"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="<?= get_page_link('cbyp') ?>"
-                        <?php echo $current_page == 'cbyp' ? 'class="active"' : ''; ?>>
-                        <i class="bi bi-circle"></i><span>CBYP</span>
+                    <a href="<?= get_page_link('cbydp') ?>"
+                        <?php echo $current_page == 'cbydp' ? 'class="active"' : ''; ?>>
+                        <i class="bi bi-circle"></i><span>CBYDP</span>
                     </a>
                 </li>
                 <li>

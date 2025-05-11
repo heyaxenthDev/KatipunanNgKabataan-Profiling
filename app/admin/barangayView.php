@@ -372,10 +372,8 @@
                                                             <div class="member-img">
                                                                 <img src="' . $imageUrl . '" class="img-fluid" alt="' . $fullname . '">
                                                                 <div class="social">
-                                                                    <a href=""><i class="bi bi-eye"></i></a>
-                                                                    <a href=""><i class="bi bi-pencil-sqaure"></i></a>
-                                                                    <a href=""><i class="bi bi-instagram"></i></a>
-                                                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                                                    <button class="view-sk-details" data-viewSK-id="'.$row['id'].'"><i class="bi bi-eye"></i></button>
+                                                                    <button class="edit-sk-details" data-editSK-id="'.$row['id'].'"><i class="bi bi-pencil-square"></i></button>
                                                                 </div>
                                                             </div>
                                                             <div class="member-info">

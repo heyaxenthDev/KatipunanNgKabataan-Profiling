@@ -193,4 +193,90 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     });
   });
+
+  // Edit Details Handler for SK Officials
+  document.querySelectorAll(".edit-sk-details").forEach((button) => {
+    button.addEventListener("click", () => {
+      const skID = button.getAttribute("data-editSK-id");
+
+      fetch(`get_sk_details.php?id=${skID}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // Set basic information
+          document.getElementById("editLastname").value = data.lastname || "";
+          document.getElementById("editFirstname").value = data.firstname || "";
+          document.getElementById("editMiddlename").value =
+            data.middlename || "";
+          document.getElementById("editStreetNumber").value =
+            data.street_num || "";
+          document.getElementById("editPosition").value = data.role || "";
+          document.getElementById("editSex").value = data.sex;
+          document.getElementById("editSKAge").value = data.age || "";
+          document.getElementById("editDOB").value = data.dob || "";
+          document.getElementById("editMobileNumber").value =
+            data.mobile_num || "";
+          document.getElementById("editAddress").value = data.address || "";
+          document.getElementById("editUsername").value = data.username || "";
+          document.getElementById("editPassword").value = data.password || "";
+          document.getElementById("editSKEmail").value = data.email || "";
+
+          // Store the SK ID for the update operation
+          document.getElementById("editSKId").value = skID;
+
+          // Show the modal using getOrCreateInstance for accessibility
+          const editModal = document.getElementById("editSKOfficialsModal");
+          const modalInstance = bootstrap.Modal.getOrCreateInstance(editModal);
+          modalInstance.show();
+        })
+        .catch((error) => console.error("Error fetching SK details:", error));
+    });
+  });
+
+  // Handle form submission for SK Official updates
+  const editSKForm = document.getElementById("editSKForm");
+  if (editSKForm) {
+    editSKForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(editSKForm);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch("update_sk_official.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
+            // Show success message
+            Swal.fire({
+              icon: "success",
+              title: "Success!",
+              text: "SK Official details updated successfully.",
+            }).then(() => {
+              // Reload the page to show updated data
+              window.location.reload();
+            });
+          } else {
+            // Show error message
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: result.message || "Failed to update SK Official details.",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating SK Official:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: "An error occurred while updating SK Official details.",
+          });
+        });
+    });
+  }
 });
