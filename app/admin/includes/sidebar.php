@@ -108,7 +108,7 @@
             </a>
         </li><!-- End Member List Nav -->
 
-        <li class="nav-heading">Documents</li>
+        <li class="nav-heading">Youth</li>
 
         <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'youth involve') ? '' : 'collapsed' ?>"
@@ -117,14 +117,6 @@
                 <span>Youth Involve</span>
             </a>
         </li><!-- End Youth Involve Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'cbydp') ? '' : 'collapsed' ?>"
-                href="<?= get_page_link('cbydp') ?>">
-                <i class="bi bi-file-earmark-text"></i>
-                <span>CBYDP</span>
-            </a>
-        </li><!-- End CBYDP Page Nav -->
 
     </ul>
 
