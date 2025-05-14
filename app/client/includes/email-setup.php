@@ -82,11 +82,25 @@ $(document).ready(function() {
 </div>
 
 
+<!-- Loader Overlay -->
+<div id="loaderOverlay"
+    style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
+    <div class="spinner-border text-light" style="width: 4rem; height: 4rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <div style="color:white; margin-top:20px; font-size:1.2rem;">Sending verification email...</div>
+</div>
+
 <!-- jQuery (Ensure jQuery is included in your project) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 $(document).ready(function() {
+    // Show loader when form is submitted
+    $("#setUpModal form").on("submit", function() {
+        $("#loaderOverlay").css("display", "flex");
+    });
+
     $("#email").on("keyup", function() {
         var email = $(this).val().trim(); // Get input value
 

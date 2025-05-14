@@ -145,49 +145,95 @@ function sendVerificationSuccessEmail($email, $username, $officialEmail, $offici
     $mail->send();
 }
 
+// Function to check email verification status
+function checkEmailVerificationStatus($conn, $userID, $username) {
+    $query = "SELECT email, email_verify FROM accounts WHERE id = ? AND username = ? AND role = 'Administrative'";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("is", $userID, $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+    
+    return [
+        'has_email' => !empty($row['email']),
+        'is_verified' => $row['email_verify'] == 1,
+        'email' => $row['email'] ?? null
+    ];
+}
 
-
-if (isset($_POST['sendVerification']) && $_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $userID = $_SESSION['user']['id'];
-    $username = $_SESSION['user']['user_username'];
+// Function to handle email verification process
+function handleEmailVerification($conn, $userID, $username, $email = null) {
+    $status = checkEmailVerificationStatus($conn, $userID, $username);
+    
+    if (!$status['has_email'] && !$email) {
+        return [
+            'status' => 'error',
+            'message' => 'Email address is required for verification.',
+            'action' => 'setup_email'
+        ];
+    }
+    
+    if ($status['is_verified']) {
+        return [
+            'status' => 'success',
+            'message' => 'Email is already verified.',
+            'action' => 'none'
+        ];
+    }
+    
+    // Generate new verification code
     $token = rand(100000, 999999);
-
+    $email = $email ?? $status['email'];
+    
     $stmt = $conn->prepare("UPDATE accounts SET verificationCode = ?, email = ? WHERE id = ? AND username = ? AND role = 'Administrative'");
     $stmt->bind_param("ssis", $token, $email, $userID, $username);
-
+    
     if ($stmt->execute()) {
+        global $officialEmail, $officialEmailPassword;
         sendVerificationCode($email, $username, $token, $officialEmail, $officialEmailPassword);
         
         $_SESSION['entered_email'] = $email;
         $_SESSION['email_sent'] = true;
-        $_SESSION['status'] = "Success!";
-        $_SESSION['status_text'] = "Verification code sent!";
-        $_SESSION['status_code'] = "success";
-        $_SESSION['status_btn'] = "Done";
-    }else {
-        $_SESSION['status'] = "Error!";
-        $_SESSION['status_text'] = "Error: " . $stmt->error;
-        $_SESSION['status_code'] = "error";
-        $_SESSION['status_btn'] = "Try Again";
+        
+        return [
+            'status' => 'success',
+            'message' => 'Verification code sent successfully.',
+            'action' => 'verify_code'
+        ];
     }
+    
+    return [
+        'status' => 'error',
+        'message' => 'Failed to send verification code.',
+        'action' => 'retry'
+    ];
+}
 
-    $stmt->close();
-    // Redirect
+// Handle email setup request
+if (isset($_POST['sendVerification']) && $_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $userID = $_SESSION['user']['id'];
+    $username = $_SESSION['user']['user_username'];
+    
+    $result = handleEmailVerification($conn, $userID, $username, $email);
+    
+    $_SESSION['status'] = ucfirst($result['status']) . "!";
+    $_SESSION['status_text'] = $result['message'];
+    $_SESSION['status_code'] = $result['status'];
+    $_SESSION['status_btn'] = $result['action'] === 'retry' ? "Try Again" : "Done";
+    
     header("Location: {$_SERVER['HTTP_REFERER']}");
     exit();
 }
 
+// Handle verification code submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['VerifyEmail'])) {
-    
     $verifyCode = mysqli_real_escape_string($conn, $_POST['verificationCode']);
     $userID = $_SESSION['user']['id'];
     $username = $_SESSION['user']['user_username'];
     $email = $_SESSION['entered_email'];
-         
-
-    // Prepare and execute the query
+    
     $checkCode = "SELECT verificationCode FROM accounts WHERE id = ? AND username = ? AND role = 'Administrative'";
     $stmt = mysqli_prepare($conn, $checkCode);
     
@@ -197,42 +243,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['VerifyEmail'])) {
         mysqli_stmt_bind_result($stmt, $dbVerificationCode);
         mysqli_stmt_fetch($stmt);
         mysqli_stmt_close($stmt);
-
-        // Check if the verification code matches
-        if ($dbVerificationCode) {
-            if ($verifyCode === $dbVerificationCode) {
-                // Update account to mark email as verified
-                $updateQuery = "UPDATE accounts SET email_verify = 1 WHERE id = ?";
-                $updateStmt = mysqli_prepare($conn, $updateQuery);
-                if ($updateStmt) {
-                    mysqli_stmt_bind_param($updateStmt, "i", $userID);
-                    mysqli_stmt_execute($updateStmt);
-                    mysqli_stmt_close($updateStmt);
-                    
-                    $_SESSION['status'] = "Success!";
-                    $_SESSION['status_text'] = "Your email has been successfully verified.";
-                    $_SESSION['status_code'] = "success";
-                    $_SESSION['status_btn'] = "Done";
-
-                    sendVerificationSuccessEmail($email, $username, $officialEmail, $officialEmailPassword);
-                    unset($_SESSION['entered_email']);
-                    unset($_SESSION['email_sent']);
-                } else {
-                    $_SESSION['status'] = "Database Error!";
-                    $_SESSION['status_text'] = "Could not update verification status.";
-                    $_SESSION['status_code'] = "error";
-                    $_SESSION['status_btn'] = "Try Again";
-
-                }
+        
+        if ($dbVerificationCode && $verifyCode === $dbVerificationCode) {
+            $updateQuery = "UPDATE accounts SET email_verify = 1 WHERE id = ?";
+            $updateStmt = mysqli_prepare($conn, $updateQuery);
+            
+            if ($updateStmt) {
+                mysqli_stmt_bind_param($updateStmt, "i", $userID);
+                mysqli_stmt_execute($updateStmt);
+                mysqli_stmt_close($updateStmt);
+                
+                sendVerificationSuccessEmail($email, $username, $officialEmail, $officialEmailPassword);
+                
+                $_SESSION['status'] = "Success!";
+                $_SESSION['status_text'] = "Your email has been successfully verified.";
+                $_SESSION['status_code'] = "success";
+                $_SESSION['status_btn'] = "Done";
+                
+                unset($_SESSION['entered_email']);
+                unset($_SESSION['email_sent']);
             } else {
-                $_SESSION['status'] = "Invalid Code!";
-                $_SESSION['status_text'] = "The verification code you entered is incorrect.";
+                $_SESSION['status'] = "Database Error!";
+                $_SESSION['status_text'] = "Could not update verification status.";
                 $_SESSION['status_code'] = "error";
-                $_SESSION['status_btn'] = "Retry";
+                $_SESSION['status_btn'] = "Try Again";
             }
         } else {
-            $_SESSION['status'] = "Error!";
-            $_SESSION['status_text'] = "No verification code found for this account.";
+            $_SESSION['status'] = "Invalid Code!";
+            $_SESSION['status_text'] = "The verification code you entered is incorrect.";
             $_SESSION['status_code'] = "error";
             $_SESSION['status_btn'] = "Retry";
         }
@@ -242,8 +280,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['VerifyEmail'])) {
         $_SESSION['status_code'] = "error";
         $_SESSION['status_btn'] = "Try Again";
     }
-
+    
     header("Location: {$_SERVER['HTTP_REFERER']}");
     exit();
+}
+
+// Handle AJAX resend verification code request
+if (isset($_POST['resendVerification'])) {
+    $userID = $_SESSION['user']['id'];
+    $username = $_SESSION['user']['user_username'];
+    $status = checkEmailVerificationStatus($conn, $userID, $username);
+    $email = $status['email'];
+    if ($email) {
+        // Generate new code and update DB
+        $token = rand(100000, 999999);
+        $stmt = $conn->prepare("UPDATE accounts SET verificationCode = ? WHERE id = ? AND username = ? AND role = 'Administrative'");
+        $stmt->bind_param("sis", $token, $userID, $username);
+        if ($stmt->execute()) {
+            global $officialEmail, $officialEmailPassword;
+            sendVerificationCode($email, $username, $token, $officialEmail, $officialEmailPassword);
+            $_SESSION['entered_email'] = $email;
+            echo 'success';
+            exit();
+        } else {
+            echo 'db_error';
+            exit();
+        }
+    } else {
+        echo 'no_email';
+        exit();
+    }
 }
 ?>

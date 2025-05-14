@@ -315,9 +315,9 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                 <th>Age Category</th>
                                 <th>Youth Classification</th>
                                 <th>Committee</th>
-                                <th>Venue</th>
+                                <!-- <th>Venue</th> -->
                                 <th>Budget</th>
-                                <th>Needs</th>
+                                <!-- <th>Needs</th> -->
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -339,12 +339,18 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                 echo "<td>" . htmlspecialchars($row['age_category']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['youth_classification']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['committee_assigned']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['venue']) . "</td>";
+                                // echo "<td>" . htmlspecialchars($row['venue']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['budget']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['needs']) . "</td>";
+                                // echo "<td>" . htmlspecialchars($row['needs']) . "</td>";
                                 echo "<td>
                                         <button class='btn btn-primary btn-sm view-details' data-id='" . $row['id'] . "'>
                                             <i class='bi bi-eye'></i>
+                                        </button>
+                                        <button class='btn btn-info btn-sm feedback-program' data-id='" . $row['id'] . "'>
+                                            <i class='bi bi-chat-dots'></i>
+                                        </button>
+                                        <button class='btn btn-warning btn-sm edit-program' data-id='" . $row['id'] . "'>
+                                            <i class='bi bi-pencil'></i>
                                         </button>
                                         <button class='btn btn-danger btn-sm delete-program' data-id='" . $row['id'] . "'>
                                             <i class='bi bi-trash'></i>
@@ -419,6 +425,183 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
         </div>
     </div>
 
+    <!-- Feedback Modal -->
+    <div class="modal fade" id="feedbackProgramModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Program Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Left Column - Feedback History -->
+                        <div class="col-md-6 border-end">
+                            <h6 class="mb-3">Feedback History</h6>
+                            <div class="feedback-history" style="max-height: 400px; overflow-y: auto;">
+                                <?php
+                                // Fetch feedback history for this program
+                                $query = "SELECT pf.*, a.firstname, a.lastname 
+                                         FROM program_feedback pf 
+                                         JOIN accounts a ON pf.user_id = a.id 
+                                         WHERE pf.program_id = ? 
+                                         ORDER BY pf.created_at DESC";
+                                $stmt = $conn->prepare($query);
+                                $stmt->bind_param("i", $row['id']);
+                                $stmt->execute();
+                                $feedbackResult = $stmt->get_result();
+
+                                if ($feedbackResult->num_rows > 0) {
+                                    while ($feedback = $feedbackResult->fetch_assoc()) {
+                                        $date = date('M d, Y h:i A', strtotime($feedback['created_at']));
+                                        echo '<div class="feedback-item mb-3 p-2 border-bottom">';
+                                        echo '<div class="d-flex justify-content-between align-items-start">';
+                                        echo '<div>';
+                                        echo '<strong>' . htmlspecialchars($feedback['firstname'] . ' ' . $feedback['lastname']) . '</strong>';
+                                        echo '<span class="badge bg-info ms-2">' . ucfirst(htmlspecialchars($feedback['feedback_type'])) . '</span>';
+                                        echo '</div>';
+                                        echo '<small class="text-muted">' . $date . '</small>';
+                                        echo '</div>';
+                                        echo '<p class="mb-0 mt-2">' . htmlspecialchars($feedback['feedback_message']) . '</p>';
+                                        echo '</div>';
+                                    }
+                                } else {
+                                    echo '<p class="text-muted">No feedback history available.</p>';
+                                }
+                                ?>
+                            </div>
+                        </div>
+
+                        <!-- Right Column - Feedback Form -->
+                        <div class="col-md-6">
+                            <h6 class="mb-3">Submit Feedback</h6>
+                            <form id="feedbackForm">
+                                <input type="hidden" id="programId" name="programId">
+                                <div class="mb-3">
+                                    <label for="feedbackType" class="form-label">Feedback Type</label>
+                                    <select class="form-select" id="feedbackType" name="feedbackType" required>
+                                        <option value="">Select feedback type...</option>
+                                        <option value="suggestion">Suggestion</option>
+                                        <option value="improvement">Area for Improvement</option>
+                                        <option value="praise">Praise</option>
+                                        <option value="concern">Concern</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="feedbackMessage" class="form-label">Feedback Message</label>
+                                    <textarea class="form-control" id="feedbackMessage" name="feedbackMessage" rows="4"
+                                        required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editProgramModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Program</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editProgramForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="editProgramId" name="programId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editProgram" class="form-label">Program</label>
+                                    <select class="form-select" id="editProgram" name="program" required>
+                                        <option value="">-- Select Program --</option>
+                                        <option value="SPORTS">Sports</option>
+                                        <option value="EDUCATION">Education</option>
+                                        <option value="HEALTH ENVIRONMENT">Health Environment</option>
+                                        <option value="FEEDING">Feeding</option>
+                                        <option value="TREE PLANTING">Tree Planting</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editType" class="form-label">Type</label>
+                                    <select class="form-select" id="editType" name="type" required>
+                                        <option value="">-- Select Type --</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editGender" class="form-label">Gender</label>
+                                    <select class="form-select" id="editGender" name="gender" required>
+                                        <option value="">-- Select Gender --</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editAgeCategory" class="form-label">Age Category</label>
+                                    <select class="form-select" id="editAgeCategory" name="ageCategory" required>
+                                        <option value="">-- Select Age Group --</option>
+                                        <option value="15-20">15-20</option>
+                                        <option value="21-25">21-25</option>
+                                        <option value="26-30">26-30</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editYouthClassification" class="form-label">Youth Classification</label>
+                                    <select class="form-select" id="editYouthClassification" name="youthClassification"
+                                        required>
+                                        <option value="">-- Select Classification --</option>
+                                        <option value="In School">In School</option>
+                                        <option value="Out of School Youth">Out of School Youth</option>
+                                        <option value="Working Youth">Working Youth</option>
+                                        <option value="Youth with Special Needs">Youth with Special Needs</option>
+                                        <option value="Person with Disability">Person with Disability</option>
+                                        <option value="Children in conflict with Law">Children in conflict with Law
+                                        </option>
+                                        <option value="Indigenous People">Indigenous People</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCommittee" class="form-label">Committee Assigned</label>
+                                    <input type="text" class="form-control" id="editCommittee" name="committee"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editVenue" class="form-label">Venue</label>
+                                    <select class="form-select" id="editVenue" name="venue" required>
+                                        <option value="">-- Select Venue --</option>
+                                        <option value="Poblacion Sebaste Gym">Poblacion Sebaste Gym</option>
+                                        <option value="Brgy. Alegre Cover Court">Brgy. Alegre Cover Court</option>
+                                        <option value="Brgy. Aras-Asan Cover Court">Brgy. Aras-Asan Cover Court</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editBudget" class="form-label">Budget</label>
+                                    <input type="text" class="form-control" id="editBudget" name="budget" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editNeeds" class="form-label">Needs</label>
+                                    <input type="text" class="form-control" id="editNeeds" name="needs" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </main><!-- End #main -->
 
 <?php 
@@ -458,6 +641,99 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert('Error fetching program details');
                 });
         });
+    });
+
+    // Feedback loading function
+    function loadFeedbackHistory(programId) {
+        fetch('get_feedback_history.php?id=' + programId)
+            .then(response => response.json())
+            .then(data => {
+                const feedbackHistory = document.querySelector('.feedback-history');
+                feedbackHistory.innerHTML = '';
+
+                if (data.length > 0) {
+                    data.forEach(feedback => {
+                        const date = new Date(feedback.created_at).toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        });
+
+                        const feedbackItem = document.createElement('div');
+                        feedbackItem.className = 'feedback-item mb-3 p-2 border-bottom';
+                        feedbackItem.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>${feedback.firstname} ${feedback.lastname}</strong>
+                                    <span class="badge bg-info ms-2">${feedback.feedback_type.charAt(0).toUpperCase() + feedback.feedback_type.slice(1)}</span>
+                                </div>
+                                <small class="text-muted">${date}</small>
+                            </div>
+                            <p class="mb-0 mt-2">${feedback.feedback_message}</p>
+                        `;
+                        feedbackHistory.appendChild(feedbackItem);
+                    });
+                } else {
+                    feedbackHistory.innerHTML = '<p class="text-muted">No feedback history available.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Handle feedback button clicks
+    document.querySelectorAll('.feedback-program').forEach(button => {
+        button.addEventListener('click', function() {
+            const programId = this.getAttribute('data-id');
+            document.getElementById('programId').value = programId;
+            loadFeedbackHistory(programId);
+            new bootstrap.Modal(document.getElementById('feedbackProgramModal')).show();
+        });
+    });
+
+    // Handle feedback submission
+    document.getElementById('submitFeedback').addEventListener('click', function() {
+        const form = document.getElementById('feedbackForm');
+        const formData = new FormData(form);
+        const programId = document.getElementById('programId').value;
+
+        fetch('submit_feedback.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Feedback submitted successfully.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        loadFeedbackHistory(programId);
+                        form.reset();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'Failed to submit feedback.',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred while submitting feedback.',
+                });
+            });
     });
 
     // Handle delete button clicks
@@ -508,6 +784,115 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         });
+    });
+
+    // Handle edit button clicks
+    document.querySelectorAll('.edit-program').forEach(button => {
+        button.addEventListener('click', function() {
+            const programId = this.getAttribute('data-id');
+            document.getElementById('editProgramId').value = programId;
+
+            // Fetch program details
+            fetch('get_program_details.php?id=' + programId)
+                .then(response => response.json())
+                .then(data => {
+                    // Populate form with data
+                    document.getElementById('editProgram').value = data.programs;
+
+                    // Trigger the change event to populate the types
+                    const event = new Event('change');
+                    document.getElementById('editProgram').dispatchEvent(event);
+
+                    // After a short delay, set the type value
+                    setTimeout(() => {
+                        document.getElementById('editType').value = data.types;
+                    }, 100);
+
+                    document.getElementById('editGender').value = data.for_gender;
+                    document.getElementById('editAgeCategory').value = data.age_category;
+                    document.getElementById('editYouthClassification').value = data
+                        .youth_classification;
+                    document.getElementById('editCommittee').value = data
+                        .committee_assigned;
+                    document.getElementById('editVenue').value = data.venue;
+                    document.getElementById('editBudget').value = data.budget;
+                    document.getElementById('editNeeds').value = data.needs;
+
+                    // Show the modal
+                    new bootstrap.Modal(document.getElementById('editProgramModal')).show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Failed to fetch program details.',
+                    });
+                });
+        });
+    });
+
+    // Handle edit form submission
+    document.getElementById('editProgramForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch('update_program.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Program updated successfully.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'Failed to update program.',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred while updating the program.',
+                });
+            });
+    });
+
+    // Handle program type options based on selected program
+    const programTypes = {
+        "SPORTS": ["BASKETBALL", "VOLLEYBALL", "TOURNAMENT PLAYING MOBILE LEGEND"],
+        "EDUCATION": ["FREE PRINTING", "LIBRARY HUB", "DISTRIBUTION OF SCHOOL SUPPLIES"],
+        "HEALTH ENVIRONMENT": ["HEALTH ENVIRONMENT"],
+        "FEEDING": ["MALNOURISH/LOW WEIGHT"],
+        "TREE PLANTING": ["TREE PLANTING"]
+    };
+
+    document.getElementById('editProgram').addEventListener('change', function() {
+        const typesSelect = document.getElementById('editType');
+        typesSelect.innerHTML = '<option value="">-- Select Type --</option>';
+
+        const selected = this.value;
+        if (programTypes[selected]) {
+            programTypes[selected].forEach(function(type) {
+                const opt = document.createElement('option');
+                opt.value = type;
+                opt.textContent = type;
+                typesSelect.appendChild(opt);
+            });
+        }
     });
 });
 </script>

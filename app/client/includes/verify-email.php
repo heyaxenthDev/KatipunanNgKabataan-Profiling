@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 include "includes/conn.php";
 include "includes/phpmailer_cred.php";
 
@@ -10,100 +10,44 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
 
-// Get session user details
-$userID = $_SESSION['user']['id'];
-$username = $_SESSION['user']['user_username'];
-$token = rand(100000, 999999);
-
-$stmt = $conn->prepare("UPDATE accounts SET verificationCode = ? WHERE id = ? AND username = ?");
-$stmt->bind_param("sis", $token, $userID, $username);
-
-if ($stmt->execute()) {
-    echo "script>console.log('Verification code sent!');</script>";
-    $_SESSION['entered_email'] = $email;
-}else{
-    echo "script>console.log('Verification code cannot be sent!');</script>";
-}
-//Create an instance; passing `true` enables exceptions
-$mail = new PHPMailer(true);
-
-try {
-    //Server settings
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-
-    $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
-    $mail->SMTPAuth   = true;
-    $mail->Username   = $officialEmail;
-    $mail->Password   = $officialEmailPassword;
-    $mail->SMTPSecure = "tls";
-    $mail->Port       = "587";                                  //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-    $mail->setFrom($officialEmail, "Katipunan ng Kabataan Profiling System");
-    $mail->addAddress($email);
-
-    // Email content
-    $mail->isHTML(true);
-    $mail->Subject = "Account Verification Code";
-
-    $email_template = "
-        <html>
-        <head>
-            <style>
-                .container {
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    padding: 20px;
-                    border-radius: 5px;
-                }
-                .header {
-                    font-size: 18px;
-                    font-weight: bold;
-                    color: #333;
-                }
-                .otp {
-                    font-size: 22px;
-                    font-weight: bold;
-                    color: #d9534f;
-                }
-                .footer {
-                    margin-top: 20px;
-                    font-size: 14px;
-                    color: #777;
-                }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <p class='header'>Hello $username,</p>
-                <p>We received a request to verify your email address. Please use the following One-Time Password (OTP) to complete your email verification process:</p>
-                <p class='otp'>$token</p>
-                <p>If you did not request this verification, please ignore this email or contact support immediately.</p>
-                <p class='footer'>Best regards,<br><strong>Katipunan ng Kabataan Profiling System</strong></p>
-            </div>
-        </body>
-        </html>
-    ";
-
-    $mail->Body = $email_template;
-    $mail->send();
-    echo 'Verification code has been sent successfully.';
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-}
-
-
-
+// The email sending logic has been removed from this file. It should only be handled in email-verification.php.
 ?>
 
 <script>
 $(document).ready(function() {
     $("#VerificationModal").modal("show");
     console.log("modal-on");
+
+    // Show loader when form is submitted
+    $("#VerificationModal form").on("submit", function() {
+        $("#loaderOverlay").css("display", "flex");
+    });
+
+    // Handle resend code button
+    $("#resendCodeBtn").on("click", function() {
+        $("#loaderOverlay").css("display", "flex");
+        $.ajax({
+            url: 'email-verification.php',
+            method: 'POST',
+            data: {
+                resendVerification: true
+            },
+            success: function(response) {
+                $("#loaderOverlay").css("display", "none");
+                $("#resendFeedback").text(
+                    "Verification code resent! Please check your email.").css("color",
+                    "green").fadeIn().delay(3000).fadeOut();
+            },
+            error: function() {
+                $("#loaderOverlay").css("display", "none");
+                $("#resendFeedback").text(
+                    "Failed to resend verification code. Please try again.").css(
+                    "color", "red").fadeIn().delay(3000).fadeOut();
+            }
+        });
+    });
 });
 </script>
-
-
 
 <!-- Verification Modal -->
 <div class="modal fade" id="VerificationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -112,7 +56,6 @@ $(document).ready(function() {
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="VerificationModalLabel">Verify Email</h1>
-                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
             </div>
             <form action="email-verification.php" method="POST">
                 <div class="modal-body">
@@ -124,10 +67,20 @@ $(document).ready(function() {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
                     <button type="submit" class="btn btn-primary" name="VerifyEmail">Confirm</button>
+                    <button type="button" class="btn btn-link" id="resendCodeBtn">Click to send Code</button>
                 </div>
+                <div id="resendFeedback" class="w-100 text-center mt-2" style="display:none;"></div>
             </form>
         </div>
     </div>
+</div>
+
+<!-- Loader Overlay -->
+<div id="loaderOverlay"
+    style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
+    <div class="spinner-border text-light" style="width: 4rem; height: 4rem;" role="status">
+        <span class="visually-hidden">Sending...</span>
+    </div>
+    <div style="color:white; margin-top:20px; font-size:1.2rem;">Sending verification email...</div>
 </div>

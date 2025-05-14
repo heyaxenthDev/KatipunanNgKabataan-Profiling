@@ -108,13 +108,23 @@
             </a>
         </li><!-- End Member List Nav -->
 
+        <li class="nav-heading">Documents</li>
+
         <li class="nav-item">
-            <a class="nav-link <?php echo $current_page == 'pages-faq' ? '' : 'collapsed'; ?>"
-                href="<?= get_page_link('pages-faq') ?>">
-                <i class="bi bi-question-circle"></i>
-                <span>Documents</span>
+            <a class="nav-link <?= ($current_page == 'youth involve') ? '' : 'collapsed' ?>"
+                href="<?= get_page_link('youth involve') ?>">
+                <i class="bi bi-people"></i>
+                <span>Youth Involve</span>
             </a>
-        </li><!-- End Documents Page Nav -->
+        </li><!-- End Youth Involve Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link <?= ($current_page == 'cbydp') ? '' : 'collapsed' ?>"
+                href="<?= get_page_link('cbydp') ?>">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>CBYDP</span>
+            </a>
+        </li><!-- End CBYDP Page Nav -->
 
     </ul>
 

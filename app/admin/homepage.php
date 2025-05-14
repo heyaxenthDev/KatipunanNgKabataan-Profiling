@@ -3,17 +3,19 @@
     checkLogin(); // Call the function to check if the user is logged in
     include "includes/conn.php";
     include "includes/header.php";
-    $sent_once = false;
     
+    // Improved Email verification logic
     if ($email_verify_status == 0) {
         if (empty($email)) {
+            // No email on account: show setup modal
             include 'includes/email-setup.php';
-            // $sent_once = true;
-        } else if($sent_once == true and !empty($email)) {
+        } else {
+            // Email exists but not verified: show verification modal
             include 'includes/verify-email.php';
         }
-    }else{ // Do nothing, user is verified and email is set up
-    ?>
+    } else {
+        // Email is verified: show dashboard and success message if needed
+        ?>
 <script src="assets/js/sweetalert2.all.min.js"></script>
 <?php
         if (isset($_SESSION['logged'])) {
@@ -39,10 +41,9 @@ Toast.fire({
 });
 </script>
 <?php
-        unset($_SESSION['logged']);
+            unset($_SESSION['logged']);
+        }
     }
-    }
-
     
     include "includes/sidebar.php";
     include "alert.php";
