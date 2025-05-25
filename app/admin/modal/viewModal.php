@@ -276,48 +276,48 @@
                               <div class="col-md-6">
                                   <label>Have you already attended a KK Assembly?</label><br>
                                   <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="kkAssembly" id="kkAssemblyYes"
-                                          value="Yes" disabled>
-                                      <label class="form-check-label" for="kkAssemblyYes">Yes</label>
+                                      <input class="form-check-input" type="radio" name="kkAssembly"
+                                          id="viewKKAssemblyYes" value="Yes" disabled>
+                                      <label class="form-check-label" for="viewKKAssemblyYes">Yes</label>
                                   </div>
                                   <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="kkAssembly" id="kkAssemblyNo"
-                                          value="No" disabled>
-                                      <label class="form-check-label" for="kkAssemblyNo">No</label>
+                                      <input class="form-check-input" type="radio" name="kkAssembly"
+                                          id="viewKKAssemblyNo" value="No" disabled>
+                                      <label class="form-check-label" for="viewKKAssemblyNo">No</label>
                                   </div>
                               </div>
 
                               <div class="col-md-6" id="ifYes" style="display: none;">
                                   <label>If Yes, how many times?</label><br>
                                   <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="kkAssemblyTimes" id="times1to2"
-                                          value="1-2" disabled>
-                                      <label class="form-check-label" for="times1to2">1-2 times</label>
-                                  </div>
-                                  <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="kkAssemblyTimes" id="times3to4"
-                                          value="3-4" disabled>
-                                      <label class="form-check-label" for="times3to4">3-4 times</label>
+                                      <input class="form-check-input" type="radio" name="kkAssemblyTimes"
+                                          id="viewTimes1to2" value="1-2" disabled>
+                                      <label class="form-check-label" for="viewTimes1to2">1-2 times</label>
                                   </div>
                                   <div class="form-check form-check-inline">
                                       <input class="form-check-input" type="radio" name="kkAssemblyTimes"
-                                          id="times5plus" value="5 and above" disabled>
-                                      <label class="form-check-label" for="times5plus">5 and above</label>
+                                          id="viewTimes3to4" value="3-4" disabled>
+                                      <label class="form-check-label" for="viewTimes3to4">3-4 times</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="kkAssemblyTimes"
+                                          id="viewTimes5plus" value="5 and above" disabled>
+                                      <label class="form-check-label" for="viewTimes5plus">5 and above</label>
                                   </div>
                               </div>
 
                               <div class="col-md-6" id="ifNo" style="display: none;">
                                   <label>If No, Why?</label><br>
                                   <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="kkAssemblyWhy" id="NoAssembly"
-                                          value="There was no KK Assembly Meeting" disabled>
-                                      <label class="form-check-label" for="NoAssembly">There was no KK Assembly
+                                      <input class="form-check-input" type="radio" name="kkAssemblyWhy"
+                                          id="viewNoAssembly" value="There was no KK Assembly Meeting" disabled>
+                                      <label class="form-check-label" for="viewNoAssembly">There was no KK Assembly
                                           Meeting</label>
                                   </div>
                                   <div class="form-check form-check-inline">
                                       <input class="form-check-input" type="radio" name="kkAssemblyWhy"
-                                          id="NotInterested" value="Not interested to attend" disabled>
-                                      <label class="form-check-label" for="NotInterested">Not interested to attend
+                                          id="viewNotInterested" value="Not interested to attend" disabled>
+                                      <label class="form-check-label" for="viewNotInterested">Not interested to attend
                                       </label>
                                   </div>
                               </div>
@@ -360,94 +360,104 @@
   <!-- View Modal for SK Officials -->
   <div class="modal fade" id="viewSKOfficialsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
       aria-labelledby="viewSKOfficialsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
               <div class="modal-header">
                   <h1 class="modal-title fs-5" id="viewSKOfficialsModalLabel">SK Official Details</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body row g-3">
-                  <h5 class="card-title mx-2">Personal Information</h5>
 
-                  <div class="col-md-4">
-                      <label for="viewLastname" class="form-label">Last
-                          Name</label>
-                      <input type="text" class="form-control" id="viewLastname" name="viewLastname">
+                  <div class="col-md-3 text-center">
+                      <img id="viewSKPicture" src="" alt="Profile Preview" class="mb-2 img-fluid img-thumbnail">
+                      <label for="viewSKPicture" class="form-label">Profile
+                          Picture</label>
                   </div>
 
-                  <div class="col-md-4">
-                      <label for="viewFirstname" class="form-label">First
-                          Name</label>
-                      <input type="text" class="form-control" id="viewFirstname" name="viewFirstname">
-                  </div>
+                  <div class="col-md-9">
+                      <div class="row g-3">
+                          <h5 class="card-title mx-2">Personal Information</h5>
+                          <div class="col-md-4">
+                              <label for="viewLastname" class="form-label">Last
+                                  Name</label>
+                              <input type="text" class="form-control" id="viewLastname" name="viewLastname">
+                          </div>
 
-                  <div class="col-md-4">
-                      <label for="viewMiddlename" class="form-label">Middle
-                          Name</label>
-                      <input type="text" class="form-control" id="viewMiddlename" name="viewMiddlename">
-                  </div>
+                          <div class="col-md-4">
+                              <label for="viewFirstname" class="form-label">First
+                                  Name</label>
+                              <input type="text" class="form-control" id="viewFirstname" name="viewFirstname">
+                          </div>
 
-                  <div class="col-md-4">
-                      <label for="viewPosition" class="form-label">Position</label>
-                      <input type="text" class="form-control" id="viewPosition" name="viewPosition" readonly>
-                  </div>
+                          <div class="col-md-4">
+                              <label for="viewMiddlename" class="form-label">Middle
+                                  Name</label>
+                              <input type="text" class="form-control" id="viewMiddlename" name="viewMiddlename">
+                          </div>
 
-                  <div class="col-md-3">
-                      <label for="viewSex" class="form-label">Sex</label>
-                      <input type="text" class="form-control" id="viewSex" name="viewSex" readonly>
-                  </div>
+                          <div class="col-md-4">
+                              <label for="viewPosition" class="form-label">Position</label>
+                              <input type="text" class="form-control" id="viewPosition" name="viewPosition" readonly>
+                          </div>
 
-                  <div class="col-md-2">
-                      <label for="viewAge" class="form-label">Age</label>
-                      <input type="text" class="form-control" id="viewSKAge" name="viewSKAge" readonly>
-                  </div>
+                          <div class="col-md-3">
+                              <label for="viewSex" class="form-label">Sex</label>
+                              <input type="text" class="form-control" id="viewSex" name="viewSex" readonly>
+                          </div>
 
-                  <div class="col-md-3">
-                      <label for="viewDOB" class="form-label">Date of
-                          Birth</label>
-                      <input type="text" class="form-control" id="viewDOB" name="viewDOB">
-                  </div>
+                          <div class="col-md-2">
+                              <label for="viewAge" class="form-label">Age</label>
+                              <input type="text" class="form-control" id="viewSKAge" name="viewSKAge" readonly>
+                          </div>
 
-                  <div class="col-md-4">
-                      <label for="viewMobileNumber" class="form-label">Mobile
-                          Number</label>
-                      <input type="tel" class="form-control" id="viewMobileNumber" name="viewMobileNumber">
-                  </div>
+                          <div class="col-md-3">
+                              <label for="viewDOB" class="form-label">Date of
+                                  Birth</label>
+                              <input type="text" class="form-control" id="viewDOB" name="viewDOB">
+                          </div>
 
-                  <div class="col-md-2">
-                      <label for="viewStreetNumber" class="form-label">Street
-                          Number</label>
-                      <input type="text" class="form-control" id="viewStreetNumber" name="viewStreetNumber">
-                  </div>
+                          <div class="col-md-4">
+                              <label for="viewMobileNumber" class="form-label">Mobile
+                                  Number</label>
+                              <input type="tel" class="form-control" id="viewMobileNumber" name="viewMobileNumber">
+                          </div>
 
-                  <div class="col-md-3">
-                      <label for="viewAddress" class="form-label">Address</label>
-                      <input type="text" class="form-control" id="viewAddress" name="viewAddress">
-                  </div>
+                          <div class="col-md-2">
+                              <label for="viewStreetNumber" class="form-label">Street
+                                  Number</label>
+                              <input type="text" class="form-control" id="viewStreetNumber" name="viewStreetNumber">
+                          </div>
 
-                  <div class="col-md-3">
-                      <label for="viewBrgyAddressName" class="form-label">Barangay</label>
-                      <input type="text" class="form-control" id="viewBrgyAddressName" value="<?= $_GET['Name']?>"
-                          readonly>
-                      <input type="hidden" class="form-control" id="viewBrgyAddressCode" name="barangay"
-                          value="<?= $_GET['Code']?>" readonly>
-                  </div>
+                          <div class="col-md-3">
+                              <label for="viewAddress" class="form-label">Address</label>
+                              <input type="text" class="form-control" id="viewAddress" name="viewAddress">
+                          </div>
 
-                  <h5 class="card-title mx-2">Login Access</h5>
+                          <div class="col-md-3">
+                              <label for="viewBrgyAddressName" class="form-label">Barangay</label>
+                              <input type="text" class="form-control" id="viewBrgyAddressName"
+                                  value="<?= $_GET['Name']?>" readonly>
+                              <input type="hidden" class="form-control" id="viewBrgyAddressCode" name="barangay"
+                                  value="<?= $_GET['Code']?>" readonly>
+                          </div>
 
-                  <div class="col-md-6">
-                      <label for="viewUsername" class="form-label">Username</label>
-                      <input type="text" class="form-control" id="viewUsername" name="viewUsername">
-                  </div>
+                          <h5 class="card-title mx-2">Login Access</h5>
 
-                  <div class="col-md-6">
-                      <label for="viewPassword" class="form-label">Password</label>
-                      <input type="password" class="form-control" id="viewPassword" name="viewPassword">
-                  </div>
+                          <div class="col-md-6">
+                              <label for="viewUsername" class="form-label">Username</label>
+                              <input type="text" class="form-control" id="viewUsername" name="viewUsername">
+                          </div>
 
-                  <div class="col-md-6">
-                      <label for="viewSKEmail" class="form-label">Email</label>
-                      <input type="email" class="form-control" id="viewSKEmail" name="viewSKEmail">
+                          <div class="col-md-6">
+                              <label for="viewPassword" class="form-label">Password</label>
+                              <input type="password" class="form-control" id="viewPassword" name="viewPassword">
+                          </div>
+
+                          <div class="col-md-6">
+                              <label for="viewSKEmail" class="form-label">Email</label>
+                              <input type="email" class="form-control" id="viewSKEmail" name="viewSKEmail">
+                          </div>
+                      </div>
                   </div>
               </div>
               <div class="modal-footer">

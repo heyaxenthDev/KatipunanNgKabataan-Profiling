@@ -100,13 +100,14 @@
             </ul>
         </li><!-- End Forms Nav -->
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link <?php echo $current_page == 'users-profile' ? '' : 'collapsed'; ?>"
                 href="<?= get_page_link('users-profile') ?>">
                 <i class="bi bi-people"></i>
                 <span>Member List</span>
             </a>
-        </li><!-- End Member List Nav -->
+        </li> -->
+        <!-- End Member List Nav -->
 
         <li class="nav-heading">Youth</li>
 

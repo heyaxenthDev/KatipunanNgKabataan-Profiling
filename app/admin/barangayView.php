@@ -116,14 +116,20 @@
                                             <td><?=$row['youth_classification'] ?></td>
                                             <td><?=$row['street'] ?></td>
                                             <td>
-                                                <button class="btn btn-success btn-sm view-details"
-                                                    data-id="<?=$row['id']?>"><i class="bi bi-eye"></i>
-                                                    View</button>
-                                                <button class="btn btn-primary btn-sm edit-details"
-                                                    data-edit-id=<?= $row['id']?>><i
-                                                        class="bi bi-pencil-square"></i></button>
-                                                <!-- <button class="btn btn-secondary btn-sm" onclick="printForm('printableCard')"
-                                            type="button"><i class="bi bi-printer"></i></button> -->
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-success btn-sm view-details"
+                                                        data-id="<?=$row['id']?>">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary btn-sm edit-details"
+                                                        data-edit-id="<?=$row['id']?>">
+                                                        <i class="bi bi-pencil-square"></i> Edit
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger btn-sm delete-youth"
+                                                        data-delete-id="<?=$row['id']?>">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                         <?php
@@ -176,12 +182,20 @@
                                             <td><?=$row['youth_classification'] ?></td>
                                             <td><?=$row['street'] ?></td>
                                             <td>
-                                                <button class="btn btn-success btn-sm view-details"
-                                                    data-id="<?=$row['id']?>"><i class="bi bi-eye"></i>
-                                                    View</button>
-                                                <button class="btn btn-primary btn-sm edit-details"
-                                                    data-edit-id=<?= $row['id']?>><i
-                                                        class="bi bi-pencil-square"></i></button>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-success btn-sm view-details"
+                                                        data-id="<?=$row['id']?>">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary btn-sm edit-details"
+                                                        data-edit-id="<?=$row['id']?>">
+                                                        <i class="bi bi-pencil-square"></i> Edit
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger btn-sm delete-youth"
+                                                        data-delete-id="<?=$row['id']?>">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                         <?php
@@ -217,7 +231,7 @@
                                         <div class="modal fade" id="AddSKOfficial" data-bs-backdrop="static"
                                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                                             aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
+                                            <div class="modal-dialog modal-xl modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Register
@@ -226,113 +240,163 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="admin-code.php" method="POST">
+                                                    <form action="admin-code.php" method="POST"
+                                                        enctype="multipart/form-data">
                                                         <div class="modal-body row g-3">
                                                             <h5 class="card-title mx-2">Personal Information</h5>
 
-                                                            <div class="col-md-4">
-                                                                <label for="lastname" class="form-label">Last
-                                                                    Name</label>
-                                                                <input type="text" class="form-control" id="lastname"
-                                                                    name="lastname">
+                                                            <div class="col-md-3 text-center">
+                                                                <label for="skPicture" class="form-label">Profile
+                                                                    Picture</label> <br>
+                                                                <img id="registerSKPreview"
+                                                                    src="assets/img/user-profile.png"
+                                                                    alt="Profile Preview"
+                                                                    class="mb-2 img-fluid img-thumbnail mt-2">
+                                                                <input type="file" class="form-control form-control-sm"
+                                                                    id="skPicture" name="skPicture" accept="image/*"
+                                                                    onchange="previewSKImage(event, 'registerSKPreview')">
                                                             </div>
 
-                                                            <div class="col-md-4">
-                                                                <label for="firstname" class="form-label">First
-                                                                    Name</label>
-                                                                <input type="text" class="form-control" id="firstname"
-                                                                    name="firstname">
+                                                            <div class="col-md-9">
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-4">
+                                                                        <label for="lastname" class="form-label">Last
+                                                                            Name</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="lastname" name="lastname">
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="firstname" class="form-label">First
+                                                                            Name</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="firstname" name="firstname">
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="middlename"
+                                                                            class="form-label">Middle
+                                                                            Name</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="middlename" name="middlename">
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="position"
+                                                                            class="form-label">Position</label>
+                                                                        <select class="form-control" id="position"
+                                                                            name="position">
+                                                                            <option value="">Select Position</option>
+                                                                            <option value="SK Chairman">SK Chairman
+                                                                            </option>
+                                                                            <option value="SK Kagawad">SK Kagawad
+                                                                            </option>
+                                                                            <option value="SK Secretary">SK Secretary
+                                                                            </option>
+                                                                            <option value="SK Treasurer">SK Treasurer
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <label for="sex" class="form-label">Sex</label>
+                                                                        <select class="form-control" id="sex"
+                                                                            name="sex">
+                                                                            <option value="">Select Sex</option>
+                                                                            <option value="1">Male</option>
+                                                                            <option value="0">Female</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-md-2">
+                                                                        <label for="age" class="form-label">Age</label>
+                                                                        <input type="number" class="form-control"
+                                                                            id="age" name="age">
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <label for="dob" class="form-label">Date of
+                                                                            Birth</label>
+                                                                        <input type="date" class="form-control" id="dob"
+                                                                            name="dob">
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="mobileNumber"
+                                                                            class="form-label">Mobile
+                                                                            Number</label>
+                                                                        <input type="tel" class="form-control"
+                                                                            id="mobileNumber" name="mobileNumber">
+                                                                    </div>
+
+                                                                    <div class="col-md-2">
+                                                                        <label for="streetNumber"
+                                                                            class="form-label">Street
+                                                                            Number</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="streetNumber" name="streetNumber">
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <label for="inputAddress"
+                                                                            class="form-label">Address</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="inputAddress" name="address">
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <label for="brgyAddressName"
+                                                                            class="form-label">Barangay</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="brgyAddressName"
+                                                                            value="<?= $_GET['Name']?>" readonly>
+                                                                        <input type="hidden" class="form-control"
+                                                                            id="brgyAddressCode" name="barangay"
+                                                                            value="<?= $_GET['Code']?>" readonly>
+                                                                    </div>
+
+                                                                    <h5 class="card-title mx-2">Login Access</h5>
+
+                                                                    <div class="col-md-6">
+                                                                        <label for="username"
+                                                                            class="form-label">Username</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="username" name="username">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label for="password"
+                                                                            class="form-label">Password</label>
+                                                                        <div class="input-group">
+                                                                            <input type="password" class="form-control"
+                                                                                id="password" name="password">
+                                                                            <button class="btn btn-outline-secondary"
+                                                                                type="button" id="togglePassword">
+                                                                                <i class="bi bi-eye"
+                                                                                    id="toggleIcon"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <script>
+                                                                    document.getElementById('togglePassword')
+                                                                        .addEventListener('click', function() {
+                                                                            const passwordField = document
+                                                                                .getElementById('password');
+                                                                            const icon = document.getElementById(
+                                                                                'toggleIcon');
+                                                                            const type = passwordField.getAttribute(
+                                                                                    'type') === 'password' ?
+                                                                                'text' : 'password';
+                                                                            passwordField.setAttribute('type',
+                                                                            type);
+                                                                            icon.classList.toggle('bi-eye');
+                                                                            icon.classList.toggle('bi-eye-slash');
+                                                                        });
+                                                                    </script>
+
+
+                                                                </div>
                                                             </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="middlename" class="form-label">Middle
-                                                                    Name</label>
-                                                                <input type="text" class="form-control" id="middlename"
-                                                                    name="middlename">
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="position"
-                                                                    class="form-label">Position</label>
-                                                                <select class="form-control" id="position"
-                                                                    name="position">
-                                                                    <option value="">Select Position</option>
-                                                                    <option value="SK Chairman">SK Chairman</option>
-                                                                    <option value="SK Kagawad">SK Kagawad</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-3">
-                                                                <label for="sex" class="form-label">Sex</label>
-                                                                <select class="form-control" id="sex" name="sex">
-                                                                    <option value="">Select Sex</option>
-                                                                    <option value="1">Male</option>
-                                                                    <option value="0">Female</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-2">
-                                                                <label for="age" class="form-label">Age</label>
-                                                                <input type="number" class="form-control" id="age"
-                                                                    name="age">
-                                                            </div>
-
-                                                            <div class="col-md-3">
-                                                                <label for="dob" class="form-label">Date of
-                                                                    Birth</label>
-                                                                <input type="date" class="form-control" id="dob"
-                                                                    name="dob">
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="mobileNumber" class="form-label">Mobile
-                                                                    Number</label>
-                                                                <input type="tel" class="form-control" id="mobileNumber"
-                                                                    name="mobileNumber">
-                                                            </div>
-
-                                                            <div class="col-md-2">
-                                                                <label for="streetNumber" class="form-label">Street
-                                                                    Number</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="streetNumber" name="streetNumber">
-                                                            </div>
-
-                                                            <div class="col-md-3">
-                                                                <label for="inputAddress"
-                                                                    class="form-label">Address</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="inputAddress" name="address">
-                                                            </div>
-
-                                                            <div class="col-md-3">
-                                                                <label for="brgyAddressName"
-                                                                    class="form-label">Barangay</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="brgyAddressName" value="<?= $_GET['Name']?>"
-                                                                    readonly>
-                                                                <input type="hidden" class="form-control"
-                                                                    id="brgyAddressCode" name="barangay"
-                                                                    value="<?= $_GET['Code']?>" readonly>
-                                                            </div>
-
-                                                            <h5 class="card-title mx-2">Login Access</h5>
-
-                                                            <div class="col-md-6">
-                                                                <label for="username"
-                                                                    class="form-label">Username</label>
-                                                                <input type="text" class="form-control" id="username"
-                                                                    name="username">
-                                                            </div>
-
-                                                            <div class="col-md-6">
-                                                                <label for="password"
-                                                                    class="form-label">Password</label>
-                                                                <input type="password" class="form-control"
-                                                                    id="password" name="password">
-                                                            </div>
-
-
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
@@ -413,6 +477,21 @@
 
     <script src="assets/js/details.js"></script>
     <script src="assets/js/edit.js"></script>
+    <script>
+    function previewSKImage(event, previewId) {
+        const input = event.target;
+        const preview = document.getElementById(previewId);
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = "assets/img/user-profile.png";
+        }
+    }
+    </script>
 
 </main><!-- End #main -->
 <?php 

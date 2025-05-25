@@ -202,6 +202,22 @@ document.addEventListener("DOMContentLoaded", () => {
       fetch(`get_sk_details.php?id=${skID}`)
         .then((response) => response.json())
         .then((data) => {
+          const editPicture = document.getElementById("editSKPreview");
+
+          if (editPicture !== null) {
+            // Set fallback image if the user image fails to load
+            editPicture.onerror = function () {
+              this.onerror = null; // prevent infinite loop if fallback also fails
+              this.src = "assets/img/user-profile.png";
+            };
+
+            // Set the image source
+            editPicture.src =
+              "../../app/client/" + data.picture && data.picture.trim() !== ""
+                ? "../../app/client/" + data.picture
+                : "assets/img/user-profile.png";
+          }
+
           // Set basic information
           document.getElementById("editLastname").value = data.lastname || "";
           document.getElementById("editFirstname").value = data.firstname || "";
@@ -217,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
             data.mobile_num || "";
           document.getElementById("editAddress").value = data.address || "";
           document.getElementById("editUsername").value = data.username || "";
-          document.getElementById("editPassword").value = data.password || "";
+          // document.getElementById("editPassword").value = "";
           document.getElementById("editSKEmail").value = data.email || "";
 
           // Store the SK ID for the update operation
@@ -239,29 +255,22 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const formData = new FormData(editSKForm);
-      const data = Object.fromEntries(formData.entries());
 
       fetch("update_sk_official.php", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: formData,
       })
         .then((response) => response.json())
         .then((result) => {
           if (result.success) {
-            // Show success message
             Swal.fire({
               icon: "success",
               title: "Success!",
               text: "SK Official details updated successfully.",
             }).then(() => {
-              // Reload the page to show updated data
               window.location.reload();
             });
           } else {
-            // Show error message
             Swal.fire({
               icon: "error",
               title: "Error!",

@@ -219,7 +219,7 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         <!-- Right Column - Feedback Form -->
                         <div class="col-md-6">
                             <h6 class="mb-3">Submit Feedback</h6>
-                            <form id="feedbackForm">
+                            <form action="submit_feedback.php" method="POST">
                                 <input type="hidden" id="programId" name="programId">
                                 <div class="mb-3">
                                     <label for="feedbackType" class="form-label">Feedback Type</label>
@@ -236,14 +236,15 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                     <textarea class="form-control" id="feedbackMessage" name="feedbackMessage" rows="4"
                                         required></textarea>
                                 </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
+                    <button type="submit" class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -342,88 +343,5 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Handle feedback submission
-    document.getElementById('submitFeedback').addEventListener('click', function() {
-        const form = document.getElementById('feedbackForm');
-        const formData = new FormData(form);
-
-        fetch('submit_feedback.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: 'Feedback submitted successfully.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        // Refresh feedback history
-                        const programId = document.getElementById('programId').value;
-                        fetch('get_feedback_history.php?id=' + programId)
-                            .then(response => response.json())
-                            .then(data => {
-                                const feedbackHistory = document.querySelector(
-                                    '.feedback-history');
-                                feedbackHistory.innerHTML = '';
-
-                                if (data.length > 0) {
-                                    data.forEach(feedback => {
-                                        const date = new Date(feedback
-                                            .created_at).toLocaleString(
-                                            'en-US', {
-                                                month: 'short',
-                                                day: 'numeric',
-                                                year: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric',
-                                                hour12: true
-                                            });
-
-                                        const feedbackItem = document
-                                            .createElement('div');
-                                        feedbackItem.className =
-                                            'feedback-item mb-3 p-2 border-bottom';
-                                        feedbackItem.innerHTML = `
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <strong>${feedback.firstname} ${feedback.lastname}</strong>
-                                                <span class="badge bg-info ms-2">${feedback.feedback_type.charAt(0).toUpperCase() + feedback.feedback_type.slice(1)}</span>
-                                            </div>
-                                            <small class="text-muted">${date}</small>
-                                        </div>
-                                        <p class="mb-0 mt-2">${feedback.feedback_message}</p>
-                                    `;
-                                        feedbackHistory.appendChild(
-                                            feedbackItem);
-                                    });
-                                } else {
-                                    feedbackHistory.innerHTML =
-                                        '<p class="text-muted">No feedback history available.</p>';
-                                }
-                            });
-
-                        form.reset();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'Failed to submit feedback.',
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An error occurred while submitting feedback.',
-                });
-            });
-    });
 });
 </script>

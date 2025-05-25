@@ -38,6 +38,10 @@ if (isset($_GET['id'])) {
             'work_status' => $data['work_status'],
             'sk_voter' => $data['sk_voter'],
             'national_voter' => $data['national_voter'],
+            'kk_assembly' => $data['kk_assembly'],
+            'kk_assembly_why' => $data['kk_assembly_why'],
+            'kk_assembly_times' => $data['kk_assembly_times'],
+            'vote' => $data['vote'],
             'user_image' => "../client/" . $data['user_image']
         );
         

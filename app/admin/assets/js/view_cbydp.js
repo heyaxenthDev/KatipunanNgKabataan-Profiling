@@ -24,7 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("viewMooeSpent").value = data.mooeSpent;
 
           //Show the modal
-          new bootstrap.Modal(document.getElementById("ViewEntryModal")).show();
+          var myModal = new bootstrap.Modal(
+            document.getElementById("ViewEntryModal")
+          );
+          myModal.show();
         })
         .catch((error) =>
           console.error("Error fetching youth details:", error)

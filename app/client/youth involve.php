@@ -475,31 +475,27 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         <!-- Right Column - Feedback Form -->
                         <div class="col-md-6">
                             <h6 class="mb-3">Submit Feedback</h6>
-                            <form id="feedbackForm">
+                            <form action="submit_feedback.php" method="POST">
                                 <input type="hidden" id="programId" name="programId">
                                 <div class="mb-3">
                                     <label for="feedbackType" class="form-label">Feedback Type</label>
-                                    <select class="form-select" id="feedbackType" name="feedbackType" required>
-                                        <option value="">Select feedback type...</option>
-                                        <option value="suggestion">Suggestion</option>
-                                        <option value="improvement">Area for Improvement</option>
-                                        <option value="praise">Praise</option>
-                                        <option value="concern">Concern</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="feedbackType" name="feedbackType"
+                                        value="Feedback Response" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="feedbackMessage" class="form-label">Feedback Message</label>
                                     <textarea class="form-control" id="feedbackMessage" name="feedbackMessage" rows="4"
                                         required></textarea>
                                 </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
+                    <button type="submit" class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -694,48 +690,6 @@ document.addEventListener("DOMContentLoaded", function() {
             new bootstrap.Modal(document.getElementById('feedbackProgramModal')).show();
         });
     });
-
-    // Handle feedback submission
-    document.getElementById('submitFeedback').addEventListener('click', function() {
-        const form = document.getElementById('feedbackForm');
-        const formData = new FormData(form);
-        const programId = document.getElementById('programId').value;
-
-        fetch('submit_feedback.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: 'Feedback submitted successfully.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        loadFeedbackHistory(programId);
-                        form.reset();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'Failed to submit feedback.',
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An error occurred while submitting feedback.',
-                });
-            });
-    });
-
     // Handle delete button clicks
     document.querySelectorAll('.delete-program').forEach(button => {
         button.addEventListener('click', function() {

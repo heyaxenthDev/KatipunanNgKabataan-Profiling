@@ -29,6 +29,8 @@
     <link href="assets/vendor/aos/aos.css" rel="stylesheet">
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet">
@@ -140,7 +142,7 @@
                         </div>
 
 
-                        <script src="assets/js/load-img.js"></script>
+                        <script src="js/load-img.js"></script>
 
                         <!-- Multi Columns Form -->
                         <div class="row g-3">
@@ -549,9 +551,10 @@
 
                             <!-- Assembly Participation Section -->
                             <div class="mb-4">
-                                <label for="AssemblyParticipation" class=" form-label fw-semibold">Assembly
+                                <label for="AssemblyParticipation" class="form-label fw-semibold">Assembly
                                     Participation</label>
                                 <div class="row">
+                                    <!-- Initial Yes/No Question -->
                                     <div class="col-md-6">
                                         <label>Have you already attended a KK Assembly?</label><br>
                                         <div class="form-check form-check-inline">
@@ -566,6 +569,7 @@
                                         </div>
                                     </div>
 
+                                    <!-- If Yes Section -->
                                     <div class="col-md-6" id="ifYes" style="display: none;">
                                         <label>If Yes, how many times?</label><br>
                                         <div class="form-check form-check-inline">
@@ -585,36 +589,39 @@
                                         </div>
                                     </div>
 
+                                    <!-- If No Section -->
                                     <div class="col-md-6" id="ifNo" style="display: none;">
                                         <label>If No, Why?</label><br>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="kkAssemblyWhy"
                                                 id="NoAssembly" value="There was no KK Assembly Meeting">
-                                            <label class="form-check-label" for="NoAssembly">There was no KK
-                                                Assembly
+                                            <label class="form-check-label" for="NoAssembly">There was no KK Assembly
                                                 Meeting</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="kkAssemblyWhy"
                                                 id="NotInterested" value="Not interested to attend">
                                             <label class="form-check-label" for="NotInterested">Not interested to
-                                                attend
-                                            </label>
+                                                attend</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- jQuery Script -->
                             <script>
                             $(document).ready(function() {
                                 $('input[name="kkAssembly"]').change(function() {
-                                    if ($(this).val() == "Yes") {
+                                    if ($(this).val() === "Yes") {
                                         $("#ifYes").show();
-                                        $("#ifNo").hide(); // Hide 'No' section if 'Yes' is selected
-                                    } else if ($(this).val() == "No") {
+                                        $("#ifNo").hide();
+                                        // Clear 'No' section radios
+                                        $('input[name="kkAssemblyWhy"]').prop('checked', false);
+                                    } else if ($(this).val() === "No") {
                                         $("#ifNo").show();
-                                        $("#ifYes")
-                                            .hide(); // Hide 'Yes' section if 'No' is selected
+                                        $("#ifYes").hide();
+                                        // Clear 'Yes' section radios
+                                        $('input[name="kkAssemblyTimes"]').prop('checked', false);
                                     }
                                 });
                             });

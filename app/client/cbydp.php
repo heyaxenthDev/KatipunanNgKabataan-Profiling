@@ -45,7 +45,7 @@ $brgyName = $getBrgy['barangay_name'];
                             <thead>
                                 <tr>
                                     <th>PYDP Center</th>
-                                    <th><b>Referrence Code</b></th>
+                                    <th>Reference Code</th>
                                     <th>PPAS</th>
                                     <th>Actions</th>
                                 </tr>
@@ -54,7 +54,6 @@ $brgyName = $getBrgy['barangay_name'];
                                 <?php
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-
                                         switch ($row['programArea']) {
                                             case 'governance':
                                                 $programArea = "Governance";
@@ -92,19 +91,18 @@ $brgyName = $getBrgy['barangay_name'];
                                         }
                                 ?>
                                 <tr>
-                                    <td><?= $programArea ?></td>
-                                    <td><?=$row['referenceCode'] ?></td>
-                                    <td><?=htmlspecialchars($row['ppa']) ?></td>
+                                    <td><?= htmlspecialchars($programArea) ?></td>
+                                    <td><?= htmlspecialchars($row['referenceCode']) ?></td>
+                                    <td><?= htmlspecialchars($row['ppa']) ?></td>
                                     <td>
-                                        <button class="btn btn-success btn-sm view-details" data-id="<?=$row['id']?>"><i
-                                                class="bi bi-eye"></i>
-                                            View</button>
+                                        <button class="btn btn-success btn-sm view-details" data-id="<?= $row['id'] ?>">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
                                         <button class="btn btn-primary btn-sm edit-details"
-                                            data-edit-id=<?= $row['id']?>><i class="bi bi-pencil-square"></i></button>
-                                        <!-- <button class="btn btn-secondary btn-sm" onclick="printForm('printableCard')"
-                                            type="button"><i class="bi bi-printer"></i></button> -->
+                                            data-edit-id="<?= $row['id'] ?>">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
                                     </td>
-
                                 </tr>
                                 <?php
                                     }
@@ -355,6 +353,125 @@ $brgyName = $getBrgy['barangay_name'];
         </div>
 
         <script src="assets/js/view_cbydp.js"></script>
+
+        <!-- Edit Entry Modal -->
+        <div class="modal fade" id="EditEntryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="editEntryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editEntryModalLabel">Edit CBYDP Entry</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="update_cbydp.php" method="POST">
+                        <div class="modal-body">
+                            <h6>Report Information:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="hidden" name="id" id="editId">
+                                        <input class="form-control" id="editBrgyName" name="brgyName"
+                                            placeholder="Barangay Name" type="text" readonly>
+                                        <label for="editBrgyName">Barangay Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="editProgramArea" name="programArea"
+                                            aria-label="Program Area Select">
+                                            <option selected disabled>Select PYDP</option>
+                                            <option value="governance">Governance</option>
+                                            <option value="active_citizenship">Active Citizenship</option>
+                                            <option value="environment">Environment</option>
+                                            <option value="global_mobility">Global Mobility</option>
+                                            <option value="health">Health</option>
+                                            <option value="education">Education</option>
+                                            <option value="economic_empowerment">Economic Empowerment</option>
+                                            <option value="social_inclusion">Social Inclusion and Equity</option>
+                                            <option value="peace_building">Peace Building and Security</option>
+                                            <option value="agriculture">Agriculture</option>
+                                        </select>
+                                        <label for="programArea">SELECT PYDP</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editReferenceCode" name="referenceCode"
+                                            placeholder="Reference Code" type="text">
+                                        <label for="editReferenceCode">Reference Code</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editPPA" name="ppa"
+                                            placeholder="Programs/Projects/Activities (PPA)" type="text">
+                                        <label for="editPPA">Programs/Projects/Activities (PPA)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editObjectiveDescription"
+                                            name="objectiveDescription" placeholder="Objective Description" type="text">
+                                        <label for="editObjectiveDescription">Objective Description</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editExpectedResult" name="expectedResult"
+                                            placeholder="Expected Result" type="text">
+                                        <label for="editExpectedResult">Expected Result</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editPerformanceIndicator"
+                                            name="performanceIndicator" placeholder="Performance Indicator" type="text">
+                                        <label for="editPerformanceIndicator">Performance Indicator</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editImplementationPeriod"
+                                            name="implementationPeriod" placeholder="Period of Implementation"
+                                            type="text">
+                                        <label for="editImplementationPeriod">Period of Implementation</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <h6>Budget:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editMooeAllocated" name="mooeAllocated"
+                                            placeholder="MOOE Allocated" type="text">
+                                        <label for="editMooeAllocated">MOOE Allocated</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="editMooeSpent" name="mooeSpent"
+                                            placeholder="MOOE Spent" type="text">
+                                        <label for="editMooeSpent">MOOE Spent</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" name="editCbydp" class="btn btn-success">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="assets/js/edit_cbydp.js"></script>
 
     </section>
 

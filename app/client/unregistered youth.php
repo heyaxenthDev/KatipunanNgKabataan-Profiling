@@ -56,12 +56,20 @@
                                     <td><?=htmlspecialchars($row['youth_classification']) ?></td>
                                     <td><?=htmlspecialchars($row['street']) ?></td>
                                     <td>
-                                        <button class="btn btn-success btn-sm view-details" data-id="<?=$row['id']?>"><i
-                                                class="bi bi-eye"></i>
-                                            View</button>
-                                        <button class="btn btn-primary btn-sm edit-details"
-                                            data-edit-id=<?= $row['id']?>><i class="bi bi-pencil-square"></i></button>
-
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-success btn-sm view-details"
+                                                data-id="<?=$row['id']?>">
+                                                <i class="bi bi-eye"></i> View
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-sm edit-details"
+                                                data-edit-id="<?=$row['id']?>">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm delete-youth"
+                                                data-delete-id="<?=$row['id']?>">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </div>
                                     </td>
 
                                 </tr>

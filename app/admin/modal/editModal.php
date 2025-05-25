@@ -460,7 +460,7 @@
   <!-- Edit Modal for SK Officials -->
   <div class="modal fade" id="editSKOfficialsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
       aria-labelledby="editSKOfficialsModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
           <div class="modal-content">
               <div class="modal-header">
                   <h1 class="modal-title fs-5" id="editSKOfficialsModalLabel">Edit SK Official Details</h1>
@@ -468,91 +468,110 @@
               </div>
               <form id="editSKForm">
                   <div class="modal-body row g-3">
-                      <input type="hidden" id="editSKId" name="editSKId">
-                      <h5 class="card-title mx-2">Personal Information</h5>
 
-                      <div class="col-md-4">
-                          <label for="editLastname" class="form-label">Last Name</label>
-                          <input type="text" class="form-control" id="editLastname" name="editLastname" required>
+                      <div class="col-md-3 text-center">
+                          <label for="editSKPicture" class="form-label">Profile Picture</label> <br>
+                          <img id="editSKPreview" src="" alt="Profile Preview"
+                              class="mb-2 img-fluid img-thumbnail mt-2">
+                          <input type="file" class="form-control form-control-sm" id="editSKPicture"
+                              name="editSKPicture" accept="image/*" onchange="previewSKImage(event, 'editSKPreview')">
                       </div>
 
-                      <div class="col-md-4">
-                          <label for="editFirstname" class="form-label">First Name</label>
-                          <input type="text" class="form-control" id="editFirstname" name="editFirstname" required>
+                      <div class="col-md-9">
+                          <div class="row g-3">
+                              <input type="hidden" id="editSKId" name="editSKId">
+                              <h5 class="card-title mx-2">Personal Information</h5>
+
+                              <div class="col-md-4">
+                                  <label for="editLastname" class="form-label">Last Name</label>
+                                  <input type="text" class="form-control" id="editLastname" name="editLastname"
+                                      required>
+                              </div>
+
+                              <div class="col-md-4">
+                                  <label for="editFirstname" class="form-label">First Name</label>
+                                  <input type="text" class="form-control" id="editFirstname" name="editFirstname"
+                                      required>
+                              </div>
+
+                              <div class="col-md-4">
+                                  <label for="editMiddlename" class="form-label">Middle Name</label>
+                                  <input type="text" class="form-control" id="editMiddlename" name="editMiddlename">
+                              </div>
+
+                              <div class="col-md-4">
+                                  <label for="editPosition" class="form-label">Position</label>
+                                  <select class="form-control" id="editPosition" name="editPosition" required>
+                                      <option value="">Select Position</option>
+                                      <option value="SK Chairman">SK Chairman</option>
+                                      <option value="SK Kagawad">SK Kagawad</option>
+                                  </select>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <label for="editSex" class="form-label">Sex</label>
+                                  <select class="form-control" id="editSex" name="editSex" required>
+                                      <option value="">Select Sex</option>
+                                      <option value="1">Male</option>
+                                      <option value="0">Female</option>
+                                  </select>
+                              </div>
+
+                              <div class="col-md-2">
+                                  <label for="editSKAge" class="form-label">Age</label>
+                                  <input type="number" class="form-control" id="editSKAge" name="editSKAge" readonly>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <label for="editDOB" class="form-label">Date of Birth</label>
+                                  <input type="date" class="form-control" id="editDOB" name="editDOB" required>
+                              </div>
+
+                              <div class="col-md-4">
+                                  <label for="editMobileNumber" class="form-label">Mobile Number</label>
+                                  <input type="tel" class="form-control" id="editMobileNumber" name="editMobileNumber"
+                                      required>
+                              </div>
+
+                              <div class="col-md-2">
+                                  <label for="editStreetNumber" class="form-label">Street Number</label>
+                                  <input type="text" class="form-control" id="editStreetNumber" name="editStreetNumber">
+                              </div>
+
+                              <div class="col-md-3">
+                                  <label for="editAddress" class="form-label">Address</label>
+                                  <input type="text" class="form-control" id="editAddress" name="editAddress" required>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <label for="editBrgyAddressName" class="form-label">Barangay</label>
+                                  <input type="text" class="form-control" id="editBrgyAddressName"
+                                      value="<?= $_GET['Name']?>" readonly>
+                                  <input type="hidden" class="form-control" id="editBrgyAddressCode" name="barangay"
+                                      value="<?= $_GET['Code']?>" readonly>
+                              </div>
+
+                              <h5 class="card-title mx-2">Login Access</h5>
+
+                              <div class="col-md-6">
+                                  <label for="editUsername" class="form-label">Username</label>
+                                  <input type="text" class="form-control" id="editUsername" name="editUsername"
+                                      required>
+                              </div>
+
+                              <!-- <div class="col-md-6">
+                                  <label for="editPassword" class="form-label">Password</label>
+                                  <input type="password" class="form-control" id="editPassword" name="editPassword"
+                                      required>
+                              </div> -->
+
+                              <div class="col-md-12">
+                                  <label for="editSKEmail" class="form-label">Email</label>
+                                  <input type="email" class="form-control" id="editSKEmail" name="editSKEmail" required>
+                              </div>
+                          </div>
                       </div>
 
-                      <div class="col-md-4">
-                          <label for="editMiddlename" class="form-label">Middle Name</label>
-                          <input type="text" class="form-control" id="editMiddlename" name="editMiddlename">
-                      </div>
-
-                      <div class="col-md-4">
-                          <label for="editPosition" class="form-label">Position</label>
-                          <select class="form-control" id="editPosition" name="editPosition" required>
-                              <option value="">Select Position</option>
-                              <option value="SK Chairman">SK Chairman</option>
-                              <option value="SK Kagawad">SK Kagawad</option>
-                          </select>
-                      </div>
-
-                      <div class="col-md-3">
-                          <label for="editSex" class="form-label">Sex</label>
-                          <select class="form-control" id="editSex" name="editSex" required>
-                              <option value="">Select Sex</option>
-                              <option value="1">Male</option>
-                              <option value="0">Female</option>
-                          </select>
-                      </div>
-
-                      <div class="col-md-2">
-                          <label for="editSKAge" class="form-label">Age</label>
-                          <input type="number" class="form-control" id="editSKAge" name="editSKAge" readonly>
-                      </div>
-
-                      <div class="col-md-3">
-                          <label for="editDOB" class="form-label">Date of Birth</label>
-                          <input type="date" class="form-control" id="editDOB" name="editDOB" required>
-                      </div>
-
-                      <div class="col-md-4">
-                          <label for="editMobileNumber" class="form-label">Mobile Number</label>
-                          <input type="tel" class="form-control" id="editMobileNumber" name="editMobileNumber" required>
-                      </div>
-
-                      <div class="col-md-2">
-                          <label for="editStreetNumber" class="form-label">Street Number</label>
-                          <input type="text" class="form-control" id="editStreetNumber" name="editStreetNumber">
-                      </div>
-
-                      <div class="col-md-3">
-                          <label for="editAddress" class="form-label">Address</label>
-                          <input type="text" class="form-control" id="editAddress" name="editAddress" required>
-                      </div>
-
-                      <div class="col-md-3">
-                          <label for="editBrgyAddressName" class="form-label">Barangay</label>
-                          <input type="text" class="form-control" id="editBrgyAddressName" value="<?= $_GET['Name']?>"
-                              readonly>
-                          <input type="hidden" class="form-control" id="editBrgyAddressCode" name="barangay"
-                              value="<?= $_GET['Code']?>" readonly>
-                      </div>
-
-                      <h5 class="card-title mx-2">Login Access</h5>
-
-                      <div class="col-md-6">
-                          <label for="editUsername" class="form-label">Username</label>
-                          <input type="text" class="form-control" id="editUsername" name="editUsername" required>
-                      </div>
-
-                      <div class="col-md-6">
-                          <label for="editPassword" class="form-label">Password</label>
-                          <input type="password" class="form-control" id="editPassword" name="editPassword" required>
-                      </div>
-
-                      <div class="col-md-12">
-                          <label for="editSKEmail" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="editSKEmail" name="editSKEmail" required>
-                      </div>
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -562,3 +581,17 @@
           </div>
       </div>
   </div>
+
+  <script>
+function previewSKImage(event, previewId) {
+    const input = event.target;
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+  </script>
