@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 session_start();
 include "includes/conn.php";
+include "includes/functions.php";   
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['programId']) && isset($_POST['feedbackMessage']) ) {
     $programId = $conn->real_escape_string($_POST['programId']);
@@ -25,6 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['programId']) && isset
     $stmt->bind_param("iiss", $programId, $userId, $feedbackType, $feedbackMessage);
 
     if ($stmt->execute()) {
+        $sent_by = $_SESSION['user']['id'];
+        $sent_to = 1;
+        $message = $feedbackType . ': ' . $feedbackMessage;
+        $type = "info";
+        $link = "view_program.php?id=$programId";
+        add_notification($conn, $sent_by, $sent_to, $message, $type, $link);
         $_SESSION['status'] = "Success";
         $_SESSION['status_text'] = "Feedback submitted successfully!";
         $_SESSION['status_code'] = "success";

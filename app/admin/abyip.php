@@ -5,23 +5,12 @@ include "includes/conn.php";
 include "includes/header.php";
 include "includes/sidebar.php";
 include "alert.php";
-
-$brgyCode = $_GET['Code'] ?? '';
-
-$stmt = $conn->prepare("SELECT * FROM `barangay` WHERE barangay_code = ?");
-$stmt->bind_param("s", $brgyCode);
-$stmt->execute();
-$result = $stmt->get_result();
-$getBrgy = $result->fetch_assoc();
-$brgyName = $getBrgy['barangay_name'];
 ?>
 
 
 <main id="main" class="main">
     <div class="pagetitle d-flex justify-content-between align-items-center  mb-3">
         <h1>Annual Barangay Youth Investment Program</h1>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#abypModal"><i
-                class="bi bi-plus-circle"></i> New ABYIP Entry</button>
     </div><!-- End Page Title -->
 
     <section class="section">
@@ -31,10 +20,7 @@ $brgyName = $getBrgy['barangay_name'];
                     <div class="card-body">
                         <!-- Registered Youth -->
                         <?php
-                        if (isset($_GET['Code'])) {
-                            $code = $_GET['Code'];
-                            $stmt = $conn->prepare("SELECT * FROM abyip WHERE brgyCode = ?");
-                            $stmt->bind_param("s", $code);
+                            $stmt = $conn->prepare("SELECT * FROM abyip");
                             $stmt->execute();
                             $result = $stmt->get_result();
                                             
@@ -104,9 +90,6 @@ $brgyName = $getBrgy['barangay_name'];
 
                         <?php
                             $stmt->close();
-                        } else {
-                            echo "<p class='text-warning'>No code specified in the URL.</p>";
-                        }
                         mysqli_close($conn);
                         ?>
 

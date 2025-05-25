@@ -3,6 +3,7 @@
 header('Content-Type: application/json');
 session_start();
 include "includes/conn.php";
+include "includes/functions.php";
 
 // Check if the request is POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['generateDecision'])) {
@@ -46,6 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['generateDecision'])) {
 
     // Execute the statement
     if ($stmt->execute()) {
+        $sent_by = $_SESSION['user']['id'];
+        $sent_to = 1;
+        $message = "New youth program submitted";
+        $type = "info";
+        $link = "view_program.php?id=" . $conn->insert_id;
+        add_notification($conn, $sent_by, $sent_to, $message, $type, $link);
         $_SESSION['status'] = "Success";
         $_SESSION['status_text'] = "Youth program data saved successfully!";
         $_SESSION['status_code'] = "success";

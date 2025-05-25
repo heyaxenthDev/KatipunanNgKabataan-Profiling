@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 session_start();
 include "includes/conn.php";
+include_once "includes/functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['programId']) && isset($_POST['feedbackMessage']) ) {
     $programId = $conn->real_escape_string($_POST['programId']);
@@ -25,6 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['programId']) && isset
     $stmt->bind_param("iiss", $programId, $userId, $feedbackType, $feedbackMessage);
 
     if ($stmt->execute()) {
+        // Get the program owner (sent_to)
+        $prog = mysqli_query($conn, "SELECT user_id FROM youth_programs WHERE id = '$programId'");
+        $progRow = mysqli_fetch_assoc($prog);
+        $sent_to = $progRow ? $progRow['user_id'] : null;
+        $sent_by = $userId;
+        $message = $feedbackType . ': ' . $feedbackMessage;
+        $type = "info";
+        $link = "view_program.php?id=$programId";
+        if ($sent_to) {
+            add_notification($conn, $sent_by, $sent_to, $message, $type, $link);
+        }
         $_SESSION['status'] = "Success";
         $_SESSION['status_text'] = "Feedback submitted successfully!";
         $_SESSION['status_code'] = "success";

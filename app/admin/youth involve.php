@@ -62,7 +62,6 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         <thead>
                             <tr>
                                 <th>Program</th>
-                                <th>Type</th>
                                 <th>Gender</th>
                                 <th>Age Category</th>
                                 <th>Youth Classification</th>
@@ -84,7 +83,6 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
                                 echo "<td>" . htmlspecialchars($row['programs']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['types']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['for_gender']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['age_category']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['youth_classification']) . "</td>";
@@ -124,10 +122,6 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Program:</label>
                                 <p id="viewProgram" class="form-control-plaintext"></p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Type:</label>
-                                <p id="viewType" class="form-control-plaintext"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Gender:</label>
@@ -268,7 +262,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     // Populate modal with data
                     document.getElementById('viewProgram').textContent = data.programs;
-                    document.getElementById('viewType').textContent = data.types;
                     document.getElementById('viewGender').textContent = data.for_gender;
                     document.getElementById('viewAgeCategory').textContent = data
                         .age_category;

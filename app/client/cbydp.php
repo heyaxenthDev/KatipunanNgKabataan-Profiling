@@ -29,7 +29,7 @@ $brgyName = $getBrgy['barangay_name'];
             <div class="col-lg-12">
                 <div class="card pt-3">
                     <div class="card-body">
-                        <!-- Registered Youth -->
+                        <!-- Comprehensive Barangay Youth Development Plan -->
                         <?php
                         if (isset($_GET['Code'])) {
                             $code = $_GET['Code'];
@@ -37,8 +37,6 @@ $brgyName = $getBrgy['barangay_name'];
                             $stmt->bind_param("s", $code);
                             $stmt->execute();
                             $result = $stmt->get_result();
-                            
-                                                      
                         ?>
 
                         <table class="table datatable">
@@ -47,6 +45,9 @@ $brgyName = $getBrgy['barangay_name'];
                                     <th>PYDP Center</th>
                                     <th>Reference Code</th>
                                     <th>PPAS</th>
+                                    <th>MOOE Allocated</th>
+                                    <th>MOOE Spent</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -89,19 +90,46 @@ $brgyName = $getBrgy['barangay_name'];
                                                 $programArea = "Unknown Program Area";
                                                 break;
                                         }
+
+                                        // Status badge
+                                        $statusBadge = '';
+                                        switch ($row['status']) {
+                                            case 'pending':
+                                                $statusBadge = '<span class="badge bg-warning">Pending</span>';
+                                                break;
+                                            case 'approved':
+                                                $statusBadge = '<span class="badge bg-success">Approved</span>';
+                                                break;
+                                            case 'rejected':
+                                                $statusBadge = '<span class="badge bg-danger">Rejected</span>';
+                                                break;
+                                            default:
+                                                $statusBadge = '<span class="badge bg-secondary">Not Set</span>';
+                                        }
                                 ?>
                                 <tr>
                                     <td><?= htmlspecialchars($programArea) ?></td>
                                     <td><?= htmlspecialchars($row['referenceCode']) ?></td>
                                     <td><?= htmlspecialchars($row['ppa']) ?></td>
+                                    <td><?= htmlspecialchars($row['mooeAllocated']) ?></td>
+                                    <td><?= htmlspecialchars($row['mooeSpent']) ?></td>
+                                    <td><?= $statusBadge ?></td>
                                     <td>
-                                        <button class="btn btn-success btn-sm view-details" data-id="<?= $row['id'] ?>">
-                                            <i class="bi bi-eye"></i> View
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit-details"
-                                            data-edit-id="<?= $row['id'] ?>">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-success btn-sm view-details"
+                                                data-id="<?= $row['id'] ?>">
+                                                <i class="bi bi-eye"></i> View
+                                            </button>
+                                            <?php if ($row['status'] !== 'approved' && $row['status'] !== 'rejected'): ?>
+                                            <button class="btn btn-primary btn-sm edit-details"
+                                                data-edit-id="<?= $row['id'] ?>">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </button>
+                                            <?php endif; ?>
+                                            <button class="btn btn-secondary btn-sm"
+                                                onclick="printForm('printableCard')" type="button"><i
+                                                    class="bi bi-printer"></i> Print</button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php
@@ -344,6 +372,22 @@ $brgyName = $getBrgy['barangay_name'];
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="viewStatus" placeholder="Status" type="text"
+                                        readonly>
+                                    <label for="viewStatus">Status</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="viewRemarks" placeholder="Remarks"
+                                        style="height: 100px" readonly></textarea>
+                                    <label for="viewRemarks">Remarks</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
@@ -475,6 +519,49 @@ $brgyName = $getBrgy['barangay_name'];
 
     </section>
 
+    <!-- Hidden Printable Card for CBYDP -->
+    <div id="printableCardCBYDP" style="display:none;">
+        <div style="font-family: Arial, sans-serif; width: 100%;">
+            <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:10px;">ANNEX 5 |
+                COMPREHENSIVE BARANGAY YOUTH DEVELOPMENT PLAN (CBYDP)</div>
+            <div style="font-size:14px; margin-bottom:5px;">Region: VI-Western Visayas &nbsp;&nbsp; Province: ANTIQUE
+                &nbsp;&nbsp; City/Municipality: SEBASTE</div>
+            <div style="text-align:center; font-weight:bold; font-size:16px; margin-bottom:10px;">AMENDED COMPREHENSIVE
+                BARANGAY YOUTH DEVELOPMENT PLAN (CBYDP) CY <span id="printYearCBYDP"></span></div>
+            <div style="text-align:center; font-weight:bold; font-size:15px; margin-bottom:10px;">CENTER OF
+                PARTICIPATION: <span id="printCenterCBYDP"></span></div>
+            <table border="1" cellspacing="0" cellpadding="4"
+                style="width:100%; border-collapse:collapse; font-size:13px;">
+                <thead style="background:#eee;">
+                    <tr>
+                        <th>Youth Development Concern</th>
+                        <th>Object</th>
+                        <th>Perf. Indicator</th>
+                        <th>Target</th>
+                        <th>PPAs</th>
+                        <th>Budget</th>
+                        <th>Person Responsible</th>
+                    </tr>
+                </thead>
+                <tbody id="printTableBodyCBYDP"></tbody>
+            </table>
+            <div style="margin-top:30px; display:flex; justify-content:space-between;">
+                <div>
+                    <div>Prepared by:</div>
+                    <div style="margin-top:30px; text-decoration:underline; font-weight:bold;"
+                        id="printPreparedByCBYDP"></div>
+                    <div style="font-size:12px;">SK SECRETARY</div>
+                </div>
+                <div style="text-align:right;">
+                    <div>Approved by:</div>
+                    <div style="margin-top:30px; text-decoration:underline; font-weight:bold;"
+                        id="printApprovedByCBYDP"></div>
+                    <div style="font-size:12px;">SK CHAIRMAN</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/print_cbydp.js"></script>
 
 </main><!-- End #main -->
 

@@ -1,8 +1,12 @@
 <?php
 session_start();
 include "includes/conn.php";
+include "includes/functions.php";
 
 if (isset($_POST['RegYouth'])) {
+    $user_id = $_SESSION['user']['id'];
+    $message = "New youth registered";
+    $type = "info";
     // Sanitize inputs (or use prepared statements)
     $brgyCode = mysqli_real_escape_string($conn, $_POST['brgyCode']);
     $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
@@ -65,6 +69,12 @@ if (isset($_POST['RegYouth'])) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssssssssssssssssssssssssssss", $acc_type, $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote, $brgyCode);
     if ($stmt->execute()) {
+        $sent_by = $_SESSION['user']['id'];
+        $sent_to = 1;
+        $message = "New youth registered";
+        $type = "info";
+        $link = "view_youth.php?id=" . $conn->insert_id;
+        add_notification($conn, $sent_by, $sent_to, $message, $type, $link);
         $_SESSION['status'] = "Success!";
         $_SESSION['status_text'] = "Youth Registered!";
         $_SESSION['status_code'] = "success";

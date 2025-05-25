@@ -63,8 +63,6 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
 
                 <h5 class="card-title">Decision-Making Data Form</h5>
 
-                <input type="hidden" name="brgyCode" id="brgyCode" value="<?=$_GET['Code']?>">
-
                 <div class="row">
                     <!-- Left Side Column -->
                     <div class="col-md-6">
@@ -76,11 +74,7 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">
-                                Dominant Youth Classification:
-                                <!-- <span id="labelClassification" class="badge bg-info text-dark ms-2"></span> -->
-                            </label>
-
+                            <label class="col-sm-4 col-form-label">Youth Classification:</label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="youthClassification" name="youthClassification"
                                     required>
@@ -90,19 +84,14 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                     <option value="Working Youth">Working Youth</option>
                                     <option value="Youth with Special Needs">Youth with Special Needs</option>
                                     <option value="Person with Disability">Person with Disability</option>
-                                    <option value="Children in conflict with Law">Children in conflict with Law
-                                    </option>
+                                    <option value="Children in conflict with Law">Children in conflict with Law</option>
                                     <option value="Indigenous People">Indigenous People</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">
-                                Dominant Gender:
-                                <!-- <span id="labelGender" class="badge bg-info text-dark ms-2"></span> -->
-                            </label>
-
+                            <label class="col-sm-4 col-form-label">Gender:</label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="dominantGender" name="dominantGender" required>
                                     <option value="">-- Select Gender --</option>
@@ -113,11 +102,7 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">
-                                Dominant Age Group:
-                                <!-- <span id="labelAge" class="badge bg-info text-dark ms-2"></span> -->
-                            </label>
-
+                            <label class="col-sm-4 col-form-label">Age Group:</label>
                             <div class="col-sm-8">
                                 <select class="form-select" id="ageCategory" name="ageCategory" required>
                                     <option value="">-- Select Age Group --</option>
@@ -127,6 +112,13 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                 </select>
                             </div>
                         </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-8 offset-sm-4">
+                                <button type="button" id="generateProgramBtn" class="btn btn-primary" disabled>Generate
+                                    Program</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Right Side Column -->
@@ -134,23 +126,8 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Suggested Program:</label>
                             <div class="col-sm-8">
-                                <select class="form-select" id="suggestedProgram" name="suggestedProgram" required>
-                                    <option value="">-- Select Program --</option>
-                                    <option value="SPORTS">Sports</option>
-                                    <option value="EDUCATION">Education</option>
-                                    <option value="HEALTH ENVIRONMENT">Health Environment</option>
-                                    <option value="FEEDING">Feeding</option>
-                                    <option value="TREE PLANTING">Tree Planting</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">Types:</label>
-                            <div class="col-sm-8">
-                                <select class="form-select" id="types" name="types" required>
-                                    <option value="">-- Select Type --</option>
-                                </select>
+                                <textarea rows="3" class="form-control" id="suggestedProgram" name="suggestedProgram"
+                                    readonly></textarea>
                             </div>
                         </div>
 
@@ -183,81 +160,22 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Committee Assigned:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="committee_assigned" required>
+                                <select name="committee_assigned" class="form-select" id="committee_assigned" required>
+                                    <option>Loading...</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="text-end pt-3">
-                    <button type="submit" class="btn btn-primary" name="generateDecision">Generate Decision</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
+                    <div class="text-end pt-3">
+                        <button type="submit" class="btn btn-primary" name="generateDecision" id="submitBtn"
+                            style="display: none;">Submit Program</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                    </div>
             </form>
 
 
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
-            // Wait for the DOM to be fully loaded before executing any code
-            $(document).ready(function() {
-                // Get the barangay code from the hidden input field
-                const brgyCode = $("#brgyCode").val();
-
-                // Make an AJAX call to fetch dominant information for the selected barangay
-                $.ajax({
-                    url: "fetch_dominant.php",
-                    method: "GET",
-                    data: {
-                        brgyCode: brgyCode
-                    },
-                    dataType: 'json', // Explicitly specify that we expect JSON
-                    success: function(data) {
-                        try {
-                            if (data.success) {
-                                // If successful, populate the form fields with the fetched data
-                                // Using trigger('change') to ensure any dependent fields are updated
-                                $("#youthClassification").val(data.classification).trigger(
-                                    "change");
-                                $("#dominantGender").val(data.gender).trigger("change");
-                                $("#ageCategory").val(data.age).trigger("change");
-
-                                // Update the badge labels to show the dominant values
-                                $("#labelClassification").text(data.classification);
-                                $("#labelGender").text(data.gender);
-                                $("#labelAge").text(data.age);
-
-                                // Auto-select suggested program and type
-                                autoSelectSuggestedProgramAndType({
-                                    classification: data.classification,
-                                    gender: data.gender,
-                                    age: data.age
-                                });
-                            } else {
-                                // Log server error to console for debugging
-                                console.error("Server returned error:", data.message);
-                                // Show user-friendly error message
-                                alert("Failed to fetch dominant info: " + (data.message ||
-                                    "Unknown error"));
-                            }
-                        } catch (error) {
-                            // Handle any JSON parsing or data processing errors
-                            console.error("Error processing response:", error);
-                            alert("Error processing server response");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle AJAX request failures (network errors, etc.)
-                        console.error("AJAX error:", status, error);
-                        // Check if the response contains HTML error message
-                        if (xhr.responseText && xhr.responseText.includes("<br />")) {
-                            alert("Server error occurred. Please check the server logs.");
-                        } else {
-                            alert("Error fetching data: " + error);
-                        }
-                    }
-                });
-            });
-
             document.addEventListener("DOMContentLoaded", function() {
                 const programTypes = {
                     "SPORTS": [
@@ -380,10 +298,6 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Program:</label>
                                 <p id="viewProgram" class="form-control-plaintext"></p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Type:</label>
-                                <p id="viewType" class="form-control-plaintext"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Gender:</label>
@@ -604,8 +518,129 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
 include "includes/footer.php";
 ?>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+$(document).ready(function() {
+    $('#committee_assigned').load('get_sk_officials.php');
+});
+
 document.addEventListener("DOMContentLoaded", function() {
+    const youthClassification = document.getElementById('youthClassification');
+    const dominantGender = document.getElementById('dominantGender');
+    const ageCategory = document.getElementById('ageCategory');
+    const generateProgramBtn = document.getElementById('generateProgramBtn');
+    const suggestedProgram = document.getElementById('suggestedProgram');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Function to check if all required fields are filled
+    function checkRequiredFields() {
+        const isComplete = youthClassification.value && dominantGender.value && ageCategory.value;
+
+        // Add visual feedback
+        [youthClassification, dominantGender, ageCategory].forEach(field => {
+            if (!field.value) {
+                field.classList.add('is-invalid');
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+            }
+        });
+
+        return isComplete;
+    }
+
+    // Add event listeners to enable/disable generate button and validate fields
+    [youthClassification, dominantGender, ageCategory].forEach(element => {
+        element.addEventListener('change', function() {
+            // Remove validation classes when user makes a new selection
+            this.classList.remove('is-invalid', 'is-valid');
+
+            // Check if all fields are filled
+            const isComplete = checkRequiredFields();
+            generateProgramBtn.disabled = !isComplete;
+
+            // Clear suggested program if any field changes
+            suggestedProgram.value = '';
+            submitBtn.style.display = 'none';
+        });
+    });
+
+    // Function to generate suggested program
+    generateProgramBtn.addEventListener('click', function() {
+        // Double check all fields are filled
+        if (!checkRequiredFields()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Information',
+                text: 'Please fill out all required fields (Classification, Gender, and Age Group) before generating a program.',
+            });
+            return;
+        }
+
+        const classification = youthClassification.value;
+        const gender = dominantGender.value;
+        const age = ageCategory.value;
+
+        let program = "";
+
+        // Base program based on classification
+        switch (classification) {
+            case "In School":
+                program = "Library Hub, School Supplies Distribution, Tutorial Programs";
+                break;
+            case "Out of School Youth":
+                program = "Alternative Learning System (ALS), Vocational Training, Job Assistance";
+                break;
+            case "Working Youth":
+                program = "Job Fairs, Skills Training, Entrepreneurship Workshops";
+                break;
+            case "Youth with Special Needs":
+                program = "Inclusive Education, Disability Support Programs";
+                break;
+            case "Person with Disability":
+                program = "PWD Support Programs, Skills Development";
+                break;
+            case "Children in conflict with Law":
+                program = "Rehabilitation Programs, Legal Assistance";
+                break;
+            case "Indigenous People":
+                program = "Cultural Preservation Programs, Livelihood Assistance";
+                break;
+        }
+
+        // Add sports program based on gender and age
+        if ((gender === "Male" || gender === "Female") &&
+            (age === "15-20" || age === "21-25" || age === "26-30")) {
+            program += gender === "Male" ?
+                ", Basketball Tournament (Sports)" :
+                ", Volleyball Tournament (Sports)";
+        }
+
+        suggestedProgram.value = program;
+        submitBtn.style.display = 'inline-block';
+
+        // Show success message
+        Swal.fire({
+            icon: 'success',
+            title: 'Program Generated',
+            text: 'A program has been suggested based on your selections.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    });
+
+    // Reset form handler
+    document.querySelector('button[type="reset"]').addEventListener('click', function() {
+        // Remove all validation classes
+        [youthClassification, dominantGender, ageCategory].forEach(field => {
+            field.classList.remove('is-invalid', 'is-valid');
+        });
+
+        suggestedProgram.value = '';
+        submitBtn.style.display = 'none';
+        generateProgramBtn.disabled = true;
+    });
+
     // Handle view button clicks
     document.querySelectorAll('.view-details').forEach(button => {
         button.addEventListener('click', function() {
@@ -617,7 +652,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     // Populate modal with data
                     document.getElementById('viewProgram').textContent = data.programs;
-                    document.getElementById('viewType').textContent = data.types;
                     document.getElementById('viewGender').textContent = data.for_gender;
                     document.getElementById('viewAgeCategory').textContent = data
                         .age_category;
@@ -752,16 +786,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     // Populate form with data
                     document.getElementById('editProgram').value = data.programs;
-
-                    // Trigger the change event to populate the types
-                    const event = new Event('change');
-                    document.getElementById('editProgram').dispatchEvent(event);
-
-                    // After a short delay, set the type value
-                    setTimeout(() => {
-                        document.getElementById('editType').value = data.types;
-                    }, 100);
-
                     document.getElementById('editGender').value = data.for_gender;
                     document.getElementById('editAgeCategory').value = data.age_category;
                     document.getElementById('editYouthClassification').value = data

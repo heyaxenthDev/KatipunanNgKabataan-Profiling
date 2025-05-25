@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 session_start();
 include "includes/conn.php";
+include "includes/functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['programId'])) {
     $id = intval($_POST['programId']);
@@ -46,6 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['programId'])) {
     );
 
     if ($stmt->execute()) {
+        $sent_by = $_SESSION['user']['id'];
+        $sent_to = 1;
+        $message = "Program updated";
+        $type = "info";
+        $link = "view_program.php?id=" . $id;
+        add_notification($conn, $sent_by, $sent_to, $message, $type, $link);
         echo json_encode(['success' => true, 'message' => 'Program updated successfully.']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Failed to update program: ' . $stmt->error]);

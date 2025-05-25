@@ -1,8 +1,12 @@
 <?php
 session_start();
 include "includes/conn.php";
+include "includes/functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['newCbydp'])) {
+    $user_id = $_SESSION['user']['id'];
+    $message = "New CBYDP report submitted";
+    $type = "info";
    // Retrieve form data
     $brgyCode = $conn->real_escape_string($_POST['brgyCode']);
     $brgyName = $conn->real_escape_string($_POST['brgyName']);
@@ -32,6 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['newCbydp'])) {
     );
 
     if ($stmt->execute()) {
+        $sent_by = $_SESSION['user']['id'];
+        $sent_to = 1;
+        $message = "New CBYDP report submitted";
+        $type = "info";
+        $link = "view_cbydp.php?id=" . $conn->insert_id;
+        add_notification($conn, $sent_by, $sent_to, $message, $type, $link);
         $_SESSION['status'] = "Success!";
         $_SESSION['status_text'] = "Report submitted successfully!";
         $_SESSION['status_code'] = "success";

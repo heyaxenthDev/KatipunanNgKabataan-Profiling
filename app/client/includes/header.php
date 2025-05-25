@@ -98,6 +98,25 @@ if (mysqli_num_rows($run_query) > 0) {
             $BrgyName = $row['barangay_name'];
         }
     }
+
+    // Fetch notifications for the logged-in user
+    $notif_query = "SELECT * FROM notifications WHERE sent_to = '$id' AND sent_by = '1' ORDER BY created_at DESC LIMIT 10";
+    $notif_result = mysqli_query($conn, $notif_query);
+    $notifications = [];
+    $unread_count = 0;
+    if ($notif_result && mysqli_num_rows($notif_result) > 0) {
+        while ($notif = mysqli_fetch_assoc($notif_result)) {
+            $notifications[] = $notif;
+            if ($notif['status'] == 'unread') $unread_count++;
+        }
+    }
+
+    $typeIcons = [
+        'approval' => 'bi-check-circle text-success',
+        'rejection' => 'bi-x-circle text-danger',
+        'revision' => 'bi-pencil-square text-warning',
+        'info' => 'bi-info-circle text-primary'
+    ];
     ?>
 
     <!-- ======= Header ======= -->
@@ -113,6 +132,56 @@ if (mysqli_num_rows($run_query) > 0) {
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <?php if ($unread_count > 0): ?>
+                        <span class="badge bg-primary badge-number"><?= $unread_count ?></span>
+                        <?php endif; ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            You have <?= $unread_count ?> new notification<?= $unread_count == 1 ? '' : 's' ?>
+                            <a href="#" onclick="markAllRead(event)"><span
+                                    class="badge rounded-pill bg-primary p-2 ms-2">Mark all as read</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <?php if (count($notifications) > 0): ?>
+                        <?php foreach ($notifications as $notif): ?>
+                        <li class="notification-item<?= $notif['status'] == 'unread' ? ' bg-light' : '' ?>">
+                            <i class="bi <?= $typeIcons[$notif['type']] ?? $typeIcons['info'] ?>"></i>
+                            <div>
+                                <?php if (!empty($notif['link'])): ?>
+                                <a href="<?= htmlspecialchars($notif['link']) ?>" style="text-decoration:none;">
+                                    <p><?= htmlspecialchars($notif['message']) ?></p>
+                                </a>
+                                <?php else: ?>
+                                <p><?= htmlspecialchars($notif['message']) ?></p>
+                                <?php endif; ?>
+                                <small
+                                    class="text-muted"><?= date('M d, Y h:i A', strtotime($notif['created_at'])) ?></small>
+                                <a href="#" onclick="markNotifRead(<?= $notif['id'] ?>, event)" title="Mark as read"><i
+                                        class="bi bi-check2-circle"></i></a>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <li class="notification-item">
+                            <div>
+                                <p>No notifications.</p>
+                            </div>
+                        </li>
+                        <?php endif; ?>
+                        <li class="dropdown-footer">
+                            <a href="#">Show all notifications</a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item dropdown pe-3">
 
@@ -170,3 +239,35 @@ if (mysqli_num_rows($run_query) > 0) {
         </nav><!-- End Icons Navigation -->
 
     </header><!-- End Header -->
+
+    <script>
+    function markAllRead(e) {
+        e.preventDefault();
+        fetch('mark_notifications_read.php', {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+            });
+    }
+
+    function markNotifRead(id, e) {
+        e.preventDefault();
+        fetch('mark_notification_read.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'id=' + encodeURIComponent(id)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+            });
+    }
+    </script>
+
+</body>
+
+</html>
