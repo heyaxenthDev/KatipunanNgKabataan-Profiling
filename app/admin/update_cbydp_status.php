@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = $_SESSION['user']['id'];
         $message = $status === 'approved' ? 'CBYDP Plan approved' : 'CBYDP Plan rejected';
         $type = "info";
-        post_notification($user_id, $conn, $message, $type);
+        add_notification($conn, $user_id, $message, $type);
         $_SESSION['status'] = "Success";
         $_SESSION['status_text'] = "Plan has been " . ($status === 'approved' ? 'approved' : 'rejected') . " successfully!";
         $_SESSION['status_code'] = "success";

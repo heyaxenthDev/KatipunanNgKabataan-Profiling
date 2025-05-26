@@ -4,6 +4,7 @@ include 'includes/conn.php';
 include_once "includes/functions.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_id = $_SESSION['user']['id'];
     $reference_code = $_POST['reference_code'];
     $ppa = $_POST['ppa'];
     $description = $_POST['description'];
@@ -19,14 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $brgyCode = $_POST['brgyCode'];
 
     $sql = "INSERT INTO abyip (
-        reference_code, ppa, description, expected_result, performance_indicator,
+        user_id,reference_code, ppa, description, expected_result, performance_indicator,
         period_implementation, mooe, co, total, person_responsible, prepared_by, approved_by, brgyCode
     ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssdddssss", $reference_code, $ppa, $description, $expected_result,
+    $stmt->bind_param("issssssdddssss", $user_id, $reference_code, $ppa, $description, $expected_result,
         $performance_indicator, $period_implementation, $mooe, $co, $total, $person_responsible,
         $prepared_by, $approved_by, $brgyCode);
 

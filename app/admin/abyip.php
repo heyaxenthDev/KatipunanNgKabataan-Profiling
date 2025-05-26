@@ -70,9 +70,14 @@ include "alert.php";
                                                 data-abyip-id="<?=$row['id']?>"><i class="bi bi-eye"></i>
                                                 View</button>
                                             <?php if ($row['status'] !== 'approved' && $row['status'] !== 'rejected'): ?>
-                                            <button class="btn btn-primary btn-sm edit-details"
-                                                data-abyip-edit-id=<?= $row['id']?>><i class="bi bi-pencil-square"></i>
-                                                Edit</button>
+                                            <button class="btn btn-primary btn-sm approve-plan"
+                                                data-id="<?= $row['id'] ?>">
+                                                <i class="bi bi-check-circle"></i> Approve
+                                            </button>
+                                            <button class="btn btn-danger btn-sm reject-plan"
+                                                data-id="<?= $row['id'] ?>">
+                                                <i class="bi bi-x-circle"></i> Reject
+                                            </button>
                                             <?php endif; ?>
                                             <button class="btn btn-secondary btn-sm"
                                                 onclick="printForm('printableCard')" type="button"><i
@@ -482,6 +487,60 @@ include "alert.php";
         </div>
     </div>
     <script src="assets/js/print_abyip.js"></script>
+
+    <!-- Approve/Reject Modal -->
+    <div class="modal fade" id="StatusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="statusModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="statusModalLabel">Update Plan Status</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="update_abyip_status.php" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="statusId">
+                        <input type="hidden" name="status" id="statusValue">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="remarks" name="remarks" style="height: 100px"
+                                required></textarea>
+                            <label for="remarks">Remarks</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Approve button click handler
+        document.querySelectorAll('.approve-plan').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                document.getElementById('statusId').value = id;
+                document.getElementById('statusValue').value = 'approved';
+                document.getElementById('statusModalLabel').textContent = 'Approve Plan';
+                new bootstrap.Modal(document.getElementById('StatusModal')).show();
+            });
+        });
+
+        // Reject button click handler
+        document.querySelectorAll('.reject-plan').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                document.getElementById('statusId').value = id;
+                document.getElementById('statusValue').value = 'rejected';
+                document.getElementById('statusModalLabel').textContent = 'Reject Plan';
+                new bootstrap.Modal(document.getElementById('StatusModal')).show();
+            });
+        });
+    });
+    </script>
 
 </main><!-- End #main -->
 

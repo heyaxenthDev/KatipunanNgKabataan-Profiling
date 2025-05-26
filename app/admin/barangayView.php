@@ -388,7 +388,7 @@
                                                                                     'type') === 'password' ?
                                                                                 'text' : 'password';
                                                                             passwordField.setAttribute('type',
-                                                                            type);
+                                                                                type);
                                                                             icon.classList.toggle('bi-eye');
                                                                             icon.classList.toggle('bi-eye-slash');
                                                                         });
@@ -415,7 +415,7 @@
 
                                             $activeBrgy = $_GET['Name'];
                                             $activeCode = $_GET['Code'];
-                                            $src = '\KatipunanNgKabataan-Profiling/app/client/';
+                                            $src = '../../app/client/';
                                             
                                             // Fetch all officials from the database
                                             $result = $conn->query("SELECT * FROM `accounts` WHERE `brgy_code` = $activeCode AND `term_until` > NOW()");
@@ -436,8 +436,8 @@
                                                             <div class="member-img">
                                                                 <img src="' . $imageUrl . '" class="img-fluid" alt="' . $fullname . '">
                                                                 <div class="social">
-                                                                    <button class="view-sk-details" data-viewSK-id="'.$row['id'].'"><i class="bi bi-eye"></i></button>
-                                                                    <button class="edit-sk-details" data-editSK-id="'.$row['id'].'"><i class="bi bi-pencil-square"></i></button>
+                                                                    <a class="view-sk-details btn btn-primary m-2" data-viewSK-id="'.$row['account_id'].'"><i class="bi bi-eye"></i></a>
+                                                                    <a class="edit-sk-details btn btn-primary" data-editSK-id="'.$row['account_id'].'"><i class="bi bi-pencil-square"></i></a>
                                                                 </div>
                                                             </div>
                                                             <div class="member-info">

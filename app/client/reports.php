@@ -17,7 +17,7 @@
     $brgyName = $getBrgy['barangay_name'];
 
     // Fetch notifications for the logged-in user
-    $notif_query = "SELECT * FROM notifications WHERE user_id = '$id' ORDER BY created_at DESC LIMIT 10";
+    $notif_query = "SELECT * FROM notifications WHERE sent_to = '$id' ORDER BY created_at DESC LIMIT 10";
     $notif_result = mysqli_query($conn, $notif_query);
     $notifications = [];
     $unread_count = 0;

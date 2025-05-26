@@ -219,6 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           // Set basic information
+          document.getElementById("editAccountId").value =
+            data.account_id || "";
           document.getElementById("editLastname").value = data.lastname || "";
           document.getElementById("editFirstname").value = data.firstname || "";
           document.getElementById("editMiddlename").value =

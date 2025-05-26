@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $id = $conn->real_escape_string($_GET['id']);
     
     // Query to fetch youth details
-    $sql = "SELECT a.*, s.lastname AS SK_lastname, s.firstname AS SK_firstname, s.middlename AS SK_middlename, s.age AS SK_age, s.dob AS SK_dob, s.mobile_num AS SK_mobile_num, s.address AS SK_address, s.street_num AS SK_street_num, s.sex AS SK_sex FROM accounts a LEFT JOIN sk_officials s ON a.account_id = s.id WHERE a.id = ?";
+    $sql = "SELECT a.*, s.id AS SK_id, s.lastname AS SK_lastname, s.firstname AS SK_firstname, s.middlename AS SK_middlename, s.age AS SK_age, s.dob AS SK_dob, s.mobile_num AS SK_mobile_num, s.address AS SK_address, s.street_num AS SK_street_num, s.sex AS SK_sex FROM accounts a LEFT JOIN sk_officials s ON s.id = a.account_id WHERE a.account_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -16,7 +16,8 @@ if (isset($_GET['id'])) {
         
         // Format the data for JSON response
         $response = array(
-            'id' => $data['id'],
+            'id' => $data['SK_id'],
+            'account_id' => $data['account_id'],
             'brgy_code' => $data['brgy_code'],
             'lastname' => $data['SK_lastname'],
             'firstname' => $data['SK_firstname'],

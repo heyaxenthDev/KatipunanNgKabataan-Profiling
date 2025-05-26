@@ -7,10 +7,11 @@ include "includes/functions.php";
 
 // Check if the request is POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['generateDecision'])) {
+    $user_id = $_SESSION['user']['id'];
     // Get form data
     $brgyCode = $conn->real_escape_string($_POST['brgyCode']);
     $programs = $conn->real_escape_string($_POST['suggestedProgram']);
-    $types = $conn->real_escape_string($_POST['types']);
+    // $types = $conn->real_escape_string($_POST['types']) || '';
     $for_gender = $conn->real_escape_string($_POST['dominantGender']);
     $age_category = $conn->real_escape_string($_POST['ageCategory']);
     $youth_classification = $conn->real_escape_string($_POST['youthClassification']);
@@ -24,16 +25,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['generateDecision'])) {
     $attachment_file = NULL;
 
     // Prepare the SQL statement
-    $sql = "INSERT INTO youth_programs (brgyCode, programs, types, for_gender, age_category, 
+    $sql = "INSERT INTO youth_programs (user_id, brgyCode, programs, for_gender, age_category, 
             youth_classification, committee_assigned, venue, budget, needs, attachment_type, attachment_file) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // Prepare and bind parameters
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssssssssssss", 
+        $user_id,
         $brgyCode, 
         $programs, 
-        $types, 
+        // $types, 
         $for_gender, 
         $age_category, 
         $youth_classification, 

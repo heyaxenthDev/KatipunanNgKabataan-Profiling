@@ -480,6 +480,7 @@
                       <div class="col-md-9">
                           <div class="row g-3">
                               <input type="hidden" id="editSKId" name="editSKId">
+                              <input type="hidden" id="editAccountId" name="editAccountId" readonly>
                               <h5 class="card-title mx-2">Personal Information</h5>
 
                               <div class="col-md-4">

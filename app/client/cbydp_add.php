@@ -22,15 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['newCbydp'])) {
 
     // Prepare SQL
     $sql = "INSERT INTO cbydp (
-        brgyCode, brgyName, programArea, referenceCode, ppa,
+        user_id, brgyCode, brgyName, programArea, referenceCode, ppa,
         objectiveDescription, expectedResult, performanceIndicator,
         implementationPeriod, mooeAllocated, mooeSpent
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "sssssssssss",
-        $brgyCode, $brgyName, $programArea, $referenceCode, $ppa,
+        "issssssssssss",
+        $user_id, $brgyCode, $brgyName, $programArea, $referenceCode, $ppa,
         $objectiveDescription, $expectedResult, $performanceIndicator,
         $implementationPeriod, $mooeAllocated, $mooeSpent
     );

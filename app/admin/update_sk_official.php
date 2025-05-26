@@ -2,9 +2,12 @@
 header('Content-Type: application/json');
 include "includes/conn.php";
 
-// Use POST and FILES, not JSON
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $conn->real_escape_string($_POST['editSKId']);
+    // SK Official and Account IDs
+    $sk_id = $conn->real_escape_string($_POST['editSKId']);
+    $account_id = $conn->real_escape_string($_POST['editAccountId']); // You need to pass this from frontend!
+
+    // Shared data
     $lastname = $conn->real_escape_string($_POST['editLastname']);
     $firstname = $conn->real_escape_string($_POST['editFirstname']);
     $middlename = $conn->real_escape_string($_POST['editMiddlename']);
@@ -16,23 +19,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mobile_num = $conn->real_escape_string($_POST['editMobileNumber']);
     $address = $conn->real_escape_string($_POST['editAddress']);
     $username = $conn->real_escape_string($_POST['editUsername']);
-    // $password = $conn->real_escape_string($_POST['editPassword']);
     $email = $conn->real_escape_string($_POST['editSKEmail']);
 
-    // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Handle image upload
+    // Picture upload handling
     $picture = null;
     if (isset($_FILES['editSKPicture']) && $_FILES['editSKPicture']['error'] === UPLOAD_ERR_OK) {
         $upload_dir = '../../app/client/uploads/';
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
-        $file_extension = strtolower(pathinfo($_FILES['editSKPicture']['name'], PATHINFO_EXTENSION));
-        $new_filename = uniqid('sk_', true) . '.' . $file_extension;
+        $ext = strtolower(pathinfo($_FILES['editSKPicture']['name'], PATHINFO_EXTENSION));
+        $new_filename = uniqid('sk_', true) . '.' . $ext;
         $upload_path = $upload_dir . $new_filename;
+
         if (move_uploaded_file($_FILES['editSKPicture']['tmp_name'], $upload_path)) {
-            // Save relative path for DB
             $picture = 'uploads/' . $new_filename;
         }
     }
@@ -40,52 +40,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->begin_transaction();
 
     try {
-        // Update accounts table
+        // Update `accounts`
         if ($picture) {
             $sql_accounts = "UPDATE accounts SET 
-                username = ?,
-                firstname = ?,
-                lastname = ?,
-                email = ?,
-                role = ?,
-                picture = ?
-                WHERE id = ?";
-            $stmt_accounts = $conn->prepare($sql_accounts);
-            $stmt_accounts->bind_param("ssssssi", $username, $firstname, $lastname, $email, $position, $picture, $id);
+                username = ?, firstname = ?, lastname = ?, email = ?, role = ?, picture = ? 
+                WHERE account_id = ?";
+            $stmt = $conn->prepare($sql_accounts);
+            $stmt->bind_param("ssssssi", $username, $firstname, $lastname, $email, $position, $picture, $account_id);
         } else {
             $sql_accounts = "UPDATE accounts SET 
-                username = ?,
-                firstname = ?,
-                lastname = ?,
-                email = ?,
-                role = ?
-                WHERE id = ?";
-            $stmt_accounts = $conn->prepare($sql_accounts);
-            $stmt_accounts->bind_param("sssssi", $username, $firstname, $lastname, $email, $position, $id);
+                username = ?, firstname = ?, lastname = ?, email = ?, role = ? 
+                WHERE account_id = ?";
+            $stmt = $conn->prepare($sql_accounts);
+            $stmt->bind_param("sssssi", $username, $firstname, $lastname, $email, $position, $account_id);
         }
-        $stmt_accounts->execute();
+        $stmt->execute();
 
-        // Update sk_officials table
+        // Update `sk_officials`
         $sql_sk = "UPDATE sk_officials SET 
-            firstname = ?,
-            lastname = ?,
-            middlename = ?,
-            street_num = ?,
-            sex = ?,
-            age = ?,
-            dob = ?,
-            mobile_num = ?,
-            address = ?
+            firstname = ?, lastname = ?, middlename = ?, street_num = ?, sex = ?, age = ?, dob = ?, 
+            mobile_num = ?, address = ? 
             WHERE id = ?";
-        $stmt_sk = $conn->prepare($sql_sk);
-        $stmt_sk->bind_param("ssssissssi", $firstname, $lastname, $middlename, $street_num, $sex, $age, $dob, $mobile_num, $address, $id);
-        $stmt_sk->execute();
+        $stmt = $conn->prepare($sql_sk);
+        $stmt->bind_param("ssssissssi", $firstname, $lastname, $middlename, $street_num, $sex, $age, $dob, $mobile_num, $address, $sk_id);
+        $stmt->execute();
 
         $conn->commit();
         echo json_encode(['success' => true, 'message' => 'SK Official updated successfully']);
     } catch (Exception $e) {
         $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Error updating SK Official: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'message' => 'Error updating: ' . $e->getMessage()]);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
