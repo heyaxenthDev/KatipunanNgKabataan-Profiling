@@ -3,83 +3,54 @@ session_start();
 include "includes/conn.php";
 
 if (isset($_POST['RegYouth'])) {
+    $user_id = $_SESSION['user']['id'];
+    $message = "New youth registered";
+    $type = "info";
     // Sanitize inputs (or use prepared statements)
     $brgyCode = mysqli_real_escape_string($conn, $_POST['brgyCode']);
     $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $middleName = mysqli_real_escape_string($conn, $_POST['middleName']);
     $street = mysqli_real_escape_string($conn, $_POST['street'] ?? '');
+    $region = mysqli_real_escape_string($conn, $_POST['Region'] ?? '');
+    $province = mysqli_real_escape_string($conn, $_POST['Province'] ?? '');
+    $municipality = mysqli_real_escape_string($conn, $_POST['Municipality'] ?? '');
+    $barangay = mysqli_real_escape_string($conn, $_POST['Barangay'] ?? '');
 
-    // Get Region Description using prepared statements
-    $regionCode = $_POST['Region'] ?? '';
-    $region = null;
-    if ($regionCode) {
-        $stmt = $conn->prepare("SELECT `regDesc` FROM `refregion` WHERE `regCode` = ?");
-        $stmt->bind_param("s", $regionCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $regionData = $result->fetch_assoc();
-            $region = $regionData['regDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Get Province Description similarly
-    $provinceCode = $_POST['Province'] ?? '';
-    $province = null;
-    if ($provinceCode) {
-        $stmt = $conn->prepare("SELECT `provDesc` FROM `refprovince` WHERE `provCode` = ?");
-        $stmt->bind_param("s", $provinceCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $ProvData = $result->fetch_assoc();
-            $province = $ProvData['provDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Get Municipality Description
-    $municipalityCode = $_POST['Municipality'] ?? '';
-    $municipality = null;
-    if ($municipalityCode) {
-        $stmt = $conn->prepare("SELECT `citymunDesc` FROM `refcitymun` WHERE `citymunCode` = ?");
-        $stmt->bind_param("s", $municipalityCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $municipalData = $result->fetch_assoc();
-            $municipality = $municipalData['citymunDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Get Barangay Description
-    $barangayCode = $_POST['Barangay'] ?? '';
-    $barangay = null;
-    if ($barangayCode) {
-        $stmt = $conn->prepare("SELECT `brgyDesc` FROM `refbrgy` WHERE `brgyCode` = ?");
-        $stmt->bind_param("s", $barangayCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $BarangayData = $result->fetch_assoc();
-            $barangay = $BarangayData['brgyDesc'];
-        }
-        $stmt->close();
-    }
-
-    // Handle Image Upload
     $userImage = null;
     if (isset($_FILES['userImage']) && $_FILES['userImage']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['userImage']['tmp_name'];
-        $fileName = uniqid() . '_' . $_FILES['userImage']['name'];
-        $filePath = 'app/client/uploads/' . basename($fileName);
+        $originalName = preg_replace("/[^a-zA-Z0-9\.\-\_]/", "", $_FILES['userImage']['name']);
+        $fileName = uniqid() . '_' . $originalName;
+        $uploadDir = 'app/client/uploads/';
+        $filePath = $uploadDir . basename($fileName);
+    
+        // Create directory if it doesn't exist
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+    
+        // Validate image type
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $fileTmpPath);
+        finfo_close($finfo);
+        if (!in_array($mimeType, $allowedMimeTypes)) {
+            die("Invalid image type.");
+        }
+    
+        // Check file size (e.g., max 2MB)
+        if ($_FILES['userImage']['size'] > 2 * 1024 * 1024) {
+            die("File too large. Maximum size is 2MB.");
+        }
+    
         if (move_uploaded_file($fileTmpPath, $filePath)) {
-            $userImage = $filePath;
+            $userImage = 'uploads/' . basename($fileName);
+        } else {
+            die("Failed to move uploaded file.");
         }
     }
+    
 
     // Get other form fields
     $zip = mysqli_real_escape_string($conn, $_POST['inputZip'] ?? '');
@@ -101,28 +72,25 @@ if (isset($_POST['RegYouth'])) {
     $vote = mysqli_real_escape_string($conn, $_POST['vote'] ?? '');
 
     // Generate registration code
-    function generateRegistrationCode($conn, $table) {
+    function generateRegistrationCode($conn) {
         $dateRegistered = date('Ymd');
         $randomNumbers = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-        $lastIdQuery = "SELECT MAX(id) as last_id FROM $table";
+        $lastIdQuery = "SELECT MAX(id) as last_id FROM registered";
         $result = mysqli_query($conn, $lastIdQuery);
         $row = mysqli_fetch_assoc($result);
         $primaryKey = $row['last_id'] + 1;
         return "$dateRegistered - $randomNumbers - $primaryKey";
     }
 
-    $table = $age < 15 ? "unregistered" : "registered";
-    $registrationCode = generateRegistrationCode($conn, $table);
+    $acc_type = $age < 15 ? "unregistered" : "registered";
+    $registrationCode = generateRegistrationCode($conn, $acc_type);
 
     // Insert data
-    $sql = $table === "unregistered"
-        ? "INSERT INTO unregistered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" // Adjust fields as needed
-        : "INSERT INTO registered (regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO registered (acc_type, regCode, last_name, first_name, middle_name, street, region, province, municipality, barangay, zip, civil_status, user_image, gender, age, birthdate, email, contact, youth_age_group, youth_classification, educational_background, work_status, sk_voter, national_voter, kk_assembly, kk_assembly_times, kk_assembly_why, vote, brgyCode)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssssssssssssssssssssssss", $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote, $brgyCode);
+    $stmt->bind_param("sssssssssssssssssssssssssssss", $acc_type, $registrationCode, $lastName, $firstName, $middleName, $street, $region, $province, $municipality, $barangay, $zip, $civilStatus, $userImage, $gender, $age, $birthdate, $email, $contact, $youthAgeGroup, $youthClassification, $educationLevel, $workStatus, $skVoter, $nationalVoter, $kkAssembly, $kkAssemblyTimes, $kkAssemblyWhy, $vote, $brgyCode);
     if ($stmt->execute()) {
         $_SESSION['status'] = "Success!";
         $_SESSION['status_text'] = "Youth Registered!";

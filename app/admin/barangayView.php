@@ -418,7 +418,7 @@
                                             $src = '../../app/client/';
                                             
                                             // Fetch all officials from the database
-                                            $result = $conn->query("SELECT * FROM `accounts` WHERE `brgy_code` = $activeCode AND `term_until` > NOW()");
+                                            $result = $conn->query("SELECT * FROM `accounts` WHERE `brgy_code` = $activeCode");
 
                                             if ($result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {

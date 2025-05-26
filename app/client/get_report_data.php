@@ -16,8 +16,15 @@ try {
         $category = 0;
     }
 
-    if (!$type || !$category || !$purok || !$brgyCode) {
-        throw new Exception('Missing required parameters');
+    // Parameter validation based on type
+    if ($type === 'activities_program') {
+        if (!$type || !$brgyCode) {
+            throw new Exception('Missing required parameters');
+        }
+    } else {
+        if (!$type || !$category || !$purok || !$brgyCode) {
+            throw new Exception('Missing required parameters');
+        }
     }
 
     $data = [];
@@ -34,7 +41,7 @@ try {
 
     // Add category condition based on report type
     if ($type === 'activities_program') {
-        $conditions[] = "category = ?";
+        $conditions[] = "programs = ?";
     } else {
         $conditions[] = "gender = ?";
     }
@@ -85,14 +92,14 @@ try {
         case 'activities_program':
             $query = "SELECT 
                         programs as program_name,
-                        DATE_FORMAT(date_created, '%M %d, %Y') as date,
+                        DATE_FORMAT(date_submitted, '%M %d, %Y') as date,
                         venue,
-                        committee,
+                        committee_assigned as committee,
                         budget,
                         status
                     FROM youth_programs 
                     WHERE $whereClause
-                    ORDER BY date_created DESC";
+                    ORDER BY date_submitted DESC";
             break;
 
         default:
