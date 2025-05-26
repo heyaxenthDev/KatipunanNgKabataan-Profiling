@@ -25,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['newCbydp'])) {
         user_id, brgyCode, brgyName, programArea, referenceCode, ppa,
         objectiveDescription, expectedResult, performanceIndicator,
         implementationPeriod, mooeAllocated, mooeSpent
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "issssssssssss",
+        "isssssssssss",
         $user_id, $brgyCode, $brgyName, $programArea, $referenceCode, $ppa,
         $objectiveDescription, $expectedResult, $performanceIndicator,
         $implementationPeriod, $mooeAllocated, $mooeSpent

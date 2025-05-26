@@ -66,9 +66,6 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                 <th>Age Category</th>
                                 <th>Youth Classification</th>
                                 <th>Committee</th>
-                                <th>Venue</th>
-                                <th>Budget</th>
-                                <th>Needs</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -87,17 +84,28 @@ if ($dominant_gender == "Male" && ($dominant_age_group == "15-20" || $dominant_a
                                 echo "<td>" . htmlspecialchars($row['age_category']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['youth_classification']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['committee_assigned']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['venue']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['budget']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['needs']) . "</td>";
                                 echo "<td>
                                         <button class='btn btn-primary btn-sm view-details' data-id='" . $row['id'] . "'>
                                             <i class='bi bi-eye'></i>
                                         </button>
-                                        <button class='btn btn-info btn-sm feedback-program' data-id='" . $row['id'] . "'>
+                                        <button class='btn btn-info btn-sm feedback-program m-1' data-id='" . $row['id'] . "'>
                                             <i class='bi bi-chat-dots'></i>
+                                        </button>";
+                                        
+                                // Only show approve/reject buttons if status is not approved or rejected
+                                if ($row['status'] != 'approved' && $row['status'] != 'rejected') {
+                                    echo "<button class='btn btn-success btn-sm approve-program' data-id='" . $row['id'] . "'>
+                                            <i class='bi bi-check-circle'></i>
                                         </button>
-                                    </td>";
+                                        <button class='btn btn-danger btn-sm reject-program' data-id='" . $row['id'] . "'>
+                                            <i class='bi bi-x-circle'></i>
+                                        </button>";
+                                } else {
+                                    // Show status badge if program is approved or rejected
+                                    $badgeClass = $row['status'] == 'approved' ? 'bg-success' : 'bg-danger';
+                                    echo "<span class='badge " . $badgeClass . " ms-2'>" . ucfirst($row['status']) . "</span>";
+                                }
+                                echo "</td>";
                                 echo "</tr>";
                             }
                             ?>
@@ -336,5 +344,112 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    // Handle approve button clicks
+    document.querySelectorAll('.approve-program').forEach(button => {
+        button.addEventListener('click', function() {
+            const programId = this.getAttribute('data-id');
+
+            Swal.fire({
+                title: 'Approve Program',
+                input: 'textarea',
+                inputLabel: 'Remarks',
+                inputPlaceholder: 'Enter your remarks here...',
+                inputAttributes: {
+                    'aria-label': 'Enter your remarks'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Approve',
+                confirmButtonColor: '#28a745',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: (remarks) => {
+                    return fetch('update_program_status.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `programId=${programId}&status=approved&remarks=${encodeURIComponent(remarks)}`
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.success) {
+                                throw new Error(data.message)
+                            }
+                            return data
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error}`)
+                        })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Program Approved!',
+                        text: 'The program has been approved successfully.',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            });
+        });
+    });
+
+    // Handle reject button clicks
+    document.querySelectorAll('.reject-program').forEach(button => {
+        button.addEventListener('click', function() {
+            const programId = this.getAttribute('data-id');
+
+            Swal.fire({
+                title: 'Reject Program',
+                input: 'textarea',
+                inputLabel: 'Remarks',
+                inputPlaceholder: 'Enter your reason for rejection...',
+                inputAttributes: {
+                    'aria-label': 'Enter your remarks'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Reject',
+                confirmButtonColor: '#dc3545',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: (remarks) => {
+                    return fetch('update_program_status.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `programId=${programId}&status=rejected&remarks=${encodeURIComponent(remarks)}`
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.success) {
+                                throw new Error(data.message)
+                            }
+                            return data
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error}`)
+                        })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Program Rejected!',
+                        text: 'The program has been rejected successfully.',
+                        confirmButtonColor: '#dc3545'
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            });
+        });
+    });
 });
 </script>

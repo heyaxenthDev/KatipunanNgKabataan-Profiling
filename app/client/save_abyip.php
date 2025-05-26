@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $co = $_POST['co'];
     $total = $_POST['total'];
     $person_responsible = $_POST['person_responsible'];
-    $prepared_by = $_POST['prepared_by'] || "";
-    $approved_by = $_POST['approved_by'] || "";
+    $prepared_by = $_POST['prepared_by'];
+    $approved_by = $_POST['approved_by'];
     $brgyCode = $_POST['brgyCode'];
 
     $sql = "INSERT INTO abyip (

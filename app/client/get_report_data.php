@@ -41,22 +41,25 @@ try {
 
     // Add category condition based on report type
     if ($type === 'activities_program') {
-        $conditions[] = "programs = ?";
+        $conditions[] = "status = 'approved'";
     } else {
         $conditions[] = "gender = ?";
+        $params[] = $category;
+        $types .= 's';
     }
-    $params[] = $category;
-    $types .= 's';
 
     // Add purok/street condition
     if ($type === 'activities_program') {
-        $conditions[] = "venue LIKE ?";
-        $params[] = "%$purok%";
+        if (!empty($purok)) {
+            $conditions[] = "venue LIKE ?";
+            $params[] = "%$purok%";
+            $types .= 's';
+        }
     } else {
         $conditions[] = "street = ?";
         $params[] = $purok;
+        $types .= 's';
     }
-    $types .= 's';
 
     // Build the WHERE clause
     $whereClause = implode(' AND ', $conditions);
